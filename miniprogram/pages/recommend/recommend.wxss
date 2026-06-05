@@ -1,0 +1,28 @@
+.route-list { padding: 0 32rpx 64rpx; }
+.loading-box { text-align: center; padding: 120rpx 0; }
+.loading-text { font-size: 28rpx; color: #909399; }
+
+.route-card { padding: 24rpx; transition: all 0.2s; }
+.route-card.expanded { border-color: rgba(31,143,95,0.25); }
+
+.rc-header { display: flex; align-items: flex-start; gap: 16rpx; }
+.rc-rank { width: 64rpx; height: 64rpx; border-radius: 50%; background: linear-gradient(135deg, rgba(31,143,95,0.15), rgba(47,107,255,0.1)); display: flex; align-items: center; justify-content: center; font-size: 24rpx; font-weight: 800; color: #1f8f5f; flex-shrink: 0; }
+.rc-body { flex: 1; }
+.rc-name { font-size: 30rpx; font-weight: 700; color: #10251d; }
+.rc-desc { font-size: 24rpx; color: #909399; margin-top: 4rpx; line-height: 1.4; }
+.rc-meta { display: flex; gap: 16rpx; margin-top: 8rpx; }
+.meta-item { font-size: 22rpx; color: #1f8f5f; padding: 2rpx 12rpx; background: rgba(31,143,95,0.08); border-radius: 8rpx; }
+.rc-tags { margin-top: 8rpx; }
+.rc-score { text-align: center; flex-shrink: 0; }
+.rc-score { font-size: 40rpx; font-weight: 800; color: #1f8f5f; }
+.score-unit { font-size: 20rpx; color: #909399; }
+
+.rc-timeline { margin-top: 24rpx; padding-top: 16rpx; border-top: 1px solid #eef2f5; }
+.tl-day { display: flex; gap: 20rpx; }
+.tl-marker { display: flex; flex-direction: column; align-items: center; width: 36rpx; flex-shrink: 0; }
+.tl-dot { width: 16rpx; height: 16rpx; border-radius: 50%; background: #1f8f5f; border: 4rpx solid rgba(31,143,95,0.2); }
+.tl-line { width: 4rpx; flex: 1; min-height: 24rpx; background: rgba(31,143,95,0.12); }
+.tl-content { padding-bottom: 20rpx; flex: 1; }
+.tl-head { font-size: 26rpx; font-weight: 600; color: #10251d; }
+.tl-desc { font-size: 24rpx; color: #5d6b7a; margin-top: 4rpx; line-height: 1.5; }
+.tl-meta { font-size: 20rpx; color: #c0c4cc; margin-top: 4rpx; }

@@ -14,17 +14,5 @@
     "navigationBarBackgroundColor": "#1f8f5f",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#f4f8f5"
-  },
-  "tabBar": {
-    "color": "#909399",
-    "selectedColor": "#1f8f5f",
-    "backgroundColor": "#ffffff",
-    "borderStyle": "white",
-    "list": [
-      { "pagePath": "pages/index/index", "text": "首页", "iconPath": "assets/tab-home.png", "selectedIconPath": "assets/tab-home-active.png" },
-      { "pagePath": "pages/knowledge/knowledge", "text": "景点", "iconPath": "assets/tab-scenic.png", "selectedIconPath": "assets/tab-scenic-active.png" },
-      { "pagePath": "pages/guide/guide", "text": "AI导游", "iconPath": "assets/tab-guide.png", "selectedIconPath": "assets/tab-guide-active.png" },
-      { "pagePath": "pages/my-trips/my-trips", "text": "行程", "iconPath": "assets/tab-trips.png", "selectedIconPath": "assets/tab-trips-active.png" }
-    ]
   }
 }

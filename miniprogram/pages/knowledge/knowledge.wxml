@@ -1,0 +1,87 @@
+<!-- 景点知识库页面 -->
+<view class="page-container">
+  <view class="page-header">
+    <text class="header-title">景点知识库</text>
+    <text class="header-subtitle">探索桂林及周边的旅行智慧</text>
+  </view>
+
+  <!-- 搜索栏 -->
+  <view class="search-section">
+    <view class="search-box">
+      <image class="search-icon" src="/images/icons/search.svg" mode="aspectFit"></image>
+      <input 
+        class="search-input" 
+        placeholder="搜索你想了解的知识…" 
+        placeholder-class="search-placeholder"
+        value="{{searchText}}"
+        bindinput="onSearchInput"
+        confirm-type="search"
+        bindconfirm="onSearchConfirm"
+      />
+      <image 
+        wx:if="{{searchText}}" 
+        class="clear-icon" 
+        src="/images/icons/close-circle.svg" 
+        mode="aspectFit"
+        bindtap="onClearSearch"
+      ></image>
+    </view>
+  </view>
+
+  <!-- 分类筛选标签 -->
+  <scroll-view class="category-tabs" scroll-x="true" enhanced show-scrollbar="{{false}}">
+    <view class="tabs-wrapper">
+      <view 
+        wx:for="{{categories}}" 
+        wx:key="value"
+        class="tab-item {{activeCategory === item.value ? 'tab-active' : ''}}"
+        data-category="{{item.value}}"
+        bindtap="onCategoryChange"
+      >
+        <text class="tab-text">{{item.label}}</text>
+        <view wx:if="{{activeCategory === item.value}}" class="tab-indicator"></view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 知识卡片列表 -->
+  <scroll-view class="knowledge-list" scroll-y="true" enhanced show-scrollbar="{{false}}">
+    <!-- 空状态 -->
+    <view wx:if="{{filteredList.length === 0}}" class="empty-state">
+      <image class="empty-icon" src="/images/icons/book-open.svg" mode="aspectFit"></image>
+      <text class="empty-title">暂无相关知识</text>
+      <text class="empty-desc">试试调整筛选条件或搜索其他关键词</text>
+    </view>
+
+    <!-- 卡片列表 -->
+    <view wx:for="{{filteredList}}" wx:key="id" class="knowledge-card">
+      <view 
+        class="card-header"
+        data-id="{{item.id}}"
+        bindtap="onToggleCard"
+      >
+        <view class="card-question-row">
+          <view class="card-category-dot {{item.category}}"></view>
+          <text class="card-question">{{item.question}}</text>
+        </view>
+        <image 
+          class="card-arrow {{item.expanded ? 'arrow-expanded' : ''}}" 
+          src="/images/icons/chevron-down.svg" 
+          mode="aspectFit"
+        ></image>
+      </view>
+      <view wx:if="{{item.expanded}}" class="card-answer">
+        <text class="answer-text">{{item.answer}}</text>
+        <view class="answer-actions">
+          <view class="action-btn" data-item="{{item}}" bindtap="onAskAI">
+            <image class="action-icon" src="/images/icons/sparkles.svg" mode="aspectFit"></image>
+            <text class="action-text">问问AI导游</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部安全距离 -->
+    <view class="list-bottom-spacer"></view>
+  </scroll-view>
+</view>

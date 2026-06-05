@@ -18,7 +18,7 @@ Page({
   },
 
   goPlanner() { wx.navigateTo({ url: '/pages/planner/planner' }) },
-  goKnowledge() { wx.switchTab({ url: '/pages/knowledge/knowledge' }) },
+  goKnowledge() { wx.navigateTo({ url: '/pages/knowledge/knowledge' }) },
   goRouteDetail(e) {
     const id = e.currentTarget.dataset.id
     wx.setStorageSync('qianxing_selected_route', mock.routes.find(r => r.id === id))

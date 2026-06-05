@@ -1,0 +1,332 @@
+/* pages/scenic-detail/scenic-detail.wxss */
+
+/* ===== 页面容器 ===== */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f5f6f8;
+  overflow: hidden;
+}
+
+.page-container.centered {
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== 英雄区域 ===== */
+.hero-section {
+  position: relative;
+  padding-top: env(safe-area-inset-top);
+  min-height: 380rpx;
+}
+
+.hero-overlay {
+  display: flex;
+  padding: 24rpx 28rpx 40rpx;
+  min-height: 380rpx;
+}
+
+.hero-back {
+  position: absolute;
+  top: 56rpx;
+  left: 24rpx;
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10rpx);
+  z-index: 10;
+}
+
+.back-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: 60rpx;
+}
+
+.hero-name {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  text-shadow: 0 2rpx 8rpx rgba(0,0,0,0.15);
+}
+
+.hero-city-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 12rpx;
+}
+
+.hero-location-icon {
+  width: 28rpx;
+  height: 28rpx;
+  opacity: 0.85;
+}
+
+.hero-city {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 20rpx;
+}
+
+.hero-tag {
+  font-size: 22rpx;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20rpx;
+  padding: 6rpx 18rpx;
+  backdrop-filter: blur(6rpx);
+}
+
+.hero-icon-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-left: 24rpx;
+}
+
+.hero-icon {
+  font-size: 100rpx;
+  filter: drop-shadow(0 4rpx 12rpx rgba(0,0,0,0.2));
+}
+
+/* ===== 信息侧边栏 ===== */
+.info-sidebar {
+  display: flex;
+  background: #ffffff;
+  margin: -28rpx 28rpx 0;
+  border-radius: 20rpx;
+  padding: 24rpx 8rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.08);
+  z-index: 5;
+}
+
+.info-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.info-value {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.info-label {
+  font-size: 22rpx;
+  color: #9da3b0;
+}
+
+.info-divider {
+  width: 2rpx;
+  height: 48rpx;
+  background: #e8eaed;
+  align-self: center;
+}
+
+/* ===== 内容滚动区 ===== */
+.content-scroll {
+  flex: 1;
+  padding: 20rpx 28rpx 0;
+}
+
+/* ===== 区块卡片 ===== */
+.section-card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.03);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-dot {
+  width: 12rpx;
+  height: 28rpx;
+  border-radius: 6rpx;
+}
+
+.green-dot { background: #1f8f5f; }
+.blue-dot { background: #2f6bff; }
+.amber-dot { background: #f59e0b; }
+
+.section-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+/* 简介 */
+.description-text {
+  font-size: 28rpx;
+  color: #4b5563;
+  line-height: 1.8;
+}
+
+/* 亮点 */
+.highlights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14rpx;
+}
+
+.highlight-dot {
+  color: #2f6bff;
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}
+
+.highlight-text {
+  font-size: 28rpx;
+  color: #374151;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* 贴士 */
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+.tip-index {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 22rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  font-size: 28rpx;
+  color: #374151;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* ===== 底部按钮 ===== */
+.bottom-actions {
+  padding: 16rpx 0 20rpx;
+}
+
+.ai-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  width: 100%;
+  height: 96rpx;
+  border-radius: 48rpx;
+  background: linear-gradient(135deg, #2f6bff 0%, #1f8f5f 100%);
+  border: none;
+  box-shadow: 0 8rpx 28rpx rgba(31, 143, 95, 0.3);
+}
+
+.ai-btn::after {
+  border: none;
+}
+
+.ai-btn-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.ai-btn-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* ===== 未找到 ===== */
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 60rpx;
+}
+
+.nf-icon {
+  width: 120rpx;
+  height: 120rpx;
+  opacity: 0.3;
+  margin-bottom: 24rpx;
+}
+
+.nf-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8rpx;
+}
+
+.nf-desc {
+  font-size: 26rpx;
+  color: #9da3b0;
+  margin-bottom: 36rpx;
+}
+
+.nf-back-btn {
+  padding: 20rpx 56rpx;
+  border-radius: 36rpx;
+  background: #1f8f5f;
+  color: #ffffff;
+  font-size: 28rpx;
+  border: none;
+}
+
+.nf-back-btn::after {
+  border: none;
+}
+
+/* ===== 底部间距 ===== */
+.list-bottom-spacer {
+  height: 60rpx;
+}
