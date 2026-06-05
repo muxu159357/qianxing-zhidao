@@ -1,0 +1,62 @@
+<view class="page">
+  <!-- Chat message area -->
+  <scroll-view class="chat-area" scroll-y scroll-top="{{scrollTop}}" scroll-with-animation>
+    <view class="msg-list">
+      <block wx:for="{{messages}}" wx:key="id">
+        <!-- AI message: avatar left, bubble right -->
+        <view class="msg-row msg-ai" wx:if="{{item.type === 'ai'}}">
+          <view class="avatar avatar-ai">导</view>
+          <view class="bubble bubble-ai">{{item.content}}</view>
+        </view>
+        <!-- User message: bubble left, avatar right -->
+        <view class="msg-row msg-user" wx:else>
+          <view class="bubble bubble-user">{{item.content}}</view>
+          <view class="avatar avatar-user">我</view>
+        </view>
+      </block>
+
+      <!-- Typing indicator -->
+      <view class="msg-row msg-ai" wx:if="{{isTyping}}">
+        <view class="avatar avatar-ai">导</view>
+        <view class="bubble bubble-typing">
+          <view class="dots">
+            <view class="dot" style="animation-delay: 0s;"></view>
+            <view class="dot" style="animation-delay: 0.15s;"></view>
+            <view class="dot" style="animation-delay: 0.3s;"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Bottom anchor for scroll -->
+      <view style="height: 10rpx;"></view>
+    </view>
+  </scroll-view>
+
+  <!-- Quick questions 2x2 grid -->
+  <view class="quick-section">
+    <view class="quick-grid">
+      <view
+        class="quick-item"
+        wx:for="{{quickQuestions}}"
+        wx:key="*this"
+        bindtap="onQuickTap"
+        data-question="{{item}}"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <!-- Fixed input bar -->
+  <view class="input-bar">
+    <input
+      class="input-field"
+      placeholder="输入您的问题…"
+      value="{{inputValue}}"
+      bindinput="onInput"
+      bindconfirm="sendMessage"
+      confirm-type="send"
+      adjust-position="{{false}}"
+      maxlength="300"
+    />
+    <view class="send-btn {{inputValue ? 'send-btn--active' : ''}}" bindtap="sendMessage">发送</view>
+  </view>
+</view>

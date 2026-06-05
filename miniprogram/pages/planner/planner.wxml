@@ -1,0 +1,57 @@
+<!-- 兴趣选择页 -->
+<view class="page-wrap">
+  <view class="page-hd">
+    <view class="page-hd-title">定制您的贵州之旅</view>
+    <view class="page-hd-desc">选择兴趣偏好与出行需求，AI为您生成专属画像</view>
+  </view>
+
+  <view class="form-section">
+    <view class="card">
+      <view class="form-label">兴趣标签 <text class="required">（至少2项）</text></view>
+      <view class="tag-list">
+        <text class="tag {{selectedTagIds.indexOf(item.id) > -1 ? 'tag-active' : 'tag-default'}}"
+          wx:for="{{interestTags}}" wx:key="id"
+          data-id="{{item.id}}" bindtap="toggleTag">{{item.icon}} {{item.name}}</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="form-label">出行天数</view>
+      <view class="radio-group">
+        <view class="radio-item {{days === item ? 'radio-active' : ''}}" wx:for="{{[1,2,3,4,5,7]}}" wx:key="*this" data-val="{{item}}" bindtap="setDays">{{item}}天</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="form-label">预算范围</view>
+      <view class="radio-group">
+        <view class="radio-item {{budget === item ? 'radio-active' : ''}}" wx:for="{{['经济型','舒适型','品质型']}}" wx:key="*this" data-val="{{item}}" bindtap="setBudget">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="form-label">同行人群</view>
+      <view class="radio-group">
+        <view class="radio-item {{companion === item ? 'radio-active' : ''}}" wx:for="{{['独自出行','情侣/朋友','亲子家庭','银发康养','研学团队']}}" wx:key="*this" data-val="{{item}}" bindtap="setCompanion">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="form-label">体力偏好</view>
+      <view class="radio-group">
+        <view class="radio-item {{physicalLevel === item ? 'radio-active' : ''}}" wx:for="{{['轻松','适中','挑战']}}" wx:key="*this" data-val="{{item}}" bindtap="setPhysical">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="form-label">旅游节奏</view>
+      <view class="radio-group">
+        <view class="radio-item {{pace === item ? 'radio-active' : ''}}" wx:for="{{['慢游','均衡','高效']}}" wx:key="*this" data-val="{{item}}" bindtap="setPace">{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="submit-area">
+    <button class="btn-primary submit-btn" bindtap="handleSubmit">生成个性化路线</button>
+  </view>
+</view>

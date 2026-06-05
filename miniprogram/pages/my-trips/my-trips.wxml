@@ -1,0 +1,50 @@
+<!-- 我的行程页面 -->
+<view class="page-container">
+  <view class="page-header">
+    <text class="header-title">我的行程</text>
+    <text class="header-subtitle">管理和查看您的旅行计划</text>
+  </view>
+
+  <!-- 有行程时 -->
+  <scroll-view wx:if="{{trips.length > 0}}" class="trips-list" scroll-y="true" enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{trips}}" wx:key="id" class="trip-card">
+      <!-- 左滑删除容器 -->
+      <view class="trip-card-inner">
+        <view class="trip-main" data-id="{{item.id}}" bindtap="onTapTrip">
+          <view class="trip-route-info">
+            <text class="trip-route-name">{{item.routeName || item.name || '未命名行程'}}</text>
+            <view class="trip-meta">
+              <view class="trip-meta-item">
+                <image class="meta-icon" src="/images/icons/calendar.svg" mode="aspectFit"></image>
+                <text class="meta-text">{{item.dateSelected || item.date || '待定日期'}}</text>
+              </view>
+              <view class="trip-meta-item">
+                <image class="meta-icon" src="/images/icons/clock.svg" mode="aspectFit"></image>
+                <text class="meta-text">{{item.daysCount || item.days || 1}}天行程</text>
+              </view>
+            </view>
+          </view>
+          <image class="trip-arrow" src="/images/icons/chevron-right.svg" mode="aspectFit"></image>
+        </view>
+        <!-- 删除按钮 -->
+        <view class="trip-delete-btn" data-id="{{item.id}}" bindtap="onDeleteTrip">
+          <image class="delete-icon" src="/images/icons/trash.svg" mode="aspectFit"></image>
+          <text class="delete-text">删除</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部间距 -->
+    <view class="list-bottom-spacer"></view>
+  </scroll-view>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-state">
+    <image class="empty-icon" src="/images/icons/map-route.svg" mode="aspectFit"></image>
+    <text class="empty-title">还没有行程</text>
+    <text class="empty-desc">去探索景点并规划您的桂林之旅吧</text>
+    <button class="explore-btn" bindtap="onGoExplore">
+      <text class="explore-btn-text">去探索景点</text>
+    </button>
+  </view>
+</view>

@@ -1,0 +1,45 @@
+<!-- 路线推荐页 -->
+<view class="page-wrap">
+  <view class="page-hd">
+    <view class="page-hd-title">个性化路线推荐</view>
+    <view class="page-hd-desc" wx:if="{{routes.length}}">基于您的画像，共匹配{{routes.length}}条路线</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-box"><view class="loading-text">AI正在匹配最优路线…</view></view>
+
+  <view wx:else class="route-list">
+    <view class="route-card card {{expandedId === item.id ? 'expanded' : ''}}" wx:for="{{routes}}" wx:key="id" bindtap="toggleExpand" data-id="{{item.id}}">
+      <view class="rc-header">
+        <view class="rc-rank">#{{index + 1}}</view>
+        <view class="rc-body">
+          <view class="rc-name">{{item.route.name}}</view>
+          <view class="rc-desc">{{item.route.description}}</view>
+          <view class="rc-meta">
+            <text class="meta-item">{{item.route.days}}天</text>
+            <text class="meta-item">{{item.route.physicalLevel}}</text>
+            <text class="meta-item">{{item.route.budgetRange}}</text>
+          </view>
+          <view class="rc-tags">
+            <text class="tag-mini" wx:for="{{item.route.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+          </view>
+        </view>
+        <view class="rc-score">{{item.score}}<text class="score-unit">分</text></view>
+      </view>
+
+      <view wx:if="{{expandedId === item.id}}" class="rc-timeline">
+        <view class="tl-day" wx:for="{{item.route.dailyPlan}}" wx:key="day" wx:for-item="plan">
+          <view class="tl-marker">
+            <view class="tl-dot"></view>
+            <view wx:if="{{plan.day < item.route.dailyPlan.length}}" class="tl-line"></view>
+          </view>
+          <view class="tl-content">
+            <view class="tl-head">Day {{plan.day}} · {{plan.title}}</view>
+            <view class="tl-desc">{{plan.description}}</view>
+            <view class="tl-meta">{{plan.meals}} · {{plan.accommodation}}</view>
+          </view>
+        </view>
+        <button class="btn-primary" style="margin-top:16rpx" bindtap="selectRoute" data-id="{{item.route.id}}">选择此路线 · 咨询AI导游</button>
+      </view>
+    </view>
+  </view>
+</view>

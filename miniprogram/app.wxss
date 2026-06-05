@@ -1,0 +1,97 @@
+/* 全局样式 - 黔行智导小程序 */
+page {
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  font-size: 28rpx;
+  background: #f4f8f5;
+  box-sizing: border-box;
+  color: #10251d;
+}
+
+/* Color system */
+.c-primary { color: #1f8f5f; }
+.c-blue { color: #2f6bff; }
+.c-orange { color: #e67e22; }
+.c-text { color: #10251d; }
+.c-gray { color: #5d6b7a; }
+.c-light { color: #909399; }
+
+.bg-primary { background: #1f8f5f; }
+.bg-gradient { background: linear-gradient(135deg, #1f8f5f, #2f6bff); }
+
+/* Common card */
+.card {
+  background: rgba(255,255,255,0.78);
+  border-radius: 24rpx;
+  border: 1px solid rgba(31,143,95,0.08);
+  box-shadow: 0 12rpx 36rpx rgba(19,61,45,0.04);
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+}
+
+/* Page layout */
+.page-wrap {
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+.page-hd {
+  padding: 40rpx 32rpx 24rpx;
+}
+.page-hd-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #10251d;
+  letter-spacing: -0.03em;
+}
+.page-hd-desc {
+  font-size: 28rpx;
+  color: #5d6b7a;
+  margin-top: 8rpx;
+  line-height: 1.6;
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #1f8f5f, #2f6bff);
+  color: #fff;
+  border-radius: 24rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  border: none;
+  padding: 24rpx 0;
+}
+.btn-outline {
+  border: 2rpx solid rgba(31,143,95,0.3);
+  background: #fff;
+  color: #1f8f5f;
+  border-radius: 24rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+/* Tag styles */
+.tag {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  margin: 6rpx;
+}
+.tag-active {
+  background: rgba(31,143,95,0.12);
+  color: #1f8f5f;
+  border: 2rpx solid #1f8f5f;
+  font-weight: 600;
+}
+.tag-default {
+  background: rgba(255,255,255,0.85);
+  color: #5d6b7a;
+  border: 2rpx solid rgba(31,143,95,0.15);
+}
+
+/* Flex helpers */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }

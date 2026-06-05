@@ -1,0 +1,199 @@
+/* ==========================================
+   guide.wxss — AI Guide Chat Page
+   Style system: primary #1f8f5f, blue #2f6bff
+   ========================================== */
+
+/* ---------- Page container ---------- */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f0f2f5;
+  overflow: hidden;
+}
+
+/* ---------- Chat scroll area ---------- */
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.msg-list {
+  padding: 24rpx 20rpx 4rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Message row ---------- */
+.msg-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 32rpx;
+}
+
+.msg-ai {
+  justify-content: flex-start;
+}
+
+.msg-user {
+  justify-content: flex-end;
+}
+
+/* ---------- Avatar ---------- */
+.avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.avatar-ai {
+  background: linear-gradient(135deg, #1f8f5f, #4caf84);
+}
+
+.avatar-user {
+  background: linear-gradient(135deg, #ff8c42, #ff6b35);
+}
+
+/* ---------- Chat bubbles ---------- */
+.bubble {
+  max-width: 68%;
+  padding: 20rpx 26rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+  word-break: break-all;
+  box-sizing: border-box;
+}
+
+.bubble-ai {
+  background: #e8f5e9;
+  color: #2c3e3a;
+  border-top-left-radius: 6rpx;
+  margin-left: 16rpx;
+}
+
+.bubble-user {
+  background: linear-gradient(135deg, #1f8f5f, #2f6bff);
+  color: #fff;
+  border-top-right-radius: 6rpx;
+  margin-right: 16rpx;
+}
+
+/* ---------- Typing indicator ---------- */
+.bubble-typing {
+  background: #e8f5e9;
+  padding: 24rpx 32rpx;
+  border-top-left-radius: 6rpx;
+  margin-left: 16rpx;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #8fbea5;
+  animation: typing-bounce 1.2s infinite ease-in-out;
+}
+
+@keyframes typing-bounce {
+  0%, 50%, 100% {
+    opacity: 0.25;
+    transform: scale(0.75);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* ---------- Quick questions ---------- */
+.quick-section {
+  padding: 20rpx 20rpx 12rpx;
+  background: #fff;
+  border-top: 1rpx solid #e8e8e8;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+}
+
+.quick-item {
+  padding: 18rpx 16rpx;
+  background: #f4faf7;
+  border: 1rpx solid #d4ede0;
+  border-radius: 14rpx;
+  font-size: 24rpx;
+  color: #1f8f5f;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.quick-item:active {
+  background: #dff0e7;
+}
+
+/* ---------- Input bar ---------- */
+.input-bar {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 20rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1rpx solid #e8e8e8;
+  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.03);
+}
+
+.input-field {
+  flex: 1;
+  height: 72rpx;
+  background: #f5f6f8;
+  border-radius: 36rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.input-field::placeholder {
+  color: #b0b0b0;
+}
+
+.send-btn {
+  margin-left: 16rpx;
+  padding: 16rpx 30rpx;
+  background: #c0c0c0;
+  color: #fff;
+  border-radius: 36rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.send-btn--active {
+  background: #1f8f5f;
+}
+
+.send-btn--active:active {
+  background: #177a4e;
+}

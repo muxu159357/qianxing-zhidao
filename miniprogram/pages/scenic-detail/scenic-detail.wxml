@@ -1,0 +1,107 @@
+<!-- 景点详情页 -->
+<view wx:if="{{attraction}}" class="page-container">
+  <!-- 顶部英雄区域 -->
+  <view class="hero-section" style="background: {{attraction.imageGradient || 'linear-gradient(135deg, #1f8f5f 0%, #0d5c3a 40%, #2f6bff 100%)'}};">
+    <view class="hero-overlay">
+      <view class="hero-back" bindtap="onGoBack">
+        <image class="back-icon" src="/images/icons/arrow-left.svg" mode="aspectFit"></image>
+      </view>
+      <view class="hero-content">
+        <text class="hero-name">{{attraction.name}}</text>
+        <view class="hero-city-row">
+          <image class="hero-location-icon" src="/images/icons/location-white.svg" mode="aspectFit"></image>
+          <text class="hero-city">{{attraction.city}}</text>
+        </view>
+        <view class="hero-tags">
+          <text wx:for="{{attraction.tags}}" wx:key="*this" class="hero-tag">{{item}}</text>
+        </view>
+      </view>
+      <view class="hero-icon-wrap">
+        <text class="hero-icon">{{attraction.icon || '🏞️'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 侧边信息栏 -->
+  <view class="info-sidebar">
+    <view class="info-item">
+      <text class="info-value">{{attraction.rating}}</text>
+      <text class="info-label">评分</text>
+    </view>
+    <view class="info-divider"></view>
+    <view class="info-item">
+      <text class="info-value">{{attraction.price || '免费'}}</text>
+      <text class="info-label">门票</text>
+    </view>
+    <view class="info-divider"></view>
+    <view class="info-item">
+      <text class="info-value">{{attraction.duration || '半天'}}</text>
+      <text class="info-label">建议时长</text>
+    </view>
+    <view class="info-divider"></view>
+    <view class="info-item">
+      <text class="info-value">{{attraction.city}}</text>
+      <text class="info-label">所在城市</text>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view class="content-scroll" scroll-y="true" enhanced show-scrollbar="{{false}}">
+    <!-- 简介 -->
+    <view class="section-card">
+      <view class="section-header">
+        <view class="section-dot green-dot"></view>
+        <text class="section-title">景点简介</text>
+      </view>
+      <text class="description-text">{{attraction.description}}</text>
+    </view>
+
+    <!-- 亮点 -->
+    <view wx:if="{{attraction.highlights && attraction.highlights.length}}" class="section-card">
+      <view class="section-header">
+        <view class="section-dot blue-dot"></view>
+        <text class="section-title">精彩亮点</text>
+      </view>
+      <view class="highlights-list">
+        <view wx:for="{{attraction.highlights}}" wx:key="*this" class="highlight-item">
+          <text class="highlight-dot">✦</text>
+          <text class="highlight-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 旅行贴士 -->
+    <view wx:if="{{attraction.tips && attraction.tips.length}}" class="section-card">
+      <view class="section-header">
+        <view class="section-dot amber-dot"></view>
+        <text class="section-title">旅行贴士</text>
+      </view>
+      <view class="tips-list">
+        <view wx:for="{{attraction.tips}}" wx:key="*this" class="tip-item">
+          <view class="tip-index">{{index + 1}}</view>
+          <text class="tip-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="bottom-actions">
+      <button class="ai-btn" bindtap="onAskAI">
+        <image class="ai-btn-icon" src="/images/icons/sparkles.svg" mode="aspectFit"></image>
+        <text class="ai-btn-text">询问AI导游</text>
+      </button>
+    </view>
+
+    <view class="list-bottom-spacer"></view>
+  </scroll-view>
+</view>
+
+<!-- 加载中 / 未找到 -->
+<view wx:else class="page-container centered">
+  <view class="not-found">
+    <image class="nf-icon" src="/images/icons/map-pin.svg" mode="aspectFit"></image>
+    <text class="nf-title">景点未找到</text>
+    <text class="nf-desc">请检查链接是否正确</text>
+    <button class="nf-back-btn" bindtap="onGoBack">返回</button>
+  </view>
+</view>

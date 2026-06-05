@@ -1,0 +1,56 @@
+<!-- 游客画像页 -->
+<view class="page-wrap">
+  <view class="page-hd">
+    <view class="page-hd-title">AI 游客画像</view>
+    <view class="page-hd-desc">基于您的偏好，AI已生成专属游客画像</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-box">
+    <view class="loading-text">AI正在分析您的偏好…</view>
+  </view>
+
+  <view wx:elif="{{profile}}" class="profile-content">
+    <view class="profile-hero card">
+      <view class="hero-badge">游客画像</view>
+      <view class="profile-name">{{profile.profileName}}</view>
+      <view class="profile-summary">{{profile.matchSummary}}</view>
+      <view class="profile-tags">
+        <text class="tag tag-active" wx:for="{{selection.selectedTagIds}}" wx:key="*this">{{getTagName(item)}}</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="form-label">兴趣匹配度</view>
+      <view class="match-item" wx:for="{{profile.dominantInterests}}" wx:key="tagId">
+        <view class="match-header">
+          <text class="match-name">{{getTagName(item.tagId)}}</text>
+          <text class="match-score">{{item.score}}%</text>
+        </view>
+        <view class="progress-bar">
+          <view class="progress-fill" style="width:{{item.score}}%"></view>
+        </view>
+        <view class="match-reason">{{item.reason}}</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="form-label">出行偏好</view>
+      <view class="info-row"><text class="info-label">出行天数</text><text class="info-value">{{selection.days}}天</text></view>
+      <view class="info-row"><text class="info-label">预算范围</text><text class="info-value">{{selection.budget}}</text></view>
+      <view class="info-row"><text class="info-label">同行人群</text><text class="info-value">{{selection.companion}}</text></view>
+      <view class="info-row"><text class="info-label">体力偏好</text><text class="info-value">{{selection.physicalLevel}}</text></view>
+      <view class="info-row"><text class="info-label">旅游节奏</text><text class="info-value">{{selection.pace}}</text></view>
+    </view>
+
+    <view class="card">
+      <view class="form-label">行程风格</view>
+      <view class="style-badge">{{profile.routeStyle}}</view>
+      <view class="style-desc">{{profile.routeStyleDesc}}</view>
+    </view>
+
+    <view class="actions">
+      <button class="btn-primary action-btn" bindtap="goRecommend">查看推荐路线</button>
+      <button class="btn-outline action-btn-secondary" bindtap="goBack">重新选择</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/planner/planner",
+    "pages/profile/profile",
+    "pages/recommend/recommend",
+    "pages/guide/guide",
+    "pages/knowledge/knowledge",
+    "pages/scenic-detail/scenic-detail",
+    "pages/my-trips/my-trips"
+  ],
+  "window": {
+    "navigationBarTitleText": "黔行智导",
+    "navigationBarBackgroundColor": "#1f8f5f",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f4f8f5"
+  }
+}
