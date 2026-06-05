@@ -1,0 +1,56 @@
+:root {
+  /* ====== 断点 ====== */
+  --bp-mobile: 768px;
+  --bp-tablet: 1024px;
+
+  /* ====== 间距 ====== */
+  --space-xs: 6px;
+  --space-sm: 12px;
+  --space-md: 20px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+
+  /* ====== 字号 ====== */
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-md: 17px;
+  --text-lg: 20px;
+  --text-xl: 26px;
+  --text-2xl: 34px;
+  --text-hero: clamp(34px, 5.5vw, 68px);
+
+  /* ====== 圆角 ====== */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+
+  /* ====== 品牌色 ====== */
+  --color-primary: #1f8f5f;
+  --color-accent: #2f6bff;
+  --color-warm: #e67e22;
+  --color-bg: #f4f8f5;
+  --color-bg-alt: #eef7f1;
+  --color-text: #10251d;
+  --color-body: #4d5f6f;
+  --color-muted: #909399;
+
+  /* ====== 导航栏 ====== */
+  --navbar-height: 56px;
+
+  /* ====== 底部安全区 ====== */
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* ====== 触摸 ====== */
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 768px) {
+  :root { --navbar-height: 68px; }
+}
+
+@media (min-width: 1024px) {
+  :root { --navbar-height: 76px; }
+}

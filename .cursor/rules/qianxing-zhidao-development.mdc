@@ -1,0 +1,35 @@
+---
+description: Core development rules for the Qianxing Zhidao demo project
+alwaysApply: true
+---
+
+# 黔行智导开发规则
+
+本项目是 2026 贵州省人工智能创业大赛 Demo：Vue 3 + Vite + TypeScript + Element Plus 前端可演示闭环。
+
+## 强制流程
+
+- 每次开发前先输出：本次目标、涉及文件、预期效果、验证方式。
+- 等用户回复“确认”或“继续”后再修改代码。
+- 一次只开发一个页面、组件或小功能，不做大规模连带重构。
+- 修改后保持 `npm run dev` 可运行；必要时用 `npm run build` 或页面访问验证。
+
+## 技术边界
+
+- Demo 阶段只用本地 Mock 数据和规则算法。
+- 禁止接入真实后端、数据库、地图 SDK、真实 AI API、ECharts 或复杂外部依赖。
+- 统计展示使用 Element Plus 卡片、进度条、列表、Tag、Descriptions 等组件。
+- 所有 Mock 数据和组件 Props 先有 TypeScript 类型定义。
+
+## 产品与 UI
+
+- 文案必须正式、适合比赛展示；不得出现 Lorem、test、TODO、敬请期待等占位内容。
+- UI 保持科技感、文旅感、贵州地域特色：翠绿 `#1f8f5f`、科技蓝 `#2f6bff`、暖橙 `#e67e22`。
+- 页面内容最大宽度 1280px，移动端断点 900px。
+- 优先复用全局导航、Mock 数据层和既有页面风格。
+
+## 当前进度
+
+- 已有：`HomeView.vue`、`PlannerView.vue`、`ProfileView.vue`、基础 `src/types`、`src/mock`。
+- 待完善：抽离 `AppNavbar.vue`、实现 `RouteRecommendView.vue`、继续开发 AI 导游、知识库、景点详情、后台看板、Demo 流程页。
+- 发现默认模板残留：`src/components/HelloWorld.vue` 后续应清理。
