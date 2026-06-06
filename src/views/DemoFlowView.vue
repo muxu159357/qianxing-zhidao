@@ -2,8 +2,8 @@
   <div class="demo-page">
     <main class="demo-body">
       <section ref="headerRef" class="page-header" style="opacity:0">
-        <h2>Demo 演示流程</h2>
-        <p>按以下步骤完整体验"黔行智导"智能导览能力，总耗时约 3-5 分钟</p>
+        <h2>智能伴游体验</h2>
+        <p>从兴趣选择到路线推荐，带你快速体验黔行智导的 AI 山地伴游服务。</p>
       </section>
 
       <div class="flow-list" ref="flowRef">
@@ -11,7 +11,7 @@
           class="flow-card" :class="{ current: currentStep === idx, done: currentStep > idx }"
           @click="goStep(step.route)">
           <div class="step-indicator">
-            <span v-if="currentStep > idx" class="step-check">&#10003;</span>
+            <span v-if="currentStep > idx" class="step-check"><el-icon><Check /></el-icon></span>
             <span v-else class="step-num">{{ idx + 1 }}</span>
           </div>
           <div class="step-content">
@@ -29,7 +29,7 @@
 
       <div class="progress-bar" ref="progressRef" style="opacity:0">
         <div class="progress-info">
-          <span>演示进度</span>
+          <span>体验进度</span>
           <span>{{ Math.round((currentStep / steps.length) * 100) }}%</span>
         </div>
         <el-progress :percentage="Math.round((currentStep / steps.length) * 100)" :stroke-width="10" color="#1f8f5f" />
@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ArrowRight } from '@element-plus/icons-vue'
+import { ArrowRight, Check } from '@element-plus/icons-vue'
 import gsap from 'gsap'
 
 const router = useRouter()
@@ -50,10 +50,10 @@ const flowRef = ref<HTMLElement | null>(null)
 const progressRef = ref<HTMLElement | null>(null)
 
 const steps = [
-  { route: '/planner', title: '定制兴趣偏好', desc: '选择兴趣标签、出行天数、预算、同行人群、体力偏好与旅游节奏。' },
-  { route: '/profile', title: '查看游客画像', desc: 'AI 基于偏好自动生成专属游客画像，展示兴趣匹配度分数。' },
-  { route: '/recommend', title: '获取路线推荐', desc: 'AI 智能匹配贵州精品旅游路线，按匹配度排序并展示每日行程。' },
-  { route: '/guide', title: 'AI 智能导游问答', desc: '基于贵州全域知识库与 AI 对话能力，实时解答旅行问题。' },
+  { route: '/planner', title: '选择兴趣', desc: '选择你的旅行兴趣、出行天数、预算范围、同行人群和体力偏好。' },
+  { route: '/profile', title: '生成画像', desc: 'AI 基于你的偏好自动生成专属游客画像与兴趣匹配分析。' },
+  { route: '/recommend', title: '查看路线', desc: 'AI 智能匹配贵州精品旅游路线，按匹配度排序并展示每日行程。' },
+  { route: '/guide', title: 'AI 山地伴游', desc: '基于贵州全域知识库，AI 伴游实时解答旅行问题并提供安全提醒。' },
 ]
 
 const currentStep = ref(0)

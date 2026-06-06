@@ -1,8 +1,15 @@
 <!-- 游客画像页 -->
 <view class="page-wrap">
   <view class="page-hd">
-    <view class="page-hd-title">AI 游客画像</view>
-    <view class="page-hd-desc">基于您的偏好，AI已生成专属游客画像</view>
+    <view class="page-hd-row">
+      <view class="page-hd-left">
+        <view class="page-hd-title">AI 游客画像</view>
+        <view class="page-hd-desc">基于您的偏好，AI已生成专属游客画像</view>
+      </view>
+      <view class="page-hd-right">
+        <text class="home-link" bindtap="goHome">首页</text>
+      </view>
+    </view>
   </view>
 
   <view wx:if="{{loading}}" class="loading-box">

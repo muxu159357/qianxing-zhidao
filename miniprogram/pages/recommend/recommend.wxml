@@ -1,14 +1,21 @@
 <!-- 路线推荐页 -->
 <view class="page-wrap">
   <view class="page-hd">
-    <view class="page-hd-title">个性化路线推荐</view>
-    <view class="page-hd-desc" wx:if="{{routes.length}}">基于您的画像，共匹配{{routes.length}}条路线</view>
+    <view class="page-hd-row">
+      <view class="page-hd-left">
+        <view class="page-hd-title">个性化路线推荐</view>
+        <view class="page-hd-desc" wx:if="{{routes.length}}">基于您的画像，共匹配{{routes.length}}条路线</view>
+      </view>
+      <view class="page-hd-right">
+        <text class="home-link" bindtap="goHome">首页</text>
+      </view>
+    </view>
   </view>
 
   <view wx:if="{{loading}}" class="loading-box"><view class="loading-text">AI正在匹配最优路线…</view></view>
 
   <view wx:else class="route-list">
-    <view class="route-card card {{expandedId === item.id ? 'expanded' : ''}}" wx:for="{{routes}}" wx:key="id" bindtap="toggleExpand" data-id="{{item.id}}">
+    <view class="route-card card {{expandedId === item.route.id ? 'expanded' : ''}}" wx:for="{{routes}}" wx:key="route.id" bindtap="toggleExpand" data-id="{{item.route.id}}">
       <view class="rc-header">
         <view class="rc-rank">#{{index + 1}}</view>
         <view class="rc-body">
@@ -26,7 +33,7 @@
         <view class="rc-score">{{item.score}}<text class="score-unit">分</text></view>
       </view>
 
-      <view wx:if="{{expandedId === item.id}}" class="rc-timeline">
+      <view wx:if="{{expandedId === item.route.id}}" class="rc-timeline">
         <view class="tl-day" wx:for="{{item.route.dailyPlan}}" wx:key="day" wx:for-item="plan">
           <view class="tl-marker">
             <view class="tl-dot"></view>
@@ -38,7 +45,7 @@
             <view class="tl-meta">{{plan.meals}} · {{plan.accommodation}}</view>
           </view>
         </view>
-        <button class="btn-primary" style="margin-top:16rpx" bindtap="selectRoute" data-id="{{item.route.id}}">选择此路线 · 咨询AI导游</button>
+        <button class="btn-primary" style="margin-top:16rpx" bindtap="selectRoute" data-id="{{item.route.id}}" data-score="{{item.score}}">查看路线详情</button>
       </view>
     </view>
   </view>

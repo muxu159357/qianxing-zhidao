@@ -1,0 +1,348 @@
+/* 路线详情页 */
+.page-wrap {
+  min-height: 100vh;
+  background: #f4f8f5;
+  padding-bottom: 160rpx;
+}
+
+/* 空态 */
+.empty-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 48rpx;
+}
+.empty-card {
+  text-align: center;
+  padding: 64rpx 48rpx;
+  border-radius: 28rpx;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 16rpx 48rpx rgba(19,61,45,0.06);
+  max-width: 600rpx;
+  width: 100%;
+}
+.empty-icon { font-size: 80rpx; margin-bottom: 24rpx; }
+.empty-title { font-size: 36rpx; font-weight: 700; color: #10251d; margin-bottom: 16rpx; }
+.empty-desc { font-size: 28rpx; color: #5d6b7a; line-height: 1.7; margin-bottom: 40rpx; }
+
+/* 路线头部 */
+.route-hero {
+  padding: 48rpx 40rpx 40rpx;
+  background: linear-gradient(135deg, #1f8f5f 0%, #2f6bff 100%);
+  color: #fff;
+}
+.route-hero-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.route-hero-main { flex: 1; }
+.route-name {
+  font-size: 44rpx;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin-bottom: 16rpx;
+}
+.route-desc {
+  font-size: 28rpx;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+.route-score {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+.score-circle {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.score-num { font-size: 36rpx; font-weight: 800; }
+.score-unit { font-size: 20rpx; opacity: 0.85; }
+.score-label { font-size: 26rpx; opacity: 0.85; }
+
+/* 基本信息 */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  padding: 32rpx 32rpx 16rpx;
+}
+.info-item {
+  padding: 24rpx;
+  border-radius: 16rpx;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 4rpx 16rpx rgba(19,61,45,0.04);
+}
+.info-label { font-size: 22rpx; color: #8c9ba6; margin-bottom: 8rpx; }
+.info-value { font-size: 28rpx; font-weight: 700; color: #10251d; }
+.info-value-sm { font-size: 24rpx; }
+
+/* 标签行 */
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  padding: 0 32rpx 24rpx;
+}
+.tag-item {
+  font-size: 22rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  background: rgba(31,143,95,0.08);
+  color: #1f8f5f;
+  font-weight: 600;
+}
+
+/* 分区 */
+.section {
+  padding: 32rpx 32rpx 0;
+}
+.section-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #10251d;
+  margin-bottom: 20rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #1f8f5f;
+}
+.safety-title {
+  border-left-color: #e67e22;
+}
+
+/* 时间线 */
+.timeline { padding: 0; }
+.tl-day { display: flex; gap: 16rpx; padding-bottom: 8rpx; }
+.tl-marker {
+  width: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.tl-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: #1f8f5f;
+  margin-top: 8rpx;
+}
+.tl-line {
+  width: 3rpx;
+  flex: 1;
+  background: rgba(31,143,95,0.18);
+  margin-top: 8rpx;
+}
+.tl-content {
+  flex: 1;
+  padding: 12rpx 20rpx 24rpx;
+  margin-bottom: 8rpx;
+  border-radius: 16rpx;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 4rpx 16rpx rgba(19,61,45,0.04);
+}
+.tl-head { font-size: 28rpx; font-weight: 700; color: #1f5f45; margin-bottom: 8rpx; }
+.tl-desc { font-size: 26rpx; color: #4d5f6f; line-height: 1.65; margin-bottom: 10rpx; }
+.tl-meta { font-size: 22rpx; color: #909399; }
+
+/* 景点卡片 */
+.scenic-grid { display: flex; flex-direction: column; gap: 16rpx; }
+.scenic-card {
+  display: flex;
+  align-items: center;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 4rpx 16rpx rgba(19,61,45,0.04);
+}
+.scenic-gradient {
+  width: 100rpx;
+  height: 100rpx;
+  flex-shrink: 0;
+  border-radius: 12rpx;
+}
+.scenic-info {
+  flex: 1;
+  padding: 16rpx 20rpx;
+}
+.scenic-name { font-size: 28rpx; font-weight: 700; color: #10251d; }
+.scenic-city { font-size: 22rpx; color: #8c9ba6; margin-top: 4rpx; }
+.scenic-rating { font-size: 22rpx; color: #e67e22; margin-top: 4rpx; font-weight: 600; }
+.scenic-arrow {
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: #c0c4cc;
+}
+
+/* 贴士卡片 */
+.tip-card {
+  padding: 24rpx 28rpx;
+  border-radius: 16rpx;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 4rpx 16rpx rgba(19,61,45,0.04);
+}
+.tip-text {
+  font-size: 26rpx;
+  color: #4d5f6f;
+  line-height: 1.75;
+  margin-bottom: 12rpx;
+}
+.tip-text:last-child { margin-bottom: 0; }
+.tip-label { font-weight: 700; color: #10251d; }
+
+/* 安全守护卡片 */
+.safety-card {
+  padding: 28rpx;
+  border-radius: 20rpx;
+  background: rgba(255,255,255,0.9);
+  border: 1rpx solid rgba(230,126,34,0.15);
+  box-shadow: 0 8rpx 32rpx rgba(230,126,34,0.06);
+}
+.safety-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  padding: 14rpx 0;
+}
+.safety-row:first-child { padding-top: 0; }
+.safety-label { font-size: 26rpx; font-weight: 700; color: #10251d; }
+.safety-icon { font-size: 28rpx; flex-shrink: 0; width: 36rpx; text-align: center; }
+.safety-text { font-size: 26rpx; color: #4d5f6f; line-height: 1.65; flex: 1; }
+
+.risk-badge {
+  font-size: 24rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 999rpx;
+  font-weight: 700;
+}
+.risk-low { background: rgba(31,143,95,0.1); color: #1f8f5f; }
+.risk-mid { background: rgba(230,126,34,0.1); color: #e67e22; }
+.risk-high { background: rgba(239,68,68,0.1); color: #ef4444; }
+
+.safety-divider {
+  height: 1rpx;
+  background: #eef2f5;
+  margin: 20rpx 0;
+}
+
+.safety-subtitle {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #10251d;
+  margin-bottom: 14rpx;
+}
+
+.service-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 24rpx;
+}
+.service-item {
+  font-size: 24rpx;
+  padding: 8rpx 18rpx;
+  border-radius: 8rpx;
+  background: rgba(47,107,255,0.06);
+  color: #2f6bff;
+  font-weight: 600;
+}
+
+.emergency-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 8rpx;
+}
+.emergency-item {
+  flex: 1;
+  min-width: 160rpx;
+  padding: 20rpx 16rpx;
+  border-radius: 14rpx;
+  background: rgba(239,68,68,0.04);
+  text-align: center;
+}
+.emergency-label { font-size: 22rpx; color: #8c9ba6; margin-bottom: 6rpx; }
+.emergency-number { font-size: 32rpx; font-weight: 800; color: #ef4444; letter-spacing: 0.04em; }
+.emergency-note { font-size: 22rpx; color: #8c9ba6; }
+
+/* 替代路线 */
+.alt-route-box {
+  margin-top: 24rpx;
+  padding: 28rpx;
+  border-radius: 16rpx;
+  background: rgba(31,143,95,0.04);
+  border: 1rpx solid rgba(31,143,95,0.12);
+}
+.alt-route-label { font-size: 24rpx; color: #1f8f5f; font-weight: 600; margin-bottom: 10rpx; }
+.alt-route-name { font-size: 30rpx; font-weight: 700; color: #10251d; margin-bottom: 6rpx; }
+.alt-route-level { font-size: 24rpx; color: #5d6b7a; margin-bottom: 20rpx; }
+
+/* 底部操作栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx 32rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20rpx);
+  border-top: 1rpx solid rgba(31,143,95,0.08);
+  z-index: 10;
+}
+.btn-save {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  background: rgba(31,143,95,0.08);
+  color: #1f8f5f;
+  border: 2rpx solid rgba(31,143,95,0.2);
+}
+.btn-guide {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1f8f5f, #2f6bff);
+  color: #fff;
+  border: none;
+}
+
+/* 通用按钮 */
+.btn-primary {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1f8f5f, #2f6bff);
+  color: #fff;
+  border: none;
+}
+.btn-outline-sm {
+  width: 100%;
+  height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 36rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: transparent;
+  color: #1f8f5f;
+  border: 2rpx solid rgba(31,143,95,0.3);
+}

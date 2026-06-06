@@ -1,35 +1,55 @@
 ---
-description: Core development rules for the Qianxing Zhidao demo project
+description: 黔行智导核心开发规则 — Vue 3 + Vite + TypeScript + Element Plus + 微信小程序
 alwaysApply: true
 ---
 
 # 黔行智导开发规则
 
-本项目是 2026 贵州省人工智能创业大赛 Demo：Vue 3 + Vite + TypeScript + Element Plus 前端可演示闭环。
+本项目是 2026 贵州省人工智能创业大赛参赛项目：Vue 3 + Vite + TypeScript + Element Plus 前端 + 微信原生小程序。
+
+## 产品外显原则
+
+用户端页面面向真实游客，**严禁出现**：Demo/demo/测试/比赛/参赛/评委/路演/演示流程/占位页/开发中/Mock/假数据/临时页面/TODO/test/coming soon
+
+功能暂未完成时的产品化表达：
+- "正在为你整理更完整的行程建议"
+- "安全提醒功能已开启基础模式"
 
 ## 强制流程
 
-- 每次开发前先输出：本次目标、涉及文件、预期效果、验证方式。
-- 等用户回复“确认”或“继续”后再修改代码。
+- 每次开发前先输出：所属端、划分理由、本次目标、涉及文件、是否涉及用户可见文案、是否需要清理违禁词汇、贴合赛题方向、后端接口预留、验证方式。
+- 等用户回复"确认"或"继续"后再修改代码。
 - 一次只开发一个页面、组件或小功能，不做大规模连带重构。
 - 修改后保持 `npm run dev` 可运行；必要时用 `npm run build` 或页面访问验证。
 
+## 赛题对齐（四个核心方向）
+
+1. **游客兴趣建模与个性化导览** — 识别兴趣、人群、体力偏好，生成个性化推荐
+2. **山地动态路径规划与实时重规划** — 体力消耗、天气、拥堵模拟 + 替代方案
+3. **游客异常行为识别与风险预警** — 偏离路线、长时间停留、体力下降、高风险区域
+4. **游客求助与安全辅助** — 附近服务点、医疗点、救援点、紧急联系
+
 ## 技术边界
 
-- Demo 阶段只用本地 Mock 数据和规则算法。
-- 禁止接入真实后端、数据库、地图 SDK、真实 AI API、ECharts 或复杂外部依赖。
+- 当前阶段只用本地数据层和规则算法（标签匹配+体力+人群+天数打分、风险评分规则）。
+- 禁止接入真实后端、数据库、地图 SDK、真实 AI API、ECharts 或复杂外部依赖（除非经过确认）。
 - 统计展示使用 Element Plus 卡片、进度条、列表、Tag、Descriptions 等组件。
-- 所有 Mock 数据和组件 Props 先有 TypeScript 类型定义。
+- 所有数据和组件 Props 先有 TypeScript 类型定义。
 
 ## 产品与 UI
 
-- 文案必须正式、适合比赛展示；不得出现 Lorem、test、TODO、敬请期待等占位内容。
+- 文案面向真实游客，不得出现 Lorem、test、TODO、敬请期待、开发中等占位内容。
+- 项目名称：**黔行智导：贵州山地旅游 AI 伴游与安全守护平台**
 - UI 保持科技感、文旅感、贵州地域特色：翠绿 `#1f8f5f`、科技蓝 `#2f6bff`、暖橙 `#e67e22`。
 - 页面内容最大宽度 1280px，移动端断点 900px。
-- 优先复用全局导航、Mock 数据层和既有页面风格。
+- 动画强制 GSAP（Web）/ wx.createAnimation（小程序），禁止 CSS @keyframes 作为主要动画。
+- 禁止 Emoji 图标，优先真实图片 > SVG > 纯文字。
+- 优先复用全局导航、数据层和既有页面风格。
 
 ## 当前进度
 
-- 已有：`HomeView.vue`、`PlannerView.vue`、`ProfileView.vue`、基础 `src/types`、`src/mock`。
-- 待完善：抽离 `AppNavbar.vue`、实现 `RouteRecommendView.vue`、继续开发 AI 导游、知识库、景点详情、后台看板、Demo 流程页。
-- 发现默认模板残留：`src/components/HelloWorld.vue` 后续应清理。
+- Web 端：9 个页面已完成（Home / Planner / Profile / RouteRecommend / AiGuide / ScenicKnowledge / ScenicDetail / AdminDashboard / DemoFlow）
+- 小程序端：8 个页面已完成（index / planner / profile / recommend / guide / knowledge / scenic-detail / my-trips）
+- 待开发：小程序路线详情独立页、小程序安全守护能力
+- 待清理：用户端页面中的 Demo/测试/比赛类违禁词汇
+- 待清理：`src/components/HelloWorld.vue` 模板残留

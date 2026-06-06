@@ -45,8 +45,8 @@ const router = createRouter({
       component: () => import('@/views/AdminDashboardView.vue'),
     },
     {
-      path: '/demo-flow',
-      name: 'demo-flow',
+      path: '/quick-tour',
+      name: 'quick-tour',
       component: () => import('@/views/DemoFlowView.vue'),
     },
   ],

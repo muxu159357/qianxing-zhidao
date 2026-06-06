@@ -7,7 +7,7 @@
       </section>
 
       <div v-if="loading" ref="loadingRef" class="loading-card" style="opacity:0">
-        <div class="loading-icon">🧬</div>
+        <div class="loading-icon"><el-icon :size="48"><MagicStick /></el-icon></div>
         <p>AI 正在分析您的偏好，生成专属画像…</p>
       </div>
 
@@ -34,7 +34,7 @@
             </div>
 
             <div class="match-card">
-              <h3 class="card-title"><span class="card-icon">🎯</span> 兴趣匹配度</h3>
+              <h3 class="card-title"><el-icon class="card-icon"><Connection /></el-icon> 兴趣匹配度</h3>
               <div class="match-list">
                 <div
                   v-for="item in profile.dominantInterests"
@@ -80,7 +80,7 @@
 
           <section class="profile-side">
             <div class="info-card">
-              <h3 class="card-title"><span class="card-icon">📋</span> 出行偏好摘要</h3>
+              <h3 class="card-title"><el-icon class="card-icon"><List /></el-icon> 出行偏好摘要</h3>
               <div class="info-list">
                 <div class="info-row">
                   <span class="info-label">出行天数</span>
@@ -106,7 +106,7 @@
             </div>
 
             <div class="style-card">
-              <h3 class="card-title"><span class="card-icon">🧭</span> 行程风格</h3>
+              <h3 class="card-title"><el-icon class="card-icon"><Promotion /></el-icon> 行程风格</h3>
               <div class="style-badge">{{ profile.routeStyle }}</div>
               <p class="style-desc">{{ profile.routeStyleDesc }}</p>
             </div>
@@ -129,7 +129,7 @@
       </template>
 
       <div v-else ref="emptyRef" class="loading-card" style="opacity:0">
-        <div class="loading-icon">⚠️</div>
+        <div class="loading-icon"><el-icon :size="48"><WarningFilled /></el-icon></div>
         <p>未检测到出行偏好数据</p>
         <el-button type="primary" size="large" @click="$router.push('/planner')">
           前往设置偏好
@@ -142,10 +142,11 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
+import { MagicStick, Connection, List, Promotion, WarningFilled } from '@element-plus/icons-vue'
 import gsap from 'gsap'
-import { generateProfile } from '@shared/mock'
+import { generateProfile, type GeneratedProfile } from '@shared/mock'
 import { interestTags as allTags } from '@shared/mock/interests'
-import type { VisitorSelection, GeneratedProfile } from '@shared/types'
+import type { VisitorSelection } from '@shared/types'
 
 interface ProfileResult {
   profileName: string
@@ -261,8 +262,7 @@ function goRecommend() {
 }
 
 .loading-icon {
-  font-size: 56px;
-  margin-bottom: 16px;
+  margin-bottom: 16px; color: #1f8f5f;
 }
 
 .loading-card p {
@@ -347,7 +347,7 @@ function goRecommend() {
 }
 
 .card-icon {
-  font-size: 22px;
+  font-size: 22px; color: #1f8f5f;
 }
 
 .match-item {

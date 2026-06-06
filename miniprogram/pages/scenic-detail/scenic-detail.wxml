@@ -1,15 +1,15 @@
 <!-- 景点详情页 -->
 <view wx:if="{{attraction}}" class="page-container">
   <!-- 顶部英雄区域 -->
-  <view class="hero-section" style="background: {{attraction.imageGradient || 'linear-gradient(135deg, #1f8f5f 0%, #0d5c3a 40%, #2f6bff 100%)'}};">
+  <view class="hero-section" style="background: {{attraction.imageUrl ? 'url(' + attraction.imageUrl + ') center/cover no-repeat' : (attraction.imageGradient || 'linear-gradient(135deg, #1f8f5f 0%, #0d5c3a 40%, #2f6bff 100%)')}};">
     <view class="hero-overlay">
       <view class="hero-back" bindtap="onGoBack">
-        <image class="back-icon" src="/images/icons/arrow-left.svg" mode="aspectFit"></image>
+        <view class="back-icon"></view>
       </view>
       <view class="hero-content">
         <text class="hero-name">{{attraction.name}}</text>
         <view class="hero-city-row">
-          <image class="hero-location-icon" src="/images/icons/location-white.svg" mode="aspectFit"></image>
+          <view class="hero-location-dot"></view>
           <text class="hero-city">{{attraction.city}}</text>
         </view>
         <view class="hero-tags">
@@ -17,7 +17,7 @@
         </view>
       </view>
       <view class="hero-icon-wrap">
-        <text class="hero-icon">{{attraction.icon || '🏞️'}}</text>
+        <view class="hero-icon">{{attraction.name.charAt(0)}}</view>
       </view>
     </view>
   </view>
@@ -87,8 +87,8 @@
     <!-- 底部操作 -->
     <view class="bottom-actions">
       <button class="ai-btn" bindtap="onAskAI">
-        <image class="ai-btn-icon" src="/images/icons/sparkles.svg" mode="aspectFit"></image>
-        <text class="ai-btn-text">询问AI导游</text>
+        <view class="ai-btn-dot"></view>
+        <text class="ai-btn-text">询问 AI 伴游</text>
       </button>
     </view>
 
@@ -99,7 +99,7 @@
 <!-- 加载中 / 未找到 -->
 <view wx:else class="page-container centered">
   <view class="not-found">
-    <image class="nf-icon" src="/images/icons/map-pin.svg" mode="aspectFit"></image>
+    <view class="nf-icon"></view>
     <text class="nf-title">景点未找到</text>
     <text class="nf-desc">请检查链接是否正确</text>
     <button class="nf-back-btn" bindtap="onGoBack">返回</button>

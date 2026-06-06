@@ -2,29 +2,112 @@
 .home-page { background: linear-gradient(180deg, #eef7f1 0%, #f4f8f5 100%); }
 
 .hero-section {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, #1f8f5f, #2f6bff);
   padding: 80rpx 48rpx 64rpx; text-align: center; color: #fff;
 }
+.hero-bg-img {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+.hero-video-mask {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(0,0,0,0.38), rgba(0,0,0,0.28));
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
 .hero-logo {
   width: 96rpx; height: 96rpx; border-radius: 32rpx;
-  background: rgba(255,255,255,0.2); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 48rpx; font-weight: 800; margin: 0 auto 20rpx;
+  margin: 0 auto 20rpx;
 }
 .hero-brand { font-size: 48rpx; font-weight: 800; letter-spacing: 0.04em; }
 .hero-subtitle { font-size: 26rpx; opacity: 0.85; margin-top: 8rpx; }
 .hero-desc { font-size: 26rpx; opacity: 0.75; margin-top: 24rpx; line-height: 1.7; white-space: pre-line; }
-.hero-actions { margin-top: 40rpx; display: flex; flex-direction: column; gap: 16rpx; padding: 0 24rpx; }
-.hero-btn { width: 100%; height: 96rpx; line-height: 96rpx; }
-.hero-btn-secondary { width: 100%; height: 88rpx; line-height: 88rpx; border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); color: #fff; }
+.hero-actions {
+  margin-top: 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  padding: 0;
+}
+.hero-btn {
+  width: 88%;
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 700;
+  border-radius: 28rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.15);
+}
+.hero-btn-secondary {
+  width: 88%;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 28rpx;
+  border: 2rpx solid rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
 
 .features { padding: 48rpx 32rpx; }
 .section-title { font-size: 36rpx; font-weight: 700; color: #10251d; margin-bottom: 24rpx; }
-.feature-grid { display: flex; flex-wrap: wrap; gap: 20rpx; }
-.feature-card { width: calc(50% - 10rpx); background: rgba(255,255,255,0.78); border-radius: 24rpx; padding: 32rpx 24rpx; text-align: center; border: 1px solid rgba(31,143,95,0.08); }
-.feature-icon { width: 72rpx; height: 72rpx; border-radius: 20rpx; display: flex; align-items: center; justify-content: center; margin: 0 auto 16rpx; font-size: 36rpx; }
-.feature-title { font-size: 28rpx; font-weight: 700; color: #10251d; }
-.feature-desc { font-size: 22rpx; color: #909399; margin-top: 8rpx; line-height: 1.5; }
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.feature-card {
+  width: 100%;
+  min-width: 0;
+  min-height: 200rpx;
+  background: rgba(255,255,255,0.82);
+  border-radius: 24rpx;
+  padding: 32rpx 24rpx 28rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(31,143,95,0.06);
+  box-shadow: 0 4rpx 20rpx rgba(19,61,45,0.04);
+  box-sizing: border-box;
+}
+.feature-card--active {
+  transform: scale(0.96);
+  opacity: 0.85;
+}
+.feature-icon {
+  width: 68rpx; height: 68rpx; border-radius: 18rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24rpx; font-weight: 700; color: #1f8f5f;
+  flex-shrink: 0;
+}
+.feature-title {
+  font-size: 28rpx; font-weight: 700; color: #10251d;
+  margin-top: 14rpx;
+}
+.feature-desc {
+  font-size: 22rpx; color: #909399;
+  margin-top: 8rpx; line-height: 1.45;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
 
 .routes-preview { padding: 0 32rpx 48rpx; }
 .route-preview-card { display: flex; align-items: center; background: rgba(255,255,255,0.78); border-radius: 20rpx; padding: 24rpx; margin-bottom: 16rpx; border: 1px solid rgba(31,143,95,0.08); }

@@ -40,15 +40,14 @@ Page({
 
   selectRoute(e) {
     const id = e.currentTarget.dataset.id
+    const score = e.currentTarget.dataset.score || 0
     const route = this.data.routes.find(r => r.route.id === id)
     if (route) {
-      wx.setStorageSync('qianxing_selected_route', route.route)
-      const app = getApp()
-      if (app.globalData) {
-        app.globalData.myTrips = [...(app.globalData.myTrips || []), { route: route.route, selectedAt: new Date().toISOString() }]
-        wx.setStorageSync('qianxing_trips', app.globalData.myTrips)
-      }
-      wx.navigateTo({ url: '/pages/guide/guide' })
+      wx.navigateTo({ url: `/pages/route-detail/route-detail?id=${id}&score=${score}` })
     }
+  },
+
+  goHome() {
+    wx.reLaunch({ url: '/pages/index/index' })
   }
 })

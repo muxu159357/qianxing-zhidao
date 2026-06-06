@@ -13,7 +13,7 @@
       </div>
 
       <div v-else-if="ranked.length === 0" ref="emptyRef" class="empty-state" style="opacity:0">
-        <div class="empty-icon">🗺️</div>
+        <div class="empty-icon"><el-icon :size="48"><MapLocation /></el-icon></div>
         <h3>暂无匹配路线</h3>
         <p>请返回重新设置出行偏好</p>
         <el-button type="primary" @click="$router.push('/planner')">返回选择</el-button>
@@ -22,7 +22,7 @@
       <template v-else>
         <section ref="bestRef" class="best-match-section" style="opacity:0">
           <div class="section-label">
-            <span class="label-icon">⭐</span> 最佳匹配
+            <span class="label-icon"><el-icon><StarFilled /></el-icon></span> 最佳匹配
           </div>
 
           <div class="best-card" @click="toggleExpand(ranked[0].route.id)">
@@ -73,8 +73,8 @@
                   </div>
                   <p>{{ plan.description }}</p>
                   <div class="day-meta">
-                    <span>🍽️ {{ plan.meals }}</span>
-                    <span>🏨 {{ plan.accommodation }}</span>
+                    <span><el-icon><Food /></el-icon> {{ plan.meals }}</span>
+                    <span><el-icon><House /></el-icon> {{ plan.accommodation }}</span>
                   </div>
                 </div>
               </div>
@@ -90,7 +90,7 @@
 
         <section v-if="ranked.length > 1" ref="otherRef" class="other-section" style="opacity:0">
           <div class="section-label">
-            <span class="label-icon">📋</span> 其他推荐路线
+            <span class="label-icon"><el-icon><List /></el-icon></span> 其他推荐路线
           </div>
 
           <div class="other-grid">
@@ -143,6 +143,7 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
+import { StarFilled, List, MapLocation, Food, House } from '@element-plus/icons-vue'
 import gsap from 'gsap'
 import { getRankedRoutes, type RankedRoute } from '@shared/mock'
 import type { VisitorSelection } from '@shared/types'
@@ -220,14 +221,14 @@ function goGuide(item: RankedRoute) {
 .page-header p { margin: 0; font-size: 16px; color: #4d5f6f; }
 
 .loading-state, .empty-state { text-align: center; padding: 80px 0; color: #5d6b7a; font-size: 16px; }
-.empty-icon { font-size: 56px; margin-bottom: 12px; }
+.empty-icon { margin-bottom: 12px; color: #c0c4cc; }
 .empty-state h3 { margin: 0 0 10px; color: #10251d; }
 
 .section-label {
   font-size: 18px; font-weight: 700; color: #10251d;
   margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
 }
-.label-icon { font-size: 20px; }
+.label-icon { display:flex; align-items:center; font-size: 18px; color: #1f8f5f; }
 
 /* 最佳匹配卡片 */
 .best-card {

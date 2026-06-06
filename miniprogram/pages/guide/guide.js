@@ -40,18 +40,22 @@ Page({
   checkRouteAndGreet() {
     let routeName = '';
     try {
-      routeName = wx.getStorageSync('qianxing_selected_route') || '';
+      const stored = wx.getStorageSync('qianxing_selected_route');
+      if (typeof stored === 'string' && stored) {
+        routeName = stored;
+      } else if (stored && typeof stored === 'object') {
+        routeName = stored.name || stored.routeName || stored.title || '';
+      }
     } catch (e) {
       /* ignore */
     }
 
     let greeting;
     if (routeName) {
-      greeting = `您好！我看到您选择了「${routeName}」路线，真是一个很棒的选择！\n我是您的贵州旅游AI向导，有什么关于贵州旅游的问题都可以问我哦～`;
-      // Clear stored route so it doesn't re-greet on next visit
+      greeting = `您好！我看到您选择了「${routeName}」路线，真是一个很棒的选择！\n我是您的贵州旅游 AI 伴游，有什么关于贵州旅游的问题都可以问我哦～`;
       try { wx.removeStorageSync('qianxing_selected_route'); } catch (e) { /* ignore */ }
     } else {
-      greeting = '您好！我是您的贵州旅游AI向导 🏔️\n有什么关于贵州旅游的问题都可以问我哦～';
+      greeting = '您好！我是您的贵州旅游 AI 伴游，有什么关于贵州旅游的问题都可以问我哦～';
     }
 
     // Slight delay so the greeting feels natural
@@ -194,5 +198,9 @@ Page({
   /** Fallback message when no knowledgeBase match is found */
   getFallback() {
     return '抱歉，我暂时还不太了解这个问题的答案～\n不过您可以问我关于贵州的景点、美食、交通、住宿等方面的问题，我会尽力帮您解答！';
+  },
+
+  goHome() {
+    wx.reLaunch({ url: '/pages/index/index' })
   }
 });

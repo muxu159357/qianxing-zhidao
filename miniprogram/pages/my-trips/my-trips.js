@@ -50,15 +50,9 @@ Page({
 
     // 跳转到行程详情或路线页
     wx.navigateTo({
-      url: `/pages/trip-detail/trip-detail?id=${id}`,
+      url: `/pages/route-detail/route-detail?id=${trip.routeId || id}`,
       fail() {
-        // 如果 trip-detail 不存在，尝试跳转到路线
-        wx.navigateTo({
-          url: `/pages/route/route?id=${trip.routeId || id}`,
-          fail() {
-            wx.showToast({ title: '页面开发中', icon: 'none' });
-          }
-        });
+        wx.showToast({ title: '更多行程服务即将开放', icon: 'none' });
       }
     });
   },

@@ -8,28 +8,28 @@
 
       <div ref="statsRef" class="stats-row" style="opacity:0">
         <div class="stat-card">
-          <div class="stat-icon scenic">🏔️</div>
+          <div class="stat-icon scenic"><el-icon :size="24"><PictureFilled /></el-icon></div>
           <div class="stat-info">
             <div class="stat-num">{{ attractions.length }}</div>
             <div class="stat-label">收录景点</div>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon route">🗺️</div>
+          <div class="stat-icon route"><el-icon :size="24"><MapLocation /></el-icon></div>
           <div class="stat-info">
             <div class="stat-num">5</div>
             <div class="stat-label">精品路线</div>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon knowledge">📚</div>
+          <div class="stat-icon knowledge"><el-icon :size="24"><Collection /></el-icon></div>
           <div class="stat-info">
             <div class="stat-num">25</div>
             <div class="stat-label">知识问答</div>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon active">📈</div>
+          <div class="stat-icon active"><el-icon :size="24"><TrendCharts /></el-icon></div>
           <div class="stat-info">
             <div class="stat-num">98.5<span class="stat-unit">%</span></div>
             <div class="stat-label">服务可用率</div>
@@ -115,6 +115,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { PictureFilled, MapLocation, Collection, TrendCharts } from '@element-plus/icons-vue'
 import gsap from 'gsap'
 import { attractions as mockAttractions } from '@shared/mock/attractions'
 

@@ -9,9 +9,9 @@
     <view class="card">
       <view class="form-label">兴趣标签 <text class="required">（至少2项）</text></view>
       <view class="tag-list">
-        <text class="tag {{selectedTagIds.indexOf(item.id) > -1 ? 'tag-active' : 'tag-default'}}"
+        <text class="tag {{item.selected ? 'tag-active' : 'tag-default'}}"
           wx:for="{{interestTags}}" wx:key="id"
-          data-id="{{item.id}}" bindtap="toggleTag">{{item.icon}} {{item.name}}</text>
+          data-id="{{item.id}}" bindtap="toggleTag">{{item.name}}</text>
       </view>
     </view>
 

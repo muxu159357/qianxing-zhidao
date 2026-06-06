@@ -97,9 +97,9 @@ Page({
     if (!item) return;
 
     wx.navigateTo({
-      url: `/pages/ai-guide/ai-guide?question=${encodeURIComponent(item.question)}`,
+      url: `/pages/guide/guide?question=${encodeURIComponent(item.question)}`,
       fail() {
-        wx.showToast({ title: 'AI导游功能开发中', icon: 'none' });
+        wx.showToast({ title: 'AI 伴游正在为你准备中', icon: 'none' });
       }
     });
   }

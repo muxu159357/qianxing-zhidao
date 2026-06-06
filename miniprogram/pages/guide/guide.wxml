@@ -47,6 +47,7 @@
 
   <!-- Fixed input bar -->
   <view class="input-bar">
+    <text class="home-link home-link--small" bindtap="goHome">首页</text>
     <input
       class="input-field"
       placeholder="输入您的问题…"

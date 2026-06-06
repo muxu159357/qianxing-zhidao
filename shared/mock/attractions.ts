@@ -15,6 +15,7 @@ export const attractions: Attraction[] = [
     tips: '建议携带雨衣，瀑布水雾较大；夏季水量充沛观感最佳。',
     icon: '💧',
     imageGradient: 'linear-gradient(135deg, #1a8a5c 0%, #2ecc71 40%, #a8e6cf 100%)',
+    imageUrl: '/assets/images/scenic/scenic-huangguoshu.jpg',
   },
   {
     id: 'xiaoxikong',
@@ -30,6 +31,7 @@ export const attractions: Attraction[] = [
     tips: '景区较大建议乘观光车游览；春秋季节水量适中景色最佳。',
     icon: '🌿',
     imageGradient: 'linear-gradient(135deg, #0d7a4d 0%, #27ae60 40%, #7dcea0 100%)',
+    imageUrl: '/assets/images/scenic/scenic-xiaoqikong.jpg',
   },
   {
     id: 'xijiang',
@@ -45,6 +47,7 @@ export const attractions: Attraction[] = [
     tips: '观景台可拍摄苗寨全景；节假日游客较多建议错峰出行。',
     icon: '🏘️',
     imageGradient: 'linear-gradient(135deg, #c0392b 0%, #e67e22 40%, #f39c12 100%)',
+    imageUrl: '/assets/images/scenic/scenic-xijiang-miao.jpg',
   },
   {
     id: 'fanjingshan',
@@ -60,6 +63,7 @@ export const attractions: Attraction[] = [
     tips: '登山需较好体力，建议乘坐索道；山顶温差大注意添衣。',
     icon: '⛰️',
     imageGradient: 'linear-gradient(135deg, #5d6d7e 0%, #85929e 40%, #d5dbdb 100%)',
+    imageUrl: '/assets/images/scenic/scenic-fanjingshan.jpg',
   },
   {
     id: 'qingyan',
@@ -75,6 +79,7 @@ export const attractions: Attraction[] = [
     tips: '可从贵阳市区乘坐公交直达；建议品尝当地特色小吃。',
     icon: '🏛️',
     imageGradient: 'linear-gradient(135deg, #8b7355 0%, #a0522d 40%, #deb887 100%)',
+    imageUrl: '/assets/images/scenic/scenic-qingyan.jpg',
   },
   {
     id: 'zhenyuan',
@@ -90,6 +95,7 @@ export const attractions: Attraction[] = [
     tips: '免费入城，部分景点单独收费；夜景灯光秀不容错过。',
     icon: '🏯',
     imageGradient: 'linear-gradient(135deg, #2c3e50 0%, #34495e 40%, #7f8c8d 100%)',
+    imageUrl: '/assets/images/scenic/scenic-zhenyuan.jpg',
   },
   {
     id: 'zhaoxing',
@@ -105,6 +111,7 @@ export const attractions: Attraction[] = [
     tips: '建议住一晚体验侗寨夜景；可顺道游览堂安侗寨梯田。',
     icon: '🎵',
     imageGradient: 'linear-gradient(135deg, #6c3483 0%, #8e44ad 40%, #d2b4de 100%)',
+    imageUrl: '/assets/images/scenic/scenic-zhaoxing.jpg',
   },
   {
     id: 'wanfenglin',
@@ -120,6 +127,7 @@ export const attractions: Attraction[] = [
     tips: '清晨或黄昏光线最佳适合摄影；可租电动车穿行峰林田园。',
     icon: '🏔️',
     imageGradient: 'linear-gradient(135deg, #1e8449 0%, #229954 40%, #82e0aa 100%)',
+    imageUrl: '/assets/images/scenic/scenic-wanfenglin.jpg',
   },
   {
     id: 'zhijindong',
@@ -135,6 +143,7 @@ export const attractions: Attraction[] = [
     tips: '洞内恒温14°C左右，建议携带薄外套；游览需步行约3公里。',
     icon: '🕳️',
     imageGradient: 'linear-gradient(135deg, #1b2631 0%, #2c3e50 40%, #5d6d7e 100%)',
+    imageUrl: '/assets/images/scenic/scenic-zhijindong.jpg',
   },
   {
     id: 'chishui',
@@ -150,5 +159,6 @@ export const attractions: Attraction[] = [
     tips: '景区面积较大建议安排2天游览；夏季竹海漂流体验独特。',
     icon: '🏜️',
     imageGradient: 'linear-gradient(135deg, #922b21 0%, #c0392b 40%, #e6b0aa 100%)',
+    imageUrl: '/assets/images/scenic/scenic-chishui-danxia.jpg',
   },
 ]

@@ -83,7 +83,7 @@
           <div class="panel-card">
             <div class="panel-header">
               <span>智能推荐引擎</span>
-              <el-tag size="small" type="success" effect="dark">Demo</el-tag>
+              <el-tag size="small" type="success" effect="dark">AI 推荐</el-tag>
             </div>
 
             <div class="user-query">

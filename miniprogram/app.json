@@ -4,6 +4,7 @@
     "pages/planner/planner",
     "pages/profile/profile",
     "pages/recommend/recommend",
+    "pages/route-detail/route-detail",
     "pages/guide/guide",
     "pages/knowledge/knowledge",
     "pages/scenic-detail/scenic-detail",

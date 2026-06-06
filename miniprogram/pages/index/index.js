@@ -3,10 +3,10 @@ const mock = require('../../utils/mock')
 Page({
   data: {
     features: [
-      { icon:'🎯', title:'兴趣画像', desc:'多维采集偏好，精准游客画像', bg:'rgba(31,143,95,0.1)' },
-      { icon:'🗺️', title:'路线推荐', desc:'AI智能匹配，千人千面定制', bg:'rgba(47,107,255,0.1)' },
-      { icon:'💬', title:'AI导游', desc:'实时问答，专业景点讲解', bg:'rgba(230,126,34,0.1)' },
-      { icon:'📚', title:'知识库', desc:'覆盖贵州全域景点信息', bg:'rgba(31,143,95,0.08)' }
+      { key:'profile', tag:'画像', title:'兴趣画像', desc:'根据你的偏好、体力和出行节奏生成旅行画像。', bg:'rgba(31,143,95,0.1)' },
+      { key:'route', tag:'路线', title:'专属路线', desc:'结合贵州山地景点、游玩时长和安全因素推荐路线。', bg:'rgba(47,107,255,0.1)' },
+      { key:'guide', tag:'伴游', title:'AI 伴游', desc:'提供景点讲解、行程建议和实时出行问答。', bg:'rgba(230,126,34,0.1)' },
+      { key:'safety', tag:'安全', title:'安全守护', desc:'结合山地天气、体力消耗和路线风险提供安全提醒。', bg:'rgba(31,143,95,0.08)' }
     ],
     topRoutes: []
   },
@@ -19,9 +19,27 @@ Page({
 
   goPlanner() { wx.navigateTo({ url: '/pages/planner/planner' }) },
   goKnowledge() { wx.navigateTo({ url: '/pages/knowledge/knowledge' }) },
-  goRouteDetail(e) {
-    const id = e.currentTarget.dataset.id
-    wx.setStorageSync('qianxing_selected_route', mock.routes.find(r => r.id === id))
-    wx.navigateTo({ url: '/pages/recommend/recommend' })
+  goRouteDetail() {
+    wx.navigateTo({ url: '/pages/planner/planner' })
+  },
+
+  onFeatureTap(e) {
+    const key = e.currentTarget.dataset.key
+    switch (key) {
+      case 'profile':
+        wx.navigateTo({ url: '/pages/planner/planner' })
+        break
+      case 'route':
+        wx.navigateTo({ url: '/pages/planner/planner' })
+        break
+      case 'guide':
+        wx.navigateTo({ url: '/pages/guide/guide' })
+        break
+      case 'safety':
+        wx.navigateTo({ url: '/pages/planner/planner' })
+        break
+      default:
+        wx.navigateTo({ url: '/pages/planner/planner' })
+    }
   }
 })

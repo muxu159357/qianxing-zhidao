@@ -12,16 +12,27 @@ Page({
   },
 
   onLoad() {
-    mock.getInterestTags().then(tags => this.setData({ interestTags: tags }))
+    mock.getInterestTags().then(tags => {
+      this.setData({
+        interestTags: tags.map(t => ({ ...t, selected: false }))
+      })
+    })
   },
 
   toggleTag(e) {
     const id = e.currentTarget.dataset.id
-    let arr = this.data.selectedTagIds
-    const idx = arr.indexOf(id)
-    if (idx > -1) arr = arr.filter(t => t !== id)
-    else arr = [...arr, id]
-    this.setData({ selectedTagIds: arr })
+    const selectedTagIds = this.data.selectedTagIds || []
+    const nextSelectedIds = selectedTagIds.includes(id)
+      ? selectedTagIds.filter(item => item !== id)
+      : [...selectedTagIds, id]
+    const nextTags = this.data.interestTags.map(item => ({
+      ...item,
+      selected: nextSelectedIds.includes(item.id)
+    }))
+    this.setData({
+      selectedTagIds: nextSelectedIds,
+      interestTags: nextTags
+    })
   },
 
   setDays(e) { this.setData({ days: parseInt(e.currentTarget.dataset.val) }) },

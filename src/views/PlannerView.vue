@@ -10,7 +10,7 @@
         <section ref="formRef" class="form-section">
           <div class="form-card">
             <h3 class="section-title">
-              <span class="section-icon">🏷️</span> 兴趣标签
+              <el-icon class="section-icon"><Collection /></el-icon> 兴趣标签
               <span class="required-hint">（至少选择2项）</span>
             </h3>
             <div class="tag-group">
@@ -21,14 +21,13 @@
                 :class="{ active: selectedTagIds.includes(tag.id) }"
                 @click="toggleTag(tag.id)"
               >
-                <span class="tag-icon">{{ tag.icon }}</span>
                 <span class="tag-name">{{ tag.name }}</span>
               </button>
             </div>
           </div>
 
           <div class="form-card">
-            <h3 class="section-title"><span class="section-icon">📅</span> 出行天数</h3>
+            <h3 class="section-title"><el-icon class="section-icon"><Calendar /></el-icon> 出行天数</h3>
             <el-radio-group v-model="days" size="large">
               <el-radio-button :value="1">1 天</el-radio-button>
               <el-radio-button :value="2">2 天</el-radio-button>
@@ -40,7 +39,7 @@
           </div>
 
           <div class="form-card">
-            <h3 class="section-title"><span class="section-icon">💰</span> 预算范围</h3>
+            <h3 class="section-title"><el-icon class="section-icon"><Wallet /></el-icon> 预算范围</h3>
             <el-radio-group v-model="budget" size="large">
               <el-radio-button value="经济型">经济型</el-radio-button>
               <el-radio-button value="舒适型">舒适型</el-radio-button>
@@ -49,7 +48,7 @@
           </div>
 
           <div class="form-card">
-            <h3 class="section-title"><span class="section-icon">👥</span> 同行人群</h3>
+            <h3 class="section-title"><el-icon class="section-icon"><User /></el-icon> 同行人群</h3>
             <el-radio-group v-model="companion" size="large">
               <el-radio-button value="独自出行">独自出行</el-radio-button>
               <el-radio-button value="情侣/朋友">情侣/朋友</el-radio-button>
@@ -60,32 +59,20 @@
           </div>
 
           <div class="form-card">
-            <h3 class="section-title"><span class="section-icon">💪</span> 体力偏好</h3>
+            <h3 class="section-title"><el-icon class="section-icon"><TrendCharts /></el-icon> 体力偏好</h3>
             <el-radio-group v-model="physicalLevel" size="large">
-              <el-radio-button value="轻松">
-                <span class="radio-label"><span class="radio-icon">🚶</span> 轻松</span>
-              </el-radio-button>
-              <el-radio-button value="适中">
-                <span class="radio-label"><span class="radio-icon">🚶‍♂️</span> 适中</span>
-              </el-radio-button>
-              <el-radio-button value="挑战">
-                <span class="radio-label"><span class="radio-icon">🧗</span> 挑战</span>
-              </el-radio-button>
+              <el-radio-button value="轻松">轻松休闲</el-radio-button>
+              <el-radio-button value="适中">适中探索</el-radio-button>
+              <el-radio-button value="挑战">深度挑战</el-radio-button>
             </el-radio-group>
           </div>
 
           <div class="form-card">
-            <h3 class="section-title"><span class="section-icon">⏱️</span> 旅游节奏</h3>
+            <h3 class="section-title"><el-icon class="section-icon"><Timer /></el-icon> 旅游节奏</h3>
             <el-radio-group v-model="pace" size="large">
-              <el-radio-button value="慢游">
-                <span class="radio-label"><span class="radio-icon">☕</span> 慢游</span>
-              </el-radio-button>
-              <el-radio-button value="均衡">
-                <span class="radio-label"><span class="radio-icon">⚖️</span> 均衡</span>
-              </el-radio-button>
-              <el-radio-button value="高效">
-                <span class="radio-label"><span class="radio-icon">⚡</span> 高效</span>
-              </el-radio-button>
+              <el-radio-button value="慢游">深度慢游</el-radio-button>
+              <el-radio-button value="均衡">劳逸均衡</el-radio-button>
+              <el-radio-button value="高效">高效打卡</el-radio-button>
             </el-radio-group>
           </div>
 
@@ -167,6 +154,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { Collection, Calendar, Wallet, User, TrendCharts, Timer } from '@element-plus/icons-vue'
 import gsap from 'gsap'
 import { getInterestTags } from '@shared/mock'
 import type { InterestTag, TravelPace, PhysicalPreference, CompanionType } from '@shared/types'
@@ -323,7 +311,7 @@ function handleSubmit() {
 }
 
 .section-icon {
-  font-size: 20px;
+  font-size: 20px; color: #1f8f5f;
 }
 
 .required-hint {
@@ -367,18 +355,10 @@ function handleSubmit() {
 }
 
 .tag-icon {
-  font-size: 18px;
+  font-size: 16px; margin-right: 2px;
 }
 
-.radio-label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
 
-.radio-icon {
-  font-size: 14px;
-}
 
 .submit-area {
   margin-top: 8px;

@@ -88,6 +88,38 @@ page {
   border: 2rpx solid rgba(31,143,95,0.15);
 }
 
+/* Page header row with home link */
+.page-hd-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.page-hd-left { flex: 1; }
+.page-hd-right {
+  flex-shrink: 0;
+  padding-top: 8rpx;
+}
+.home-link {
+  display: inline-block;
+  padding: 10rpx 24rpx;
+  font-size: 26rpx;
+  color: #1f8f5f;
+  border: 2rpx solid rgba(31,143,95,0.25);
+  border-radius: 20rpx;
+  background: rgba(255,255,255,0.85);
+}
+.home-link--light {
+  color: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.12);
+}
+.home-link--small {
+  padding: 8rpx 18rpx;
+  font-size: 22rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+
 /* Flex helpers */
 .flex { display: flex; }
 .flex-col { flex-direction: column; }

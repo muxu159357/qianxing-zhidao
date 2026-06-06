@@ -40,9 +40,9 @@ Page({
     const question = `请介绍一下${attraction.name}的详细情况，包括怎么玩、有什么注意事项？`;
 
     wx.navigateTo({
-      url: `/pages/ai-guide/ai-guide?question=${encodeURIComponent(question)}&attractionId=${attraction.id}`,
+      url: `/pages/guide/guide?question=${encodeURIComponent(question)}&attractionId=${attraction.id}`,
       fail() {
-        wx.showToast({ title: 'AI导游功能开发中', icon: 'none' });
+        wx.showToast({ title: 'AI 伴游正在为你准备中', icon: 'none' });
       }
     });
   },

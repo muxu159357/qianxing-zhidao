@@ -1,21 +1,26 @@
 <!-- 首页 -->
 <view class="page-wrap home-page">
   <view class="hero-section">
-    <view class="hero-logo">黔</view>
-    <view class="hero-brand">黔行智导</view>
-    <view class="hero-subtitle">贵州山地旅游 AI 个性化导览</view>
-    <text class="hero-desc">基于游客兴趣画像与智能推荐算法\n为您定制专属贵州旅游路线</text>
-    <view class="hero-actions">
-      <button class="btn-primary hero-btn" bindtap="goPlanner">开始智能规划</button>
-      <button class="btn-outline hero-btn-secondary" bindtap="goKnowledge">浏览景点</button>
+    <image class="hero-bg-img" src="/assets/images/home-hero.jpg" mode="aspectFill" />
+    <view class="hero-video-mask"></view>
+    <view class="hero-content">
+      <image class="hero-logo" src="/assets/images/brand/logo.png" mode="aspectFit" />
+      <view class="hero-brand">黔行智导</view>
+      <view class="hero-subtitle">贵州山地旅游 AI 个性化导览</view>
+      <text class="hero-desc">基于游客兴趣画像与智能推荐算法\n为您定制专属贵州旅游路线</text>
+      <view class="hero-actions">
+        <button class="btn-primary hero-btn" bindtap="goPlanner">开始智能规划</button>
+        <button class="btn-outline hero-btn-secondary" bindtap="goKnowledge">浏览景点</button>
+      </view>
     </view>
   </view>
 
   <view class="features">
     <view class="section-title">核心能力</view>
     <view class="feature-grid">
-      <view class="feature-card" wx:for="{{features}}" wx:key="title">
-        <view class="feature-icon" style="background:{{item.bg}}">{{item.icon}}</view>
+      <view class="feature-card" wx:for="{{features}}" wx:key="title"
+        bindtap="onFeatureTap" data-key="{{item.key}}" hover-class="feature-card--active">
+        <view class="feature-icon" style="background:{{item.bg}}">{{item.tag}}</view>
         <view class="feature-title">{{item.title}}</view>
         <view class="feature-desc">{{item.desc}}</view>
       </view>
