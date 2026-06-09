@@ -17,7 +17,7 @@
         </view>
       </view>
       <view class="hero-icon-wrap">
-        <view class="hero-icon">{{attraction.name.charAt(0)}}</view>
+        <view class="hero-icon"></view>
       </view>
     </view>
   </view>
@@ -64,7 +64,7 @@
       </view>
       <view class="highlights-list">
         <view wx:for="{{attraction.highlights}}" wx:key="*this" class="highlight-item">
-          <text class="highlight-dot">✦</text>
+          <view class="highlight-dot"></view>
           <text class="highlight-text">{{item}}</text>
         </view>
       </view>

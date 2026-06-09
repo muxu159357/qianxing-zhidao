@@ -96,11 +96,7 @@ Page({
     const item = e.currentTarget.dataset.item;
     if (!item) return;
 
-    wx.navigateTo({
-      url: `/pages/guide/guide?question=${encodeURIComponent(item.question)}`,
-      fail() {
-        wx.showToast({ title: 'AI 伴游正在为你准备中', icon: 'none' });
-      }
-    });
+    wx.setStorageSync('qianxing_pending_question', item.question);
+    wx.switchTab({ url: '/pages/guide/guide' });
   }
 });

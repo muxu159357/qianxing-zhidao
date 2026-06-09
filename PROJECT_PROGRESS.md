@@ -2,7 +2,50 @@
 
 ## 当前阶段
 
-小程序游客端主流程完善阶段 — P0 问题修复、文案统一、破图处理已基本完成。
+小程序游客端主流程完善阶段 — P0 问题修复、文案统一、破图处理已基本完成。底部三入口 tabBar 导航已建立。
+
+### 本次进度更新 (2026-06-09)
+
+#### 底部三入口 tabBar 导航
+
+- [x] `app.json` 新增原生 tabBar：首页 / AI助手 / 我的行程
+- [x] 6 处 navigateTo → switchTab（index/route-detail/scenic-detail/knowledge）
+- [x] 跨页面上下文传递：scenic-detail/knowledge → guide 通过 `qianxing_pending_question` storage
+- [x] guide.js 新增 `onShow` + `checkPendingContext()` 处理 tab 切换时的上下文
+- [x] route-detail 保存后 "查看我的行程" 仍为 switchTab
+- [x] 所有 tabBar 跳转点已更新：首页→AI助手、路线详情→AI助手/我的行程、景点详情→AI助手、知识库→AI助手
+
+**涉及文件（6个）：**
+| 文件 | 操作 |
+|------|------|
+| `miniprogram/app.json` | 新增 tabBar 配置 |
+| `miniprogram/pages/index/index.js` | navigateTo → switchTab |
+| `miniprogram/pages/route-detail/route-detail.js` | 2处 navigateTo → switchTab |
+| `miniprogram/pages/scenic-detail/scenic-detail.js` | setStorageSync + switchTab |
+| `miniprogram/pages/knowledge/knowledge.js` | setStorageSync + switchTab |
+| `miniprogram/pages/guide/guide.js` | 新增 onShow + checkPendingContext |
+
+#### AI助手页底部布局修复 (2026-06-09)
+
+- [x] 移除 input-bar 内冗余"首页"按钮（tabBar 已有首页入口）
+- [x] 优化底部留白：`padding-bottom` 从 `calc(16rpx + env(safe-area-inset-bottom))` → `16rpx`
+- [x] 清理 guide.js 中不再使用的 `goHome()` 方法
+
+**涉及文件（3个）：**
+| 文件 | 操作 |
+|------|------|
+| `miniprogram/pages/guide/guide.wxml` | 删除 input-bar 内 `<text>首页</text>` |
+| `miniprogram/pages/guide/guide.wxss` | `.input-bar` padding-bottom 从 `calc(16rpx + env(...))` → `16rpx` |
+| `miniprogram/pages/guide/guide.js` | 删除 `goHome()` 方法 |
+
+#### 我的行程页底部防御性修复 (2026-06-09)
+
+- [x] `.list-bottom-spacer` 从 `40rpx` → `80rpx`，确保最后一张卡片与 tabBar 有安全间距
+- [x] 文案口径修正：项目记录中统一使用"删除"，不写"左滑删除"
+
+| 文件 | 操作 |
+|------|------|
+| `miniprogram/pages/my-trips/my-trips.wxss` | `.list-bottom-spacer` 40→80rpx |
 
 ## 总体目标
 
@@ -232,3 +275,273 @@ hero-section (渐变兜底)
 |------|---------|
 | `index.wxml` | Hero 区新增 `<video>` + `<view class="hero-video-mask">` + `<view class="hero-content">` 三层结构 |
 | `index.wxss` | 新增 `.hero-video` `.hero-video-mask` `.hero-content` 定位与层级 |
+
+### 2026-06-09（Logo 品牌标识 + 首页 4 核心能力图标接入）
+
+**本次完成**：
+1. Logo 双端接入：小程序首页 Hero "黔"文字方块替换为 Logo 图片，Web favicon 新增 PNG Logo
+2. Logo 压缩优化：备份原图 `logo-original.png`，双端压缩 PNG（小程序 ~107 KB，Web ~369 KB）
+3. 目录规范：创建 `miniprogram/assets/images/icons/` 和 `public/assets/icons/` 目录
+4. 小程序首页 4 核心能力图标接入：画像分析/路线推荐/AI 伴游/安全守护
+
+**修改文件**：
+| 文件 | 修改内容 |
+|------|---------|
+| `miniprogram/assets/images/brand/logo.png` | 新增 Logo（压缩版） |
+| `miniprogram/assets/images/brand/logo-original.png` | Logo 原图备份 |
+| `public/assets/brand/logo.png` | 新增 Logo（高清版） |
+| `public/assets/brand/logo-original.png` | Logo 原图备份 |
+| `miniprogram/assets/images/icons/` | 新建目录，4 个能力图标 |
+| `public/assets/icons/` | 新建目录，icon-profile.png |
+| `index.html` | favicon 新增 PNG Logo 链接 |
+| `miniprogram/pages/index/index.wxml` | Hero Logo 文字→图片，feature-icon 条件渲染 |
+| `miniprogram/pages/index/index.wxss` | hero-logo 简化，新增 feature-icon-img |
+| `miniprogram/pages/index/index.js` | features 数组增加 icon 字段（4 个） |
+
+**验证结果**：
+- Logo 双端文件均确认真 PNG（magic bytes `89 50 4E 47`）
+- 4 核心能力图标文件均存在（profile 53 KB, route 109 KB, guide 106 KB, safety 72 KB）
+- WXML 条件渲染：有 icon 显示图片，无 icon 回退文字
+- 2×2 CSS Grid 布局未受影响
+- Web favicon 引用路径正确
+
+**下一步**：
+1. ~~Web 首页 3 张能力卡片图标接入~~ ✅ 已完成
+2. Web 首页补充第 4 张"安全守护"卡片
+3. brand 目录旧 `icon-profile.png` 清理
+
+### 2026-06-09（Web 首页 3 能力卡片图标接入）
+
+**本次完成**：
+1. Web 首页 3 张能力卡片 Element Plus 图标替换为图片图标
+2. 移除未使用的 `UserFilled`/`MapLocation`/`ChatDotRound` import
+3. 新增 `.feature-card-icon` 样式（88×88 px, object-fit: contain）
+
+**修改文件**：
+| 文件 | 修改内容 |
+|------|---------|
+| `src/views/HomeView.vue` | 3 张卡片 `<el-icon>` → `<img>`，移除 Element Plus icons import，新增 feature-card-icon CSS |
+
+**验证结果**：
+- `npm run build` 编译通过，零错误
+- 4 个图标文件均存在 Web icons 目录（profile 175 KB, route 109 KB, guide 106 KB, safety 72 KB）
+- 卡片布局、标题、文案、按钮未改动
+- Hero 视频背景、路由、favicon 未改动
+- 小程序未改动
+
+**下一步**：
+1. ~~Web 首页补充第 4 张"安全守护"卡片~~ ✅ 已完成
+2. brand 目录旧 `icon-profile.png` 清理
+
+### 2026-06-09（Web 首页新增"安全守护"能力卡片）
+
+**本次完成**：
+1. Web 首页核心能力区新增第 4 张"安全守护"卡片
+2. 布局从 3 列升级为 4 列（desktop），900px → 2 列，560px → 1 列
+3. 副标题"三大"→"四大 AI 引擎"
+
+**修改文件**：
+| 文件 | 修改内容 |
+|------|---------|
+| `src/views/HomeView.vue` | 新增安全守护卡片模板，grid 3→4 列，副标题更新，card-image-safety 渐变背景，响应式 900px 2 列 + 560px 1 列 |
+
+**验证结果**：
+- `npm run build` 编译通过
+- 4 张卡片布局一致，图标尺寸统一
+- 原有 3 张卡片未改动
+- Hero 区、按钮、路由未改动
+- 小程序未改动
+
+**下一步**：
+1. ~~brand 目录旧 `icon-profile.png` 清理~~ ✅ 已完成
+2. 确认/恢复 `logo-original.png` 备份文件
+
+### 2026-06-09（资源目录清理）
+
+**本次完成**：
+1. 删除 `miniprogram/assets/images/brand/icon-profile.png`（已迁移到 icons 目录）
+2. 删除 `public/assets/brand/icon-profile.png`（已迁移到 icons 目录）
+
+**目录状态**：
+| 目录 | 内容 |
+|------|------|
+| 小程序 brand | `logo.png` |
+| 小程序 icons | 4 个能力图标 |
+| Web brand | `logo.png` |
+| Web icons | 4 个能力图标 |
+
+**确认**：`logo-original.png` 不再恢复，当前 `logo.png` 为正式 Logo。brand 目录仅保留品牌资产，icons 目录存放功能图标。
+
+**下一步**：进入 AI 伴游头像素材阶段。
+
+### 2026-06-09（AI 伴游头像资源归位）
+
+**本次完成**：
+1. 创建 `miniprogram/assets/images/ai/` 和 `public/assets/ai/` 目录
+2. `aibanyou.png` 复制到双端 `ai/` 目录（123.1 KB，真 PNG）
+
+**目录状态**：
+| 端 | 路径 | 状态 |
+|------|------|------|
+| 小程序 | `miniprogram/assets/images/ai/aibanyou.png` | ✅ |
+| Web | `public/assets/ai/aibanyou.png` | ✅ |
+**下一步**：
+1. ~~小程序 guide 页 AI 头像接入~~ ✅ 已完成
+2. ~~Web AiGuideView AI 头像接入~~ ✅ 已完成
+3. ~~清理根目录旧 `aibanyou.png`~~ ✅ 已完成
+
+### 2026-06-09（双端 AI 伴游头像接入）
+
+**本次完成**：
+1. 小程序 guide 页 AI 消息头像 + 打字指示器头像：文字"导" → `<image>` 图片
+2. Web AiGuideView AI 消息头像 + 打字指示器头像：文字"AI" → `<img>` 图片
+3. 双端用户头像（"我"/"U"）保持不变
+
+**修改文件**：
+| 文件 | 修改内容 |
+|------|---------|
+| `guide.wxml` | AI 头像 `<view>` 文字 → `<image>`（2 处） |
+| `guide.wxss` | `.avatar` 简化，`.avatar-ai`/`.avatar-user` 拆分（AI 用 image，用户保留文字） |
+| `AiGuideView.vue` | AI 头像 `<span>AI</span>` → `<img>`（2 处），`.avatar-ai` CSS 适配图片 |
+
+**验证结果**：
+- `npm run build` 编译通过（1465 modules）
+- 小程序用户头像"我"未改
+- Web 用户头像"U"未改
+- 聊天布局未变
+- 文案/逻辑/路由未改
+
+**下一步**：Logo/图标/头像三大素材阶段已完成。
+
+### 2026-06-09（空态插画资源归位）
+
+**本次完成**：
+1. 将 `empty-trips.png` 从 `ai/` 目录归位到 `miniprogram/assets/images/empty/`
+2. 创建 `miniprogram/assets/images/empty/` 目录
+3. 源文件在 `ai/` 目录暂时保留，未删除
+
+**修改文件**：
+| 文件 | 操作 |
+|------|------|
+| `miniprogram/assets/images/empty/empty-trips.png` | 新建（从 ai/ 复制） |
+
+**验证结果**：
+- 文件大小：71.7 KB
+- 格式：PNG（magic bytes 89 50 4E 47 确认）
+- 源文件 `ai/empty-trips.png` 保留未删
+- 未修改任何页面代码
+
+**下一步**：接入我的行程空态插画（修改 my-trips.wxml + my-trips.wxss）
+
+### 2026-06-09（接入我的行程空态插画）
+
+**本次完成**：
+1. `my-trips.wxml`：CSS 虚线方块 `<view>` → `<image>` 插画
+2. `my-trips.wxss`：去掉 border/background/border-radius，140rpx → 280rpx
+
+**修改文件**：
+| 文件 | 修改内容 |
+|------|---------|
+| `my-trips.wxml:40` | `<view class="empty-icon">` → `<image class="empty-icon" src="/assets/images/empty/empty-trips.png" mode="aspectFit" />` |
+| `my-trips.wxss:162-166` | 去边框/背景/圆角，尺寸 140→280rpx |
+
+**验证结果**：
+- empty-trips.png 正式文件存在（71.7 KB PNG）
+- 空态标题/说明/按钮文案未改
+- 有行程时列表不受影响
+- 页面逻辑/路由/其他页面未改
+- ai/ 源文件保留未删
+
+**下一步**：待后续阶段（如 Web 用户头像、其他优化等）
+
+### 2026-06-09（清理 ai/ 目录误放的 empty-trips.png）
+
+**本次完成**：
+1. 删除 `miniprogram/assets/images/ai/empty-trips.png`（误放）
+2. 删除 `public/assets/ai/empty-trips.png`（误放）
+3. 正式文件 `miniprogram/assets/images/empty/empty-trips.png` 保留不变
+
+**目录最终状态**：
+| 目录 | 内容 |
+|------|------|
+| `miniprogram/assets/images/ai/` | `aibanyou.png`（唯一文件） |
+| `public/assets/ai/` | `aibanyou.png`（唯一文件） |
+| `miniprogram/assets/images/empty/` | `empty-trips.png`（唯一文件） |
+
+**验证结果**：
+- ai/ 目录不再包含空态插画
+- my-trips.wxml 引用路径正确（`/assets/images/empty/empty-trips.png`）
+- aibanyou.png 双端均保留
+- 未修改任何页面代码
+
+**下一步**：待后续阶段
+
+### 2026-06-09（修复 P0 视觉问题：emoji + 打字指示器头像）
+
+**本次完成**：
+1. **P0-1**: `guide.wxml:20` 打字指示器头像"导" → `<image>` aibanyou.png
+2. **P0-2**: `route-detail.wxml` 安全守护区 5 个 emoji（⚡🌤️⛰️👥🕐）→ CSS 图形图标
+3. **P0-3**: `route-detail.wxml:7` 空态 🗺️ emoji → CSS 路线图标
+
+**修改文件**：
+| 文件 | 修改内容 |
+|------|---------|
+| `guide.wxml:20` | `<view>导</view>` → `<image>` 图片头像 |
+| `route-detail.wxml:7` | `🗺️` emoji → 空 `<view>` + CSS 图标 |
+| `route-detail.wxml:124-148` | 5 处 emoji → 5 个语义 class（`safety-icon-*`） |
+| `route-detail.wxss:25-48` | `.empty-icon` CSS 路线图标（圆形 + 三角指针 + 定位点） |
+| `route-detail.wxss:240-300` | 5 种 CSS 图形：三角警示/圆形太阳/双峰/双点/圆形时钟 |
+
+**验证结果**：
+- 页面 emoji：仅剩 P1 `scenic-detail.wxml:67` `✦`（不在本次范围）
+- 打字指示器：已用 aibanyou.png
+- 用户头像"我"：未改
+- 安全守护区：5 个 CSS 图标，无 emoji
+- 路线详情布局/底部操作栏/业务逻辑：未改
+- 路由/文案/图片资源：未改
+
+**下一步**：P1 问题（景点详情 ✦/文字首字、知识库空态）
+
+### 2026-06-09（修复 P1：景点详情页视觉降级）
+
+**本次完成**：
+1. **✦ → CSS 渐变圆点**：`highlight-dot` 从 unicode 字符改为 `12rpx` 品牌色渐变圆
+2. **charAt(0) → CSS 山峰图形**：`hero-icon` 从文字首字改为 ::before + ::after 双三角山峰
+
+**修改文件**：
+| 文件 | 修改内容 |
+|------|---------|
+| `scenic-detail.wxml:20` | 移除 `{{attraction.name.charAt(0)}}`，空 `<view>` + CSS 图形 |
+| `scenic-detail.wxml:67` | `<text>✦</text>` → `<view class="highlight-dot">` |
+| `scenic-detail.wxss:122-148` | `.hero-icon` 去文字属性 + `::before`/`::after` 双峰 |
+| `scenic-detail.wxss:230-236` | `.highlight-dot` 去 font → `12rpx` 渐变圆 |
+
+**验证结果**：
+- scenic-detail 无 emoji / 特殊符号残留
+- Hero 大图、标题、城市、评分、简介、亮点、贴士：未受影响
+- 未新增图片资源，路由/逻辑未改
+
+**下一步**：知识库空态插画、P2 箭头等后续优化
+
+### 2026-06-09（修复 P1：知识库搜索无结果空态）
+
+**本次完成**：
+1. 知识库空态：CSS 虚线方块（`border: 4rpx solid #d0d5dd`）→ CSS 放大镜图标
+
+**修改文件**：
+| 文件 | 修改内容 |
+|------|---------|
+| `knowledge.wxss:268-290` | `.empty-icon` 去边框/背景 → 140rpx 圆形 + `::before` 镜框 + `::after` 手柄 |
+
+**CSS 放大镜设计**：
+- 140rpx 圆形浅绿背景（`rgba(31,143,95,0.06)`）
+- `::before`：48rpx 圆形镜框（5rpx 品牌绿边框）
+- `::after`：22rpx 手柄（品牌绿，-45° 旋转）
+
+**验证结果**：
+- 无 emoji / 特殊符号
+- 空态标题"暂无相关知识"、说明未改
+- 搜索栏、分类标签、知识卡片、按钮：未受影响
+- WXML 未改，路由/逻辑未改
+
+**下一步**：P2 箭头等后续优化

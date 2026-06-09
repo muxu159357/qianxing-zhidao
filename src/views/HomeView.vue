@@ -37,13 +37,15 @@
       <section class="features-section" ref="featuresSection">
         <div class="section-header">
           <h2>核心能力</h2>
-          <p>三大 AI 引擎驱动贵州山地旅游个性化体验</p>
+          <p>四大 AI 引擎驱动贵州山地旅游个性化体验</p>
         </div>
 
         <div class="feature-grid">
           <div class="feature-card" ref="featureCards">
             <div class="card-image card-image-profile">
-              <div class="card-image-inner"><el-icon :size="44"><UserFilled /></el-icon></div>
+              <div class="card-image-inner">
+                <img src="/assets/icons/icon-profile.png" alt="画像分析" class="feature-card-icon" />
+              </div>
             </div>
             <div class="card-body">
               <h3>游客兴趣画像</h3>
@@ -53,7 +55,9 @@
 
           <div class="feature-card">
             <div class="card-image card-image-route">
-              <div class="card-image-inner"><el-icon :size="44"><MapLocation /></el-icon></div>
+              <div class="card-image-inner">
+                <img src="/assets/icons/icon-route.png" alt="路线推荐" class="feature-card-icon" />
+              </div>
             </div>
             <div class="card-body">
               <h3>个性化路线推荐</h3>
@@ -63,11 +67,25 @@
 
           <div class="feature-card">
             <div class="card-image card-image-guide">
-              <div class="card-image-inner"><el-icon :size="44"><ChatDotRound /></el-icon></div>
+              <div class="card-image-inner">
+                <img src="/assets/icons/icon-guide.png" alt="AI 伴游" class="feature-card-icon" />
+              </div>
             </div>
             <div class="card-body">
               <h3>AI 智能导游</h3>
               <p>基于贵州景点知识图谱，提供实时景点讲解、路线咨询及本地特色推荐等智能问答服务。</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="card-image card-image-safety">
+              <div class="card-image-inner">
+                <img src="/assets/icons/icon-safety.png" alt="安全守护" class="feature-card-icon" />
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>安全守护</h3>
+              <p>结合山地天气、体力消耗和路线风险，提供出行安全提醒、附近服务点和紧急求助辅助。</p>
             </div>
           </div>
         </div>
@@ -120,7 +138,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { UserFilled, MapLocation, ChatDotRound } from '@element-plus/icons-vue'
 import { getRoutes } from '@shared/mock'
 import type { TourRoute } from '@shared/types'
 import gsap from 'gsap'
@@ -228,7 +245,7 @@ onMounted(async () => {
 
 .feature-grid {
   max-width: 1080px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;
 }
 
 .feature-card {
@@ -244,9 +261,15 @@ onMounted(async () => {
   height: 160px; display: flex; align-items: center; justify-content: center;
 }
 .card-image-inner { color: #1f8f5f; }
+.feature-card-icon {
+  width: 88px; height: 88px;
+  object-fit: contain;
+  display: block;
+}
 .card-image-profile { background: linear-gradient(135deg, rgba(31, 143, 95, 0.12), rgba(47, 107, 255, 0.08)); }
 .card-image-route { background: linear-gradient(135deg, rgba(47, 107, 255, 0.1), rgba(31, 143, 95, 0.1)); }
 .card-image-guide { background: linear-gradient(135deg, rgba(230, 126, 34, 0.12), rgba(31, 143, 95, 0.08)); }
+.card-image-safety { background: linear-gradient(135deg, rgba(31, 143, 95, 0.1), rgba(47, 107, 255, 0.06)); }
 
 .card-body { padding: 24px 28px 28px; }
 .card-body h3 { margin: 0 0 10px; font-size: 19px; color: #10251d; }
@@ -308,8 +331,11 @@ onMounted(async () => {
   .hero-text { font-size: 15px; }
   .hero-buttons { flex-direction: column; }
   .features-section { padding: 60px 24px; }
-  .feature-grid { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: repeat(2, 1fr); }
   .demo-section { padding: 60px 24px; }
   .card-image { height: 120px; }
+}
+@media (max-width: 560px) {
+  .feature-grid { grid-template-columns: 1fr; }
 }
 </style>

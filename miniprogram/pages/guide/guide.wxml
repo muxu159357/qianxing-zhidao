@@ -5,7 +5,7 @@
       <block wx:for="{{messages}}" wx:key="id">
         <!-- AI message: avatar left, bubble right -->
         <view class="msg-row msg-ai" wx:if="{{item.type === 'ai'}}">
-          <view class="avatar avatar-ai">导</view>
+          <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
           <view class="bubble bubble-ai">{{item.content}}</view>
         </view>
         <!-- User message: bubble left, avatar right -->
@@ -17,7 +17,7 @@
 
       <!-- Typing indicator -->
       <view class="msg-row msg-ai" wx:if="{{isTyping}}">
-        <view class="avatar avatar-ai">导</view>
+        <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
         <view class="bubble bubble-typing">
           <view class="dots">
             <view class="dot" style="animation-delay: 0s;"></view>
@@ -47,7 +47,6 @@
 
   <!-- Fixed input bar -->
   <view class="input-bar">
-    <text class="home-link home-link--small" bindtap="goHome">首页</text>
     <input
       class="input-field"
       placeholder="输入您的问题…"

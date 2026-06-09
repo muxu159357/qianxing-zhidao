@@ -39,12 +39,8 @@ Page({
 
     const question = `请介绍一下${attraction.name}的详细情况，包括怎么玩、有什么注意事项？`;
 
-    wx.navigateTo({
-      url: `/pages/guide/guide?question=${encodeURIComponent(question)}&attractionId=${attraction.id}`,
-      fail() {
-        wx.showToast({ title: 'AI 伴游正在为你准备中', icon: 'none' });
-      }
-    });
+    wx.setStorageSync('qianxing_pending_question', question);
+    wx.switchTab({ url: '/pages/guide/guide' });
   },
 
   onShareAppMessage() {

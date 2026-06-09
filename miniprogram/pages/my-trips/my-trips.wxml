@@ -37,7 +37,7 @@
 
   <!-- 空状态 -->
   <view wx:else class="empty-state">
-    <view class="empty-icon"></view>
+    <image class="empty-icon" src="/assets/images/empty/empty-trips.png" mode="aspectFit" />
     <text class="empty-title">还没有行程</text>
     <text class="empty-desc">去探索景点并规划您的贵州之旅吧</text>
     <button class="explore-btn" bindtap="onGoExplore">

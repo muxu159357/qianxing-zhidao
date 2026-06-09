@@ -20,7 +20,10 @@
     <view class="feature-grid">
       <view class="feature-card" wx:for="{{features}}" wx:key="title"
         bindtap="onFeatureTap" data-key="{{item.key}}" hover-class="feature-card--active">
-        <view class="feature-icon" style="background:{{item.bg}}">{{item.tag}}</view>
+        <view class="feature-icon" style="background:{{item.bg}}">
+          <image wx:if="{{item.icon}}" class="feature-icon-img" src="{{item.icon}}" mode="aspectFit" />
+          <text wx:else>{{item.tag}}</text>
+        </view>
         <view class="feature-title">{{item.title}}</view>
         <view class="feature-desc">{{item.desc}}</view>
       </view>

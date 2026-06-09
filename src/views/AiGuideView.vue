@@ -16,7 +16,7 @@
             :class="msg.role"
           >
             <div class="msg-avatar">
-              <span v-if="msg.role === 'assistant'" class="avatar-ai">AI</span>
+              <img v-if="msg.role === 'assistant'" src="/assets/ai/aibanyou.png" alt="AI 伴游" class="avatar-ai" />
               <span v-else class="avatar-user">U</span>
             </div>
             <div class="msg-bubble" :class="msg.role">
@@ -27,7 +27,7 @@
 
           <div v-if="typing" class="msg-row assistant">
             <div class="msg-avatar">
-              <span class="avatar-ai">AI</span>
+              <img src="/assets/ai/aibanyou.png" alt="AI 伴游" class="avatar-ai" />
             </div>
             <div class="msg-bubble assistant typing-bubble">
               <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>
@@ -242,10 +242,8 @@ function askQuick(question: string) {
 
 .msg-avatar { flex-shrink: 0; }
 .avatar-ai {
-  width: 36px; height: 36px; border-radius: 12px;
-  background: linear-gradient(135deg, #1f8f5f, #2f6bff);
-  color: #fff; display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700;
+  width: 40px; height: 40px; border-radius: 50%; overflow: hidden;
+  object-fit: cover;
 }
 .avatar-user {
   width: 36px; height: 36px; border-radius: 12px;

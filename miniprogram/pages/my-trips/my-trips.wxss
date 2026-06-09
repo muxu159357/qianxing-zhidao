@@ -160,12 +160,9 @@
 }
 
 .empty-icon {
-  width: 140rpx;
-  height: 140rpx;
-  border: 4rpx solid #d0d5dd;
-  border-radius: 32rpx;
+  width: 280rpx;
+  height: 280rpx;
   margin-bottom: 28rpx;
-  background: rgba(31,143,95,0.04);
 }
 
 .empty-title {
@@ -202,5 +199,5 @@
 
 /* ===== 底部间距 ===== */
 .list-bottom-spacer {
-  height: 40rpx;
+  height: 80rpx;
 }

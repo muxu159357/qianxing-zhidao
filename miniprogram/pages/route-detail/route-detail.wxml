@@ -4,7 +4,7 @@
   <!-- 空态 -->
   <view wx:if="{{emptyState}}" class="empty-container">
     <view class="empty-card">
-      <view class="empty-icon">🗺️</view>
+      <view class="empty-icon"></view>
       <view class="empty-title">暂未找到该路线</view>
       <view class="empty-desc">你可以返回路线推荐页，重新选择适合自己的贵州山地旅行路线。</view>
       <button class="btn-primary" bindtap="onGoRecommend">返回路线推荐</button>
@@ -121,31 +121,31 @@
 
         <!-- 体力提醒 -->
         <view class="safety-row">
-          <view class="safety-icon">⚡</view>
+          <view class="safety-icon safety-icon-risk"></view>
           <view class="safety-text">{{safety.physicalReminder}}</view>
         </view>
 
         <!-- 天气提醒 -->
         <view class="safety-row">
-          <view class="safety-icon">🌤️</view>
+          <view class="safety-icon safety-icon-weather"></view>
           <view class="safety-text">{{safety.weatherReminder}}</view>
         </view>
 
         <!-- 山地提醒 -->
         <view wx:if="{{safety.mountainReminder}}" class="safety-row">
-          <view class="safety-icon">⛰️</view>
+          <view class="safety-icon safety-icon-mountain"></view>
           <view class="safety-text">{{safety.mountainReminder}}</view>
         </view>
 
         <!-- 错峰提醒 -->
         <view wx:if="{{safety.peakReminder}}" class="safety-row">
-          <view class="safety-icon">👥</view>
+          <view class="safety-icon safety-icon-crowd"></view>
           <view class="safety-text">{{safety.peakReminder}}</view>
         </view>
 
         <!-- 体力分配提醒 -->
         <view wx:if="{{safety.staminaReminder}}" class="safety-row">
-          <view class="safety-icon">🕐</view>
+          <view class="safety-icon safety-icon-time"></view>
           <view class="safety-text">{{safety.staminaReminder}}</view>
         </view>
 
@@ -180,7 +180,7 @@
 
     <!-- 底部操作栏 -->
     <view class="bottom-bar">
-      <button class="btn-save" bindtap="onSaveToMyTrips">保存到我的行程</button>
+      <button class="btn-save" bindtap="onSaveOrViewTrip">{{hasSavedTrip ? '查看我的行程' : '保存到我的行程'}}</button>
       <button class="btn-guide" bindtap="onOpenAiGuide">开启 AI 山地伴游</button>
     </view>
   </block>

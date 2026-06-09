@@ -6,7 +6,8 @@ Page({
     score: 0,
     attractions: [],
     safety: null,
-    emptyState: false
+    emptyState: false,
+    hasSavedTrip: false
   },
 
   onLoad(options) {
@@ -34,6 +35,7 @@ Page({
     const safety = this.computeSafety(route)
 
     this.setData({ route, score, attractions, safety, emptyState: false })
+    this.checkIfSaved()
   },
 
   computeSafety(route) {
@@ -113,6 +115,26 @@ Page({
     }
   },
 
+  onSaveOrViewTrip() {
+    if (this.data.hasSavedTrip) {
+      wx.switchTab({ url: '/pages/my-trips/my-trips' })
+      return
+    }
+    this.onSaveToMyTrips()
+  },
+
+  checkIfSaved() {
+    try {
+      const trips = wx.getStorageSync('qianxing_trips') || []
+      const { route } = this.data
+      if (!route) return
+      const exists = trips.find(t => t.routeId === route.id || t.id === route.id)
+      if (exists) {
+        this.setData({ hasSavedTrip: true })
+      }
+    } catch (e) { /* ignore */ }
+  },
+
   onSaveToMyTrips() {
     const { route, score } = this.data
     if (!route) return
@@ -123,6 +145,7 @@ Page({
 
       const exists = trips.find(t => t.routeId === route.id || t.id === route.id)
       if (exists) {
+        this.setData({ hasSavedTrip: true })
         wx.showToast({ title: '该路线已在你的行程中', icon: 'none' })
         return
       }
@@ -145,6 +168,7 @@ Page({
         app.globalData.myTrips = trips
       }
 
+      this.setData({ hasSavedTrip: true })
       wx.showToast({ title: '已保存到我的行程', icon: 'success' })
     } catch (e) {
       wx.showToast({ title: '保存失败，请重试', icon: 'none' })
@@ -156,7 +180,7 @@ Page({
     if (!route) return
 
     wx.setStorageSync('qianxing_selected_route', route)
-    wx.navigateTo({ url: '/pages/guide/guide' })
+    wx.switchTab({ url: '/pages/guide/guide' })
   },
 
   onViewScenic(e) {

@@ -15,10 +15,19 @@ Page({
   },
 
   _msgId: 0,  // internal counter for message IDs
+  _firstShow: true,
 
   onLoad() {
     this.loadKnowledgeBase();
     this.checkRouteAndGreet();
+  },
+
+  onShow() {
+    if (this._firstShow) {
+      this._firstShow = false
+      return
+    }
+    this.checkPendingContext()
   },
 
   /* ========== Data Loading ========== */
@@ -62,6 +71,50 @@ Page({
     setTimeout(() => {
       this.addAIMessage(greeting);
     }, 400);
+  },
+
+  /** Check for pending context passed via storage from other pages */
+  checkPendingContext() {
+    // 1. Check for pending question (from scenic-detail / knowledge)
+    let question = ''
+    try {
+      question = wx.getStorageSync('qianxing_pending_question') || ''
+      if (question) wx.removeStorageSync('qianxing_pending_question')
+    } catch (e) { /* ignore */ }
+
+    if (question) {
+      setTimeout(() => {
+        this.addUserMessage(question)
+        this.setData({ isTyping: true })
+        this.scrollToBottom()
+        setTimeout(() => {
+          const answer = this.matchAnswer(question)
+          this.addAIMessage(answer)
+          this.setData({ isTyping: false })
+          this.scrollToBottom()
+        }, 600)
+      }, 300)
+      return
+    }
+
+    // 2. Check for selected route (from route-detail)
+    let routeName = ''
+    try {
+      const stored = wx.getStorageSync('qianxing_selected_route')
+      if (typeof stored === 'string' && stored) {
+        routeName = stored
+      } else if (stored && typeof stored === 'object') {
+        routeName = stored.name || stored.routeName || stored.title || ''
+      }
+      if (routeName) wx.removeStorageSync('qianxing_selected_route')
+    } catch (e) { /* ignore */ }
+
+    if (routeName) {
+      setTimeout(() => {
+        this.addAIMessage(`您好！我看到您选择了「${routeName}」路线，真是一个很棒的选择！\n我是您的贵州旅游 AI 伴游，有什么关于贵州旅游的问题都可以问我哦～`)
+        this.scrollToBottom()
+      }, 400)
+    }
   },
 
   /* ========== Message Handling ========== */
@@ -198,9 +251,5 @@ Page({
   /** Fallback message when no knowledgeBase match is found */
   getFallback() {
     return '抱歉，我暂时还不太了解这个问题的答案～\n不过您可以问我关于贵州的景点、美食、交通、住宿等方面的问题，我会尽力帮您解答！';
-  },
-
-  goHome() {
-    wx.reLaunch({ url: '/pages/index/index' })
   }
 });
