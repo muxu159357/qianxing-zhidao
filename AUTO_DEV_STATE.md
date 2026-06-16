@@ -9,10 +9,10 @@
 ## 当前状态快照
 
 ```yaml
-current_phase: PHASE-1
-current_stage: V20-E
+current_phase: PHASE-2
+current_stage: V21-A
 current_status: in_progress
-last_completed_stage: V20-D
+last_completed_stage: V20-E
 p0_count: 0
 p1_count: 0
 auto_continue: true
@@ -76,7 +76,7 @@ deployment_allowed: false
 | `qianxing_trips` | 长期 | 我的行程数据 | utils/trip-storage.js |
 | `qianxing_pending_context` | 临时 | 跨页面上下文传递 | scenic-detail.js, trip-detail.js |
 | `qianxing_pending_question` | 临时 | 知识库到AI问题传递 | knowledge.js |
-| `qianxing_pending_route` | 临时 | route-detail到guide路线上下文 | route-detail.js |
+| `qianxing_selected_route` | 临时 | route-detail到guide路线上下文 | route-detail.js, app.js, guide.js |
 
 ---
 
