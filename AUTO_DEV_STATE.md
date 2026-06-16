@@ -10,15 +10,15 @@
 
 ```yaml
 current_phase: PHASE-1
-current_stage: V20-D
-current_status: pending
-last_completed_stage: V20-C
+current_stage: V20-E
+current_status: in_progress
+last_completed_stage: V20-D
 p0_count: 0
 p1_count: 0
 auto_continue: true
 stop_required: false
 stop_reason: none
-next_action: start V20-D development (guide + knowledge + scenic-detail)
+next_action: execute V20-E full visual regression (10 pages)
 backend_allowed: false
 backend_requires_plan: true
 api_integration_allowed: false
