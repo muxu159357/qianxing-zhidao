@@ -1,8 +1,10 @@
 <!-- 景点知识库页面 -->
 <view class="page-container">
   <view class="page-header">
+    <view class="header-deco"></view>
     <text class="header-title">景点知识库</text>
     <text class="header-subtitle">探索贵州山地旅游的精彩世界</text>
+    <view class="header-wave"></view>
   </view>
 
   <!-- 搜索栏 -->
@@ -52,7 +54,8 @@
     </view>
 
     <!-- 卡片列表 -->
-    <view wx:for="{{filteredList}}" wx:key="id" class="knowledge-card">
+    <view wx:for="{{filteredList}}" wx:key="id" wx:for-index="idx" class="knowledge-card" style="animation: fadeInUp 0.4s {{idx * 0.06 + 0.15}}s both;">
+      <view class="card-accent"></view>
       <view
         class="card-header"
         data-id="{{item.id}}"

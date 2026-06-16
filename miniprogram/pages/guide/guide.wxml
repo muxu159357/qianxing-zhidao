@@ -33,7 +33,7 @@
   </scroll-view>
 
   <!-- Quick questions 2x2 grid -->
-  <view class="quick-section">
+  <view class="quick-section" style="animation: fadeInUp 0.4s 0.3s both;">
     <view class="quick-grid">
       <view
         class="quick-item"
@@ -46,7 +46,7 @@
   </view>
 
   <!-- Fixed input bar -->
-  <view class="input-bar">
+  <view class="input-bar" style="animation: fadeInUp 0.4s 0.4s both;">
     <input
       class="input-field"
       placeholder="输入您的问题…"
