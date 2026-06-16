@@ -1,4 +1,4 @@
-<!-- 游客画像页 -->
+<!-- 游客画像页 · V20-B 美化 -->
 <view class="page-wrap">
   <view class="page-hd">
     <view class="page-hd-row">
@@ -13,35 +13,42 @@
   </view>
 
   <view wx:if="{{loading}}" class="loading-box">
-    <view class="loading-text">AI正在分析您的偏好…</view>
+    <view class="loading-dot-row">
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+    </view>
+    <view class="loading-text">AI正在分析您的偏好</view>
+    <view class="loading-sub">正在匹配贵州山地旅行画像</view>
   </view>
 
   <view wx:elif="{{profile}}" class="profile-content">
-    <view class="profile-hero card">
+    <view class="profile-hero anim-hero-in">
       <view class="hero-badge">游客画像</view>
       <view class="profile-name">{{profile.profileName}}</view>
       <view class="profile-summary">{{profile.matchSummary}}</view>
       <view class="profile-tags">
-        <text class="tag tag-active" wx:for="{{selection.selectedTagIds}}" wx:key="*this">{{getTagName(item)}}</text>
+        <text class="tag-active" wx:for="{{selection.selectedTagIds}}" wx:key="*this">{{getTagName(item)}}</text>
       </view>
     </view>
 
-    <view class="card">
-      <view class="form-label">兴趣匹配度</view>
+    <view class="match-section-card anim-match-in">
+      <view class="section-label">兴趣匹配度</view>
       <view class="match-item" wx:for="{{profile.dominantInterests}}" wx:key="tagId">
         <view class="match-header">
           <text class="match-name">{{getTagName(item.tagId)}}</text>
           <text class="match-score">{{item.score}}%</text>
         </view>
-        <view class="progress-bar">
-          <view class="progress-fill" style="width:{{item.score}}%"></view>
+        <view class="match-bar">
+          <view class="match-bar-fill {{item.score >= 80 ? 'high' : (item.score >= 60 ? 'mid' : 'low')}}" style="width:{{item.score}}%"></view>
         </view>
         <view class="match-reason">{{item.reason}}</view>
       </view>
     </view>
 
-    <view class="card">
-      <view class="form-label">出行偏好</view>
+    <view class="info-card anim-info-in">
+      <view class="section-label">出行偏好</view>
       <view class="info-row"><text class="info-label">出行天数</text><text class="info-value">{{selection.days}}天</text></view>
       <view class="info-row"><text class="info-label">预算范围</text><text class="info-value">{{selection.budget}}</text></view>
       <view class="info-row"><text class="info-label">同行人群</text><text class="info-value">{{selection.companion}}</text></view>
@@ -49,15 +56,15 @@
       <view class="info-row"><text class="info-label">旅游节奏</text><text class="info-value">{{selection.pace}}</text></view>
     </view>
 
-    <view class="card">
-      <view class="form-label">行程风格</view>
+    <view class="style-card anim-style-in">
+      <view class="section-label">行程风格</view>
       <view class="style-badge">{{profile.routeStyle}}</view>
       <view class="style-desc">{{profile.routeStyleDesc}}</view>
     </view>
 
-    <view class="actions">
-      <button class="btn-primary action-btn" bindtap="goRecommend">查看推荐路线</button>
-      <button class="btn-outline action-btn-secondary" bindtap="goBack">重新选择</button>
+    <view class="actions anim-actions-in">
+      <button class="action-btn" bindtap="goRecommend">查看推荐路线</button>
+      <button class="action-btn-secondary" bindtap="goBack">重新选择</button>
     </view>
   </view>
 </view>

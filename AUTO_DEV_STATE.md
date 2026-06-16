@@ -10,15 +10,15 @@
 
 ```yaml
 current_phase: PHASE-1
-current_stage: V20-B
+current_stage: V20-C
 current_status: pending
-last_completed_stage: V20-A
+last_completed_stage: V20-B
 p0_count: 0
 p1_count: 0
 auto_continue: true
 stop_required: false
 stop_reason: none
-next_action: start V20-B development
+next_action: start V20-C development (my-trips + trip-detail)
 backend_allowed: false
 backend_requires_plan: true
 api_integration_allowed: false
@@ -32,9 +32,9 @@ deployment_allowed: false
 | 字段 | 值 | 说明 |
 |------|-----|------|
 | 当前阶段 | PHASE-1 | 前端视觉与交互全面美化 |
-| 当前任务 | V20-B | profile + recommend + route-detail 美化 |
+| 当前任务 | V20-C | my-trips + trip-detail 美化 |
 | 当前任务状态 | pending | 等待启动 |
-| 上一个完成阶段 | V20-A | 全局视觉系统 + 首页 + planner |
+| 上一个完成阶段 | V20-B | profile + recommend + route-detail 美化 |
 | P0 数量 | 0 | 零阻断问题 |
 | P1 数量 | 0 | 零高优先级问题 |
 | 是否允许自动继续 | 是 | 满足自动继续全部条件 |
@@ -43,7 +43,7 @@ deployment_allowed: false
 | 是否允许 API 集成 | 否 | 后端未就绪 |
 | 是否允许部署 | 否 | 尚未进入 PHASE-6 |
 | 是否需要用户介入 | 否 | 可自动继续 |
-| 下一步动作 | 启动 V20-B 开发 | 美化 profile + recommend + route-detail |
+| 下一步动作 | 启动 V20-C 开发 | 美化 my-trips + trip-detail |
 
 ---
 
@@ -52,6 +52,7 @@ deployment_allowed: false
 | 阶段 | 完成日期 | commit | P0 | P1 | 备注 |
 |------|---------|--------|----|----|------|
 | V20-A | 2026-06-16 | `e50535d` | 0 | 0 | 全局视觉系统 + 首页 + planner 美化完成 |
+| V20-B | 2026-06-16 | (pending commit) | 0 | 0 | profile + recommend + route-detail 美化完成 |
 
 ---
 
@@ -60,6 +61,7 @@ deployment_allowed: false
 | 日期 | 阶段 | P0 | P1 | code-reviewer | 结果 |
 |------|------|----|----|---------------|------|
 | 2026-06-16 | V20-A | 0 | 0 | APPROVE | PASS |
+| 2026-06-16 | V20-B | 0 | 0 | APPROVE | PASS |
 
 ---
 

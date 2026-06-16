@@ -1,4 +1,4 @@
-<!-- 路线推荐页 -->
+<!-- 路线推荐页 · V20-B 美化 -->
 <view class="page-wrap">
   <view class="page-hd">
     <view class="page-hd-row">
@@ -12,12 +12,21 @@
     </view>
   </view>
 
-  <view wx:if="{{loading}}" class="loading-box"><view class="loading-text">AI正在匹配最优路线…</view></view>
+  <view wx:if="{{loading}}" class="loading-box">
+    <view class="loading-dot-row">
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+    </view>
+    <view class="loading-text">AI正在匹配最优路线</view>
+    <view class="loading-sub">正在根据你的偏好智能排序</view>
+  </view>
 
   <view wx:else class="route-list">
-    <view class="route-card card {{expandedId === item.route.id ? 'expanded' : ''}}" wx:for="{{routes}}" wx:key="route.id" bindtap="toggleExpand" data-id="{{item.route.id}}">
+    <view class="route-card anim-card-in {{expandedId === item.route.id ? 'expanded' : ''}}" wx:for="{{routes}}" wx:key="route.id" wx:for-index="idx" style="animation-delay:{{idx * 0.06}}s" bindtap="toggleExpand" data-id="{{item.route.id}}">
       <view class="rc-header">
-        <view class="rc-rank">#{{index + 1}}</view>
+        <view class="rc-rank {{idx === 0 ? 'top1' : ''}}">#{{idx + 1}}</view>
         <view class="rc-body">
           <view class="rc-name">{{item.route.name}}</view>
           <view class="rc-desc">{{item.route.description}}</view>
@@ -45,7 +54,7 @@
             <view class="tl-meta">{{plan.meals}} · {{plan.accommodation}}</view>
           </view>
         </view>
-        <!-- V11: 推荐理由与匹配解释 -->
+
         <view wx:if="{{item.recommendSummary}}" class="recommend-reason-box">
           <view class="recommend-reason-row">
             <text class="recommend-reason-label">推荐理由</text>
@@ -63,7 +72,7 @@
           </view>
         </view>
 
-        <button class="btn-primary" style="margin-top:16rpx" bindtap="selectRoute" data-id="{{item.route.id}}" data-score="{{item.score}}">查看路线详情</button>
+        <button class="rc-detail-btn" bindtap="selectRoute" data-id="{{item.route.id}}" data-score="{{item.score}}">查看路线详情</button>
       </view>
     </view>
   </view>
