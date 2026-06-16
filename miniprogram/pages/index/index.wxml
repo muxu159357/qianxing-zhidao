@@ -1,25 +1,35 @@
-<!-- 首页 -->
+<!-- 首页 · V20-A 美化 -->
 <view class="page-wrap home-page">
   <view class="hero-section">
     <image class="hero-bg-img" src="/assets/images/home-hero.jpg" mode="aspectFill" />
     <view class="hero-video-mask"></view>
+    <!-- V20-A: 云雾光斑装饰 -->
+    <view class="hero-cloud hero-cloud-1"></view>
+    <view class="hero-cloud hero-cloud-2"></view>
     <view class="hero-content">
-      <image class="hero-logo" src="/assets/images/brand/logo.png" mode="aspectFit" />
-      <view class="hero-brand">黔行智导</view>
-      <view class="hero-subtitle">贵州山地旅游 AI 个性化导览</view>
-      <text class="hero-desc">基于游客兴趣画像与智能推荐算法\n为您定制专属贵州旅游路线</text>
-      <view class="hero-actions">
-        <button class="btn-primary hero-btn" bindtap="goPlanner">开始智能规划</button>
+      <image class="hero-logo anim-fade-scale" src="/assets/images/brand/logo.png" mode="aspectFit" />
+      <view class="hero-brand anim-fade-up" style="animation-delay:0.05s">黔行智导</view>
+      <view class="hero-subtitle anim-fade-up" style="animation-delay:0.12s">贵州山地旅游 AI 个性化导览</view>
+      <text class="hero-desc anim-fade-up" style="animation-delay:0.19s">基于游客兴趣画像与智能推荐算法\n为您定制专属贵州旅游路线</text>
+      <view class="hero-actions anim-fade-up" style="animation-delay:0.26s">
+        <button class="btn-primary hero-btn pulse-glow" bindtap="goPlanner">开始智能规划</button>
         <button class="btn-outline hero-btn-secondary" bindtap="goKnowledge">浏览景点</button>
       </view>
+    </view>
+    <!-- V20-A: 底部山形装饰 -->
+    <view class="hero-mountains">
+      <view class="mountain mountain-1"></view>
+      <view class="mountain mountain-2"></view>
+      <view class="mountain mountain-3"></view>
     </view>
   </view>
 
   <view class="features">
-    <view class="section-title">核心能力</view>
+    <view class="section-title anim-fade-up">核心能力</view>
     <view class="feature-grid">
-      <view class="feature-card" wx:for="{{features}}" wx:key="title"
-        bindtap="onFeatureTap" data-key="{{item.key}}" hover-class="feature-card--active">
+      <view class="feature-card tap-lift anim-fade-up" wx:for="{{features}}" wx:key="title" wx:for-index="idx"
+        style="animation-delay:{{idx * 0.08}}s"
+        bindtap="onFeatureTap" data-key="{{item.key}}">
         <view class="feature-icon" style="background:{{item.bg}}">
           <image wx:if="{{item.icon}}" class="feature-icon-img" src="{{item.icon}}" mode="aspectFit" />
           <text wx:else>{{item.tag}}</text>
@@ -31,11 +41,16 @@
   </view>
 
   <view class="routes-preview">
-    <view class="section-title">精选路线</view>
+    <view class="section-title anim-fade-up">精选路线</view>
     <view class="route-list">
-      <view class="route-preview-card" wx:for="{{topRoutes}}" wx:key="id" bindtap="goRouteDetail" data-id="{{item.id}}">
-        <view class="rpc-left">
-          <view class="rpc-days">{{item.days}}天</view>
+      <view class="route-preview-card tap-lift anim-fade-up" wx:for="{{topRoutes}}" wx:key="id" wx:for-index="idx"
+        style="animation-delay:{{idx * 0.08}}s"
+        bindtap="goRouteDetail" data-id="{{item.id}}">
+        <!-- V20-A: CSS 缩略图占位 -->
+        <view class="rpc-thumb">
+          <view class="rpc-thumb-inner">
+            <view class="rpc-thumb-mountain"></view>
+          </view>
         </view>
         <view class="rpc-body">
           <view class="rpc-name">{{item.name}}</view>
@@ -44,7 +59,10 @@
             <text class="tag-mini" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
           </view>
         </view>
-        <view class="rpc-arrow">></view>
+        <view class="rpc-right">
+          <view class="rpc-days-badge">{{item.days}}<text class="rpc-days-unit">天</text></view>
+          <view class="rpc-arrow-icon"></view>
+        </view>
       </view>
     </view>
     <button class="btn-outline view-all-btn" bindtap="goPlanner">查看更多路线</button>

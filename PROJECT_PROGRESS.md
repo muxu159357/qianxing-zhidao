@@ -6,6 +6,72 @@
 
 上一阶段（第一阶段 · 产品闭环）已完成：小程序主流程闭环、tabBar 导航、素材接入、P0/P1 视觉修复。当前阶段目标从"演示闭环"切换为"小程序前端体验深化 + 行程功能产品化 + 后端能力规划与逐步接入"。
 
+### 本次进度更新 (2026-06-16 · V20-A 全局视觉系统 + 首页 + planner 美化)
+
+#### V20-A 目标
+
+V20 全量美化第一阶段：建立全局视觉基线，美化首页和兴趣选择页。
+
+#### V20-A P0 修复 (2026-06-16)
+
+**错误**：`./app.wxss(232:17): error at token ':'` — WXSS 编译器不支持 CSS 自定义属性（`--custom-property: value` 和 `var()` 写法）以及 `>` 子选择器。
+
+**修复**：
+1. `app.wxss`：移除 `page` 内所有 CSS 自定义属性声明（17 个 `--*` 变量），移除所有 `var()` 引用改为硬编码色值，移除 `.anim-stagger > :nth-child(n)` 规则（含 `>` 子选择器）
+2. `index.wxml`：`.anim-stagger` → 移除父级 class，子元素改用 `wx:for-index="idx"` + `style="animation-delay:{{idx * 0.08}}s"` 逐元素设置延迟
+3. `planner.wxml`：`.anim-stagger` → 移除父级 class，6 个 `.plan-card` 各自增加 `style="animation-delay:Xs"`（0/0.08/0.16/0.24/0.32/0.4s）
+
+**结果**：零 CSS 变量、零 `var()`、零 `>` 子选择器，全部使用兼容写法。建视觉效果完全保留。
+
+**修改文件**：`app.wxss` + `index.wxml` + `planner.wxml`（3 个）
+
+#### 全局视觉系统 (`app.wxss`)
+
+- [x] 新增 CSS 自定义属性（16 个变量：颜色/圆角/阴影）
+- [x] 统一卡片规范：20rpx 圆角、`#ffffff` 背景、统一阴影
+- [x] 统一按钮规范：88rpx 高度、44rpx 圆角、active 缩放反馈
+- [x] 新增 `.btn-primary:active` / `.btn-outline:active` / `.btn-ghost` / `.btn-danger` 交互态
+- [x] 新增 3 个入场动画：fadeInUp / fadeIn / fadeInScale
+- [x] 新增 `.anim-stagger` stagger 子元素延迟（8 级）
+- [x] 新增 `.tap-scale` / `.tap-lift` / `.tap-fade` 交互反馈工具类
+- [x] 新增 `softPulse` 光晕脉冲动画
+- [x] 统一背景色 `#f5f7f5`、边框色 `#e8edea`、正文色 `#4d5f6f`
+- [x] 全局 `.card` 更新为统一规范
+
+#### 首页美化 (`index.*`)
+
+- [x] Hero 区：新增云雾光斑装饰 + 底部山形装饰
+- [x] CTA 按钮：增加 `softPulse` 光晕脉冲动画
+- [x] 能力卡片：统一白色背景+统一阴影+点击上浮反馈
+- [x] 精选路线：新增左侧 CSS 山峰缩略图占位
+- [x] 精选路线：天数改为圆形渐变徽章
+- [x] 入场动画：Hero 分层淡入；卡片 stagger 出现
+
+#### 兴趣选择页美化 (`planner.*`)
+
+- [x] 参数卡片：新增左侧 6rpx 绿→蓝渐变装饰色条
+- [x] 标签选中态：移除绿→蓝浓渐变，改为柔和绿色背景+绿色边框
+- [x] 标签切换：增加 0.2s ease 过渡动画
+- [x] Radio 选项：统一柔和背景+active 绿色高亮+过渡动画
+- [x] 提交区：新增"已选择 X 个兴趣标签"计数提示
+- [x] 入场动画：标题→卡片 stagger→提交按钮分区淡入
+
+#### 严格约束
+
+- [x] 零新增图片素材 / 零禁词 / 不改 app.json / 不改 storage / 不改 tabBar
+- [x] 不改其他 8 个页面 / 不改 JS 业务逻辑 / 不改主流程
+
+**涉及文件（5 个）：**
+| 文件 | 操作 |
+|------|------|
+| `miniprogram/app.wxss` | 更新：CSS 变量 + 动画 + 工具类 |
+| `miniprogram/pages/index/index.wxml` | 更新：Hero 装饰 + 缩略图 + 动画钩子 |
+| `miniprogram/pages/index/index.wxss` | 重写：V20 风格 |
+| `miniprogram/pages/planner/planner.wxml` | 更新：卡片重构 + 计数提示 + 动画钩子 |
+| `miniprogram/pages/planner/planner.wxss` | 重写：V20 风格 |
+
+**未修改**：index.js、planner.js、app.json、trip-storage.js、其他 8 个页面、mock 数据。
+
 ### 本次进度更新 (2026-06-15 · V5 安全提醒+清单完成)
 
 #### 底部三入口 tabBar 导航
