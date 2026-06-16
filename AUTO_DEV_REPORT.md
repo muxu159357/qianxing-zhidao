@@ -78,7 +78,7 @@
 | P1 列表 | 无 |
 | 是否修复 | MEDIUM: 合并重复 .rc-score 声明 |
 | 是否提交 git | 否（待提交） |
-| commit id | (pending) |
+| commit id | `77d6ea4` |
 | 下一阶段 | V20-C |
 | 是否停止 | 否 |
 | 停止原因 | none |

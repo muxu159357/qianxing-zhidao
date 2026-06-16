@@ -52,7 +52,7 @@ deployment_allowed: false
 | 阶段 | 完成日期 | commit | P0 | P1 | 备注 |
 |------|---------|--------|----|----|------|
 | V20-A | 2026-06-16 | `e50535d` | 0 | 0 | 全局视觉系统 + 首页 + planner 美化完成 |
-| V20-B | 2026-06-16 | (pending commit) | 0 | 0 | profile + recommend + route-detail 美化完成 |
+| V20-B | 2026-06-16 | `77d6ea4` | 0 | 0 | profile + recommend + route-detail 美化完成 |
 
 ---
 
