@@ -1,8 +1,10 @@
 <!-- 我的行程页面 -->
 <view class="page-container">
   <view class="page-header">
+    <view class="header-deco"></view>
     <text class="header-title">我的行程</text>
     <text class="header-subtitle">管理和查看您的旅行计划</text>
+    <view class="header-wave"></view>
   </view>
 
   <!-- V9: 行程档案概览 -->
@@ -48,8 +50,9 @@
 
   <!-- 有行程时 -->
   <scroll-view wx:if="{{trips.length > 0}}" class="trips-list" scroll-y="true" enhanced show-scrollbar="{{false}}">
-    <view wx:for="{{filteredTrips}}" wx:key="id" class="trip-card">
+    <view wx:for="{{filteredTrips}}" wx:key="id" wx:for-index="idx" class="trip-card" style="animation: fadeInUp 0.45s {{idx * 0.07}}s both;">
       <view class="trip-card-inner">
+        <view class="trip-card-accent"></view>
         <view class="trip-main" data-id="{{item.id}}" bindtap="onTapTrip">
           <view class="trip-route-info">
             <view class="trip-name-row">

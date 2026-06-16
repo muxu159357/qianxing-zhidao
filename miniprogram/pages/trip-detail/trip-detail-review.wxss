@@ -76,11 +76,23 @@
   background: rgba(31,143,95,0.12);
 }
 
+.review-action-btn-primary {
+  border: none;
+  background: linear-gradient(135deg, #1f8f5f, #2f6bff);
+  color: #ffffff;
+  box-shadow: 0 4rpx 16rpx rgba(31,143,95,0.2);
+}
+
+.review-action-btn-primary:active {
+  opacity: 0.85;
+}
+
 .review-edit-card {
   background: #f8f9fb;
   border-radius: 16rpx;
   padding: 24rpx;
   margin-top: 20rpx;
+  border: 1rpx solid #edf0ed;
 }
 
 .review-edit-card .review-label {
@@ -101,16 +113,6 @@
 
 .review-star-pick.review-star-active {
   color: #e67e22;
-}
-
-.review-action-btn-primary {
-  border: none;
-  background: linear-gradient(135deg, #1f8f5f, #2f6bff);
-  color: #ffffff;
-}
-
-.review-action-btn-primary:active {
-  opacity: 0.85;
 }
 
 .review-empty {

@@ -3,6 +3,10 @@
 
   <!-- ① 顶部标题区 -->
   <view class="hero-section">
+    <view class="hero-deco-orbs">
+      <view class="hero-orb hero-orb-1"></view>
+      <view class="hero-orb hero-orb-2"></view>
+    </view>
     <view class="hero-back" bindtap="onGoBack">
       <view class="back-arrow"></view>
     </view>
@@ -24,7 +28,7 @@
   </view>
 
   <!-- ② 基础信息区 -->
-  <view class="info-bar">
+  <view class="info-bar" style="animation: fadeInUp 0.45s 0.15s both;">
     <text class="info-tag">{{trip.dayCount || trip.days}}天</text>
     <text class="info-tag">{{trip.spotCount || 0}}个景点</text>
     <text class="info-tag info-tag-{{trip.energyLevel === '挑战' ? 'hard' : trip.energyLevel === '轻松' ? 'easy' : 'medium'}}">{{trip.energyLevel === '挑战' ? '体力挑战' : trip.energyLevel === '轻松' ? '体力轻松' : '体力适中'}}</text>
@@ -48,7 +52,7 @@
   </view>
 
   <!-- ③ 核心操作区 -->
-  <view wx:if="{{editingDayIndex < 0}}" class="actions-row">
+  <view wx:if="{{editingDayIndex < 0}}" class="actions-row" style="animation: fadeInUp 0.45s 0.2s both;">
     <view wx:if="{{trip.status === 'upcoming'}}" class="action-btn action-btn-primary" bindtap="onStartTrip">
       <text>开始行程</text>
     </view>
@@ -64,7 +68,7 @@
   </view>
 
   <!-- ④ 每日安排区 -->
-  <view wx:if="{{dayPlans.length > 0}}" class="section">
+  <view wx:if="{{dayPlans.length > 0}}" class="section" style="animation: fadeInUp 0.45s 0.25s both;">
     <view class="section-title">每日安排</view>
     <view class="timeline">
       <view class="tl-day" wx:for="{{dayPlans}}" wx:key="day" wx:for-index="dIdx">
@@ -116,7 +120,7 @@
   </view>
 
   <!-- ⑤ 涉及景点区 -->
-  <view wx:if="{{spotNames.length > 0}}" class="section">
+  <view wx:if="{{spotNames.length > 0}}" class="section" style="animation: fadeInUp 0.45s 0.3s both;">
     <view class="section-title">涉及景点</view>
     <view class="spots-row">
       <view class="spot-chip" wx:for="{{spotNames}}" wx:key="*this" wx:for-item="name" wx:for-index="idx"
@@ -127,7 +131,7 @@
   </view>
 
   <!-- ⑥ 行程安全提醒区 (V5) -->
-  <view wx:if="{{safetyAlerts.length > 0 || safetyChecklist.length > 0}}" class="section">
+  <view wx:if="{{safetyAlerts.length > 0 || safetyChecklist.length > 0}}" class="section" style="animation: fadeInUp 0.45s 0.35s both;">
     <view class="section-title">行程安全</view>
 
     <!-- Status safety header -->
@@ -177,7 +181,7 @@
   </view>
 
   <!-- ⑧ 行程复盘 (V7) -->
-  <view wx:if="{{trip.status === 'completed'}}" class="section">
+  <view wx:if="{{trip.status === 'completed'}}" class="section" style="animation: fadeInUp 0.45s 0.4s both;">
     <view class="section-title">行程复盘</view>
 
     <!-- 展示态 -->
@@ -251,7 +255,7 @@
   </view>
 
   <!-- 未完成行程复盘提示 -->
-  <view wx:if="{{trip.status !== 'completed'}}" class="section">
+  <view wx:if="{{trip.status !== 'completed'}}" class="section" style="animation: fadeInUp 0.45s 0.4s both;">
     <view class="section-title">行程复盘</view>
     <view class="review-hint">
       <text wx:if="{{trip.status === 'upcoming'}}" class="review-hint-text">完成行程后，可以在这里记录本次旅行体验。</text>

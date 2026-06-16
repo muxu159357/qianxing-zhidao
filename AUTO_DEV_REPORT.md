@@ -86,8 +86,34 @@
 
 ---
 
+### 阶段报告：V20-C — 2026-06-16
+
+| 字段 | 值 |
+|------|-----|
+| 执行日期 | 2026-06-16 |
+| 当前 phase | PHASE-1 |
+| 当前 stage | V20-C |
+| 修改文件 | `miniprogram/pages/my-trips/my-trips.wxml` `miniprogram/pages/my-trips/my-trips.wxss` `miniprogram/pages/trip-detail/trip-detail.wxml` `miniprogram/pages/trip-detail/trip-detail.wxss` `miniprogram/pages/trip-detail/trip-detail-plan.wxss` `miniprogram/pages/trip-detail/trip-detail-safety.wxss` `miniprogram/pages/trip-detail/trip-detail-review.wxss` |
+| 完成内容 | my-trips：三段渐变Hero + 装饰光斑 + 底部波浪 + 统计卡片彩色顶条 + 筛选栏阴影发光 + 行程卡片左侧渐变装饰条 + 卡片stagger入场动画 + 箭头改CSS三角；trip-detail：Hero装饰光斑双圆 + 信息栏浮卡阴影 + 操作按钮发光阴影 + 时间线圆点光环 + section卡片统一阴影 + 编辑卡片柔和边框 + 全部section分区stagger入场动画 |
+| 质量门结果 | PASS (P0=0, P1=0) |
+| code-reviewer 结果 | APPROVE (2 P2 极低影响建议) |
+| security-reviewer 结果 | N/A（纯视觉改动） |
+| 测试结果 | var()=0、>子选择器=0、中文class=0、禁词=0、JS 零改动、文件全部 <800行（最大454行） |
+| P0 列表 | 无 |
+| P1 列表 | 无 |
+| 是否修复 | N/A |
+| 是否提交 git | 待提交 |
+| commit id | 待生成 |
+| 下一阶段 | V20-D |
+| 是否停止 | 否 |
+| 停止原因 | none |
+| 备注 | JS 业务逻辑、storage、tabBar、app.json、页面路径、mock 数据全部未改。 |
+
+---
+
 ## 版本历史
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-06-16 | 1.1 | V20-B 阶段报告：profile + recommend + route-detail 美化完成 |
+| 2026-06-16 | 1.2 | V20-C 阶段报告：my-trips + trip-detail 美化完成 |
