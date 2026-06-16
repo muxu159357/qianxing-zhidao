@@ -9,10 +9,10 @@
 ## 当前状态快照
 
 ```yaml
-current_phase: PHASE-2
-current_stage: V21-A
+current_phase: PHASE-3
+current_stage: V22-A
 current_status: in_progress
-last_completed_stage: V20-E
+last_completed_stage: V21-F
 p0_count: 0
 p1_count: 0
 auto_continue: true
