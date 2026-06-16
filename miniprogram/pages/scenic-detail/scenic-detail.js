@@ -3,7 +3,8 @@ const mock = require('../../utils/mock');
 
 Page({
   data: {
-    attraction: null
+    attraction: null,
+    relatedRoutes: []
   },
 
   onLoad(options) {
@@ -19,8 +20,9 @@ Page({
 
     if (attraction) {
       this.setData({ attraction });
+      this._loadRelatedRoutes(attraction);
     } else {
-      this.setData({ attraction: null });
+      this.setData({ attraction: null, relatedRoutes: [] });
     }
   },
 
@@ -33,13 +35,86 @@ Page({
     }
   },
 
+  _loadRelatedRoutes: function (attraction) {
+    var routes = mock.routes || [];
+    var selection = null;
+    try {
+      selection = wx.getStorageSync('qianxing_selection') || null;
+    } catch (e) {
+      selection = null;
+    }
+    var related = this._buildRelatedRoutes(attraction, routes, selection);
+    this.setData({ relatedRoutes: related });
+  },
+
+  _buildRelatedRoutes: function (attraction, routes, selection) {
+    if (!attraction || !attraction.id || !routes || !routes.length) return [];
+
+    var attractionId = attraction.id;
+    var self = this;
+
+    var matched = routes.filter(function (route) {
+      return route.attractionIds && route.attractionIds.some(function (aid) {
+        return String(aid) === String(attractionId);
+      });
+    });
+
+    if (!matched.length) return [];
+
+    if (selection && selection.days) {
+      matched.sort(function (a, b) {
+        return Math.abs(a.days - selection.days) - Math.abs(b.days - selection.days);
+      });
+    }
+
+    return matched.slice(0, 3).map(function (route) {
+      return {
+        id: route.id,
+        name: route.name,
+        days: route.days,
+        physicalLevel: route.physicalLevel,
+        budgetRange: route.budgetRange || '',
+        summary: self._buildRelatedRouteSummary(route, attraction)
+      };
+    });
+  },
+
+  _buildRelatedRouteSummary: function (route) {
+    if (route.description && route.description.length > 0) {
+      return route.description.length > 30
+        ? route.description.slice(0, 30) + '…'
+        : route.description;
+    }
+    return '包含该景点及其它精彩目的地';
+  },
+
+  onTapRelatedRoute: function (e) {
+    var routeId = e.currentTarget.dataset.routeId;
+    if (!routeId) return;
+    wx.navigateTo({
+      url: '/pages/route-detail/route-detail?id=' + routeId
+    });
+  },
+
   onAskAI() {
     const { attraction } = this.data;
     if (!attraction) return;
 
-    const question = `请介绍一下${attraction.name}的详细情况，包括怎么玩、有什么注意事项？`;
+    wx.setStorageSync('qianxing_pending_context', {
+      contextType: 'attraction',
+      attractionId: attraction.id,
+      attractionName: attraction.name,
+      city: attraction.city || '',
+      description: attraction.description || '',
+      highlights: attraction.highlights || [],
+      tips: attraction.tips || [],
+      tags: attraction.tags || [],
+      category: attraction.category || '',
+      rating: attraction.rating || 0,
+      price: attraction.price || '',
+      duration: attraction.duration || ''
+    });
 
-    wx.setStorageSync('qianxing_pending_question', question);
     wx.switchTab({ url: '/pages/guide/guide' });
   },
 

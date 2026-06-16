@@ -5,22 +5,69 @@
     <text class="header-subtitle">管理和查看您的旅行计划</text>
   </view>
 
+  <!-- V9: 行程档案概览 -->
+  <view wx:if="{{tripStats.total > 0}}" class="stats-section">
+    <view class="stats-header">
+      <text class="stats-title">我的行程档案</text>
+      <text wx:if="{{tripStats.latestTripName}}" class="stats-latest">最近更新：{{tripStats.latestTripName}}</text>
+    </view>
+    <view class="stats-row">
+      <view class="stat-item">
+        <text class="stat-num">{{tripStats.total}}</text>
+        <text class="stat-label">全部</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{tripStats.upcoming}}</text>
+        <text class="stat-label">未开始</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{tripStats.active}}</text>
+        <text class="stat-label">进行中</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{tripStats.completed}}</text>
+        <text class="stat-label">已完成</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num stat-num-reviewed">{{tripStats.reviewed}}</text>
+        <text class="stat-label">已复盘</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 状态筛选栏 -->
+  <view class="filter-bar">
+    <view
+      class="filter-item {{activeFilter === item.key ? 'filter-item-active' : ''}}"
+      wx:for="{{filters}}"
+      wx:key="key"
+      data-key="{{item.key}}"
+      bindtap="onFilterTap"
+    >{{item.label}}</view>
+  </view>
+
   <!-- 有行程时 -->
   <scroll-view wx:if="{{trips.length > 0}}" class="trips-list" scroll-y="true" enhanced show-scrollbar="{{false}}">
-    <view wx:for="{{trips}}" wx:key="id" class="trip-card">
+    <view wx:for="{{filteredTrips}}" wx:key="id" class="trip-card">
       <view class="trip-card-inner">
         <view class="trip-main" data-id="{{item.id}}" bindtap="onTapTrip">
           <view class="trip-route-info">
-            <text class="trip-route-name">{{item.routeName || item.name || '未命名行程'}}</text>
-            <view class="trip-meta">
-              <view class="trip-meta-item">
-                <view class="meta-dot"></view>
-                <text class="meta-text">{{item.savedAt || '最近保存'}}</text>
-              </view>
-              <view class="trip-meta-item">
-                <view class="meta-dot"></view>
-                <text class="meta-text">{{item.days || 1}}天行程</text>
-              </view>
+            <view class="trip-name-row">
+              <text class="trip-route-name">{{item.displayName}}</text>
+              <text class="trip-status-tag trip-status-{{item.status === 'active' ? 'active' : item.status === 'completed' ? 'completed' : 'upcoming'}}">{{item.status === 'active' ? '进行中' : item.status === 'completed' ? '已完成' : '未开始'}}</text>
+              <text wx:if="{{item.reviewStatusText}}" class="trip-review-tag {{item.reviewStatusText === '已复盘' ? 'trip-review-done' : 'trip-review-pending'}}">{{item.reviewStatusText}}</text>
+            </view>
+            <view class="trip-meta-row">
+              <text class="trip-meta-tag">{{item.dayCount}}天</text>
+              <text class="trip-meta-tag">{{item.spotCount}}个景点</text>
+              <text class="trip-meta-tag trip-energy-{{item.energyLevel === '挑战' ? 'hard' : item.energyLevel === '轻松' ? 'easy' : 'medium'}}">{{item.energyLevel === '挑战' ? '体力挑战' : item.energyLevel === '轻松' ? '体力轻松' : '体力适中'}}</text>
+            </view>
+            <view wx:if="{{item.spotNames && item.spotNames.length > 0}}" class="trip-spots-row">
+              <text class="trip-spots-text">{{item.spotNames.slice(0, 3).join(' · ')}}</text>
+            </view>
+            <view class="trip-date-row">
+              <text wx:if="{{item.travelDateText}}" class="trip-date-text">{{item.travelDateText}}</text>
+              <text wx:else class="trip-date-text">{{item.savedAt}}</text>
             </view>
           </view>
           <view class="trip-arrow"></view>
@@ -38,10 +85,10 @@
   <!-- 空状态 -->
   <view wx:else class="empty-state">
     <image class="empty-icon" src="/assets/images/empty/empty-trips.png" mode="aspectFit" />
-    <text class="empty-title">还没有行程</text>
-    <text class="empty-desc">去探索景点并规划您的贵州之旅吧</text>
+    <text class="empty-title">{{emptyTitle}}</text>
+    <text class="empty-desc">{{emptyDesc}}</text>
     <button class="explore-btn" bindtap="onGoExplore">
-      <text class="explore-btn-text">去探索景点</text>
+      <text class="explore-btn-text">去规划行程</text>
     </button>
   </view>
 </view>

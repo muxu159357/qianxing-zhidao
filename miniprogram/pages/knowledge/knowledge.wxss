@@ -256,6 +256,19 @@
   font-weight: 500;
 }
 
+.action-btn-scenic {
+  background: rgba(31, 143, 95, 0.08);
+  margin-bottom: 12rpx;
+}
+
+.action-dot-scenic {
+  background: #1f8f5f;
+}
+
+.action-text-scenic {
+  color: #1f8f5f;
+}
+
 /* ===== 空状态 ===== */
 .empty-state {
   display: flex;

@@ -87,7 +87,7 @@ module.exports = {
       profileName,
       dominantInterests: dominant.map(t => ({ tagId: t.id, score: 85 + Math.floor(Math.random()*15), reason: `您对${t.name}有浓厚兴趣` })),
       secondaryInterests: secondary.map(t => ({ tagId: t.id, score: 40 + Math.floor(Math.random()*40), reason: `补充偏好` })),
-      matchSummary: `基于您在${dominant.map(t=>t.name).join('、')}方面的兴趣偏好，结合${selection.days}天行程和${selection.physicalLevel}体力需求，AI生成本画像。`,
+      matchSummary: `基于您在${dominant.map(t=>t.name).join('、')}方面的兴趣偏好，结合${selection.days}天行程和${selection.physicalLevel}体力需求，智能分析后为您生成本画像。`,
       routeStyle: styleMap[selection.physicalLevel] || '探索发现型',
       routeStyleDesc: `行程安排将优先匹配${dominant[0]?.name || '自然风光'}类景点，兼顾${secondary[0]?.name || '文化体验'}类目的地。`
     }

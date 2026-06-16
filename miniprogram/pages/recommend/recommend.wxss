@@ -26,3 +26,76 @@
 .tl-head { font-size: 26rpx; font-weight: 600; color: #10251d; }
 .tl-desc { font-size: 24rpx; color: #5d6b7a; margin-top: 4rpx; line-height: 1.5; }
 .tl-meta { font-size: 20rpx; color: #c0c4cc; margin-top: 4rpx; }
+
+/* ===== V11: Recommend reason box ===== */
+.recommend-reason-box {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  border-radius: 14rpx;
+  background: rgba(31,143,95,0.04);
+  border: 1rpx solid rgba(31,143,95,0.08);
+}
+.recommend-reason-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10rpx;
+  margin-bottom: 12rpx;
+}
+.recommend-reason-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #1f8f5f;
+  flex-shrink: 0;
+  min-width: 80rpx;
+}
+.recommend-reason-text {
+  font-size: 24rpx;
+  color: #4d5f6f;
+  line-height: 1.55;
+  flex: 1;
+}
+.match-tag-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10rpx;
+  margin-bottom: 10rpx;
+}
+.match-tag-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #2f6bff;
+  flex-shrink: 0;
+  min-width: 80rpx;
+}
+.match-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  flex: 1;
+}
+.match-tag-item {
+  font-size: 20rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  background: rgba(47,107,255,0.08);
+  color: #2f6bff;
+  font-weight: 500;
+}
+.route-notice-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10rpx;
+}
+.route-notice-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #e67e22;
+  flex-shrink: 0;
+  min-width: 80rpx;
+}
+.route-notice-text {
+  font-size: 24rpx;
+  color: #909399;
+  line-height: 1.5;
+  flex: 1;
+}

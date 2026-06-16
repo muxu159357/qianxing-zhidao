@@ -428,3 +428,69 @@
   color: #1f8f5f;
   border: 2rpx solid rgba(31,143,95,0.3);
 }
+
+/* ===== V11: Recommend explanation ===== */
+.explain-card {
+  padding: 28rpx;
+  border-radius: 20rpx;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 4rpx 16rpx rgba(19,61,45,0.04);
+}
+.explain-summary {
+  font-size: 28rpx;
+  color: #4d5f6f;
+  line-height: 1.7;
+  display: block;
+  margin-bottom: 24rpx;
+}
+.explain-subtitle {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #10251d;
+  margin-bottom: 14rpx;
+  display: block;
+}
+.explain-match-section {
+  margin-bottom: 20rpx;
+}
+.explain-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+.explain-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+  padding: 10rpx 0;
+}
+.explain-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #1f8f5f;
+  flex-shrink: 0;
+  min-width: 110rpx;
+}
+.explain-detail {
+  font-size: 24rpx;
+  color: #5d6b7a;
+  line-height: 1.5;
+  flex: 1;
+}
+.explain-notice-section {
+  padding-top: 16rpx;
+  border-top: 1rpx solid #eef2f5;
+}
+.notice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+.notice-item {
+  padding: 6rpx 0;
+}
+.notice-text {
+  font-size: 24rpx;
+  color: #909399;
+  line-height: 1.55;
+}

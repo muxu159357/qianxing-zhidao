@@ -56,6 +56,33 @@
       <text class="tag-item" wx:for="{{route.tags}}" wx:key="*this">{{item}}</text>
     </view>
 
+    <!-- V11: 推荐解释模块 -->
+    <view wx:if="{{recommendExplanation}}" class="section">
+      <view class="section-title">为什么推荐这条路线</view>
+      <view class="explain-card">
+        <text class="explain-summary">{{recommendExplanation.summary}}</text>
+
+        <view wx:if="{{recommendExplanation.matchItems && recommendExplanation.matchItems.length > 0}}" class="explain-match-section">
+          <text class="explain-subtitle">匹配你的偏好</text>
+          <view class="explain-list">
+            <view class="explain-item" wx:for="{{recommendExplanation.matchItems}}" wx:key="label">
+              <text class="explain-label">{{item.label}}</text>
+              <text class="explain-detail">{{item.detail}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{recommendExplanation.notices && recommendExplanation.notices.length > 0}}" class="explain-notice-section">
+          <text class="explain-subtitle">出行提醒</text>
+          <view class="notice-list">
+            <view class="notice-item" wx:for="{{recommendExplanation.notices}}" wx:key="*this">
+              <text class="notice-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 每日行程 -->
     <view class="section">
       <view class="section-title">每日行程</view>

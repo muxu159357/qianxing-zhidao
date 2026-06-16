@@ -45,6 +45,24 @@
             <view class="tl-meta">{{plan.meals}} · {{plan.accommodation}}</view>
           </view>
         </view>
+        <!-- V11: 推荐理由与匹配解释 -->
+        <view wx:if="{{item.recommendSummary}}" class="recommend-reason-box">
+          <view class="recommend-reason-row">
+            <text class="recommend-reason-label">推荐理由</text>
+            <text class="recommend-reason-text">{{item.recommendSummary}}</text>
+          </view>
+          <view wx:if="{{item.matchTags && item.matchTags.length > 0}}" class="match-tag-row">
+            <text class="match-tag-label">匹配点</text>
+            <view class="match-tag-list">
+              <text class="match-tag-item" wx:for="{{item.matchTags}}" wx:key="*this">{{item}}</text>
+            </view>
+          </view>
+          <view wx:if="{{item.routeNotice}}" class="route-notice-row">
+            <text class="route-notice-label">小提醒</text>
+            <text class="route-notice-text">{{item.routeNotice}}</text>
+          </view>
+        </view>
+
         <button class="btn-primary" style="margin-top:16rpx" bindtap="selectRoute" data-id="{{item.route.id}}" data-score="{{item.score}}">查看路线详情</button>
       </view>
     </view>

@@ -1,0 +1,283 @@
+<!-- 行程详情页（个人已保存行程） -->
+<view wx:if="{{trip}}" class="page-container">
+
+  <!-- ① 顶部标题区 -->
+  <view class="hero-section">
+    <view class="hero-back" bindtap="onGoBack">
+      <view class="back-arrow"></view>
+    </view>
+    <view class="hero-content">
+      <!-- Name display mode -->
+      <view wx:if="{{!isEditingName}}" class="hero-title-row">
+        <text class="hero-title">{{displayName}}</text>
+        <text class="hero-status {{statusClass}}">{{statusText}}</text>
+        <text class="hero-edit-btn" bindtap="onStartEditName">编辑</text>
+      </view>
+      <!-- Name edit mode -->
+      <view wx:else class="hero-edit-row">
+        <input class="hero-edit-input" value="{{editNameValue}}" maxlength="30" bindinput="onNameInput" focus="{{true}}" />
+        <text class="hero-edit-confirm" bindtap="onSaveName">确认</text>
+        <text class="hero-edit-cancel" bindtap="onCancelEditName">取消</text>
+      </view>
+      <text class="hero-subtitle">你的专属行程</text>
+    </view>
+  </view>
+
+  <!-- ② 基础信息区 -->
+  <view class="info-bar">
+    <text class="info-tag">{{trip.dayCount || trip.days}}天</text>
+    <text class="info-tag">{{trip.spotCount || 0}}个景点</text>
+    <text class="info-tag info-tag-{{trip.energyLevel === '挑战' ? 'hard' : trip.energyLevel === '轻松' ? 'easy' : 'medium'}}">{{trip.energyLevel === '挑战' ? '体力挑战' : trip.energyLevel === '轻松' ? '体力轻松' : '体力适中'}}</text>
+    <text class="info-date">{{savedAtText}}</text>
+  </view>
+
+  <!-- 出行日期行 -->
+  <view class="date-bar">
+    <view wx:if="{{travelDateText}}" class="date-bar-row">
+      <text class="date-bar-label">出行日期：{{travelDateText}}</text>
+      <picker wx:if="{{editingDayIndex < 0}}" mode="date" bindchange="onSetDate">
+        <text class="date-bar-action">修改</text>
+      </picker>
+    </view>
+    <view wx:else class="date-bar-row">
+      <text class="date-bar-label">出行日期待设置</text>
+      <picker wx:if="{{editingDayIndex < 0}}" mode="date" bindchange="onSetDate">
+        <text class="date-bar-action">设置</text>
+      </picker>
+    </view>
+  </view>
+
+  <!-- ③ 核心操作区 -->
+  <view wx:if="{{editingDayIndex < 0}}" class="actions-row">
+    <view wx:if="{{trip.status === 'upcoming'}}" class="action-btn action-btn-primary" bindtap="onStartTrip">
+      <text>开始行程</text>
+    </view>
+    <view wx:if="{{trip.status === 'active'}}" class="action-btn action-btn-primary" bindtap="onCompleteTrip">
+      <text>完成行程</text>
+    </view>
+    <view class="action-btn action-btn-outline" bindtap="onAskAI">
+      <text>问 AI 伴游</text>
+    </view>
+    <view class="action-btn action-btn-outline" bindtap="onViewOriginalRoute">
+      <text>查看原路线</text>
+    </view>
+  </view>
+
+  <!-- ④ 每日安排区 -->
+  <view wx:if="{{dayPlans.length > 0}}" class="section">
+    <view class="section-title">每日安排</view>
+    <view class="timeline">
+      <view class="tl-day" wx:for="{{dayPlans}}" wx:key="day" wx:for-index="dIdx">
+        <view class="tl-marker">
+          <view class="tl-dot"></view>
+          <view wx:if="{{item.day < dayPlans.length}}" class="tl-line"></view>
+        </view>
+        <!-- Show mode -->
+        <view wx:if="{{editingDayIndex !== dIdx}}" class="tl-content">
+          <view class="tl-head-row">
+            <view class="tl-head">第{{item.day}}天 · {{item.title}}</view>
+            <view class="tl-head-tags">
+              <text wx:if="{{item.isEdited}}" class="tl-edited-tag">已调整</text>
+              <text class="tl-edit-btn" data-index="{{dIdx}}" bindtap="onEditDayPlan">编辑</text>
+            </view>
+          </view>
+          <view class="tl-desc">{{item.description}}</view>
+          <view wx:if="{{item.meals || item.accommodation}}" class="tl-meta">{{item.meals}}<text wx:if="{{item.meals && item.accommodation}}"> · </text>{{item.accommodation}}</view>
+        </view>
+        <!-- Edit mode -->
+        <view wx:else class="tl-content">
+          <view class="tl-edit-card">
+            <view class="tl-edit-head">第{{item.day}}天</view>
+            <view class="tl-edit-field">
+              <view class="tl-edit-label">标题</view>
+              <input class="tl-edit-input" value="{{editForm.title}}" maxlength="30" data-field="title" bindinput="onDayPlanInput" placeholder="请输入当天标题" />
+            </view>
+            <view class="tl-edit-field">
+              <view class="tl-edit-label">说明</view>
+              <textarea class="tl-edit-textarea" value="{{editForm.description}}" maxlength="200" data-field="description" bindinput="onDayPlanInput" placeholder="请输入当天行程说明" auto-height />
+            </view>
+            <view class="tl-edit-field">
+              <view class="tl-edit-label">餐饮建议</view>
+              <textarea class="tl-edit-textarea" value="{{editForm.meals}}" maxlength="200" data-field="meals" bindinput="onDayPlanInput" placeholder="请输入餐饮建议" auto-height />
+            </view>
+            <view class="tl-edit-field">
+              <view class="tl-edit-label">住宿建议</view>
+              <textarea class="tl-edit-textarea" value="{{editForm.accommodation}}" maxlength="200" data-field="accommodation" bindinput="onDayPlanInput" placeholder="请输入住宿建议" auto-height />
+            </view>
+            <view class="tl-edit-actions">
+              <text class="tl-edit-restore" bindtap="onRestoreDayPlan">恢复默认</text>
+              <text class="tl-edit-cancel" bindtap="onCancelEditDay">取消</text>
+              <text class="tl-edit-confirm" bindtap="onSaveDayPlan">确认</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ⑤ 涉及景点区 -->
+  <view wx:if="{{spotNames.length > 0}}" class="section">
+    <view class="section-title">涉及景点</view>
+    <view class="spots-row">
+      <view class="spot-chip" wx:for="{{spotNames}}" wx:key="*this" wx:for-item="name" wx:for-index="idx"
+        bindtap="onViewScenic" data-id="{{trip.spotIds ? trip.spotIds[idx] : ''}}">
+        <text>{{name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ⑥ 行程安全提醒区 (V5) -->
+  <view wx:if="{{safetyAlerts.length > 0 || safetyChecklist.length > 0}}" class="section">
+    <view class="section-title">行程安全</view>
+
+    <!-- Status safety header -->
+    <view class="safety-status-bar">
+      <text class="safety-status-title">{{statusSafetyTitle}}</text>
+      <text wx:if="{{checklistProgress.totalCount > 0}}" class="safety-status-progress">已完成 {{checklistProgress.checkedCount}}/{{checklistProgress.totalCount}} 项</text>
+    </view>
+
+    <!-- Progress bar -->
+    <view wx:if="{{checklistProgress.totalCount > 0}}" class="safety-progress-bar">
+      <view class="safety-progress-fill" style="width: {{checklistProgress.totalCount > 0 ? checklistProgress.checkedCount / checklistProgress.totalCount * 100 : 0}}%;"></view>
+    </view>
+
+    <!-- Dynamic alerts -->
+    <view wx:if="{{safetyAlerts.length > 0}}" class="safety-alerts-list">
+      <view class="safety-row" wx:for="{{safetyAlerts}}" wx:key="*this">
+        <view class="safety-icon safety-icon-{{item.type}}"></view>
+        <text class="safety-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <!-- Checklist -->
+    <view wx:if="{{safetyChecklist.length > 0}}" class="checklist-section">
+      <view class="checklist-title">出行准备清单</view>
+      <view class="checklist-items">
+        <view
+          wx:for="{{safetyChecklist}}"
+          wx:key="id"
+          class="checklist-item {{item.checked ? 'checklist-item-checked' : ''}} {{editingDayIndex >= 0 ? 'checklist-item-disabled' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onToggleCheckItem"
+        >
+          <view class="checklist-box {{item.checked ? 'checklist-box-checked' : ''}}">
+            <text wx:if="{{item.checked}}" class="checklist-box-icon"></text>
+          </view>
+          <text class="checklist-text {{item.checked ? 'checklist-text-checked' : ''}}">{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 状态提示 -->
+  <view class="section status-hint">
+    <text wx:if="{{trip.status === 'upcoming'}}" class="status-hint-text">行程还未开始，你可以先查看每日安排和安全提醒。</text>
+    <text wx:if="{{trip.status === 'active'}}" class="status-hint-text">你正在旅行中，如需帮助，可以随时使用 AI 伴游获取建议。</text>
+    <text wx:if="{{trip.status === 'completed'}}" class="status-hint-text">你已完成这段行程，可以回顾路线安排，也可以继续咨询 AI 伴游。</text>
+  </view>
+
+  <!-- ⑧ 行程复盘 (V7) -->
+  <view wx:if="{{trip.status === 'completed'}}" class="section">
+    <view class="section-title">行程复盘</view>
+
+    <!-- 展示态 -->
+    <view wx:if="{{!isEditingReview}}" class="review-display">
+      <!-- 已复盘 -->
+      <view wx:if="{{trip.review.rating > 0 || trip.review.highlights || trip.review.regrets || trip.review.nextAdvice}}">
+        <view class="review-rating-row">
+          <text class="review-label">本次评分</text>
+          <view class="review-stars-display">
+            <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="review-star-display {{trip.review.rating >= item ? 'review-star-active' : ''}}">★</text>
+          </view>
+        </view>
+        <view wx:if="{{trip.review.highlights}}" class="review-field-display">
+          <text class="review-label">本次亮点</text>
+          <text class="review-text">{{trip.review.highlights}}</text>
+        </view>
+        <view wx:if="{{trip.review.regrets}}" class="review-field-display">
+          <text class="review-label">遗憾与不足</text>
+          <text class="review-text">{{trip.review.regrets}}</text>
+        </view>
+        <view wx:if="{{trip.review.nextAdvice}}" class="review-field-display">
+          <text class="review-label">下次建议</text>
+          <text class="review-text">{{trip.review.nextAdvice}}</text>
+        </view>
+        <view wx:if="{{reviewDateText}}" class="review-updated-row">
+          <text class="review-updated-text">最后更新：{{reviewDateText}}</text>
+        </view>
+        <view class="review-action-btn" bindtap="onStartEditReview">
+          <text>编辑复盘</text>
+        </view>
+      </view>
+      <!-- 未复盘 -->
+      <view wx:else class="review-empty">
+        <text class="review-empty-text">这段行程已经完成，记录一下你的体验吧。</text>
+        <view class="review-action-btn review-action-btn-primary" bindtap="onStartEditReview">
+          <text>记录本次旅行体验</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 编辑态 -->
+    <view wx:else class="review-edit">
+      <view class="review-edit-field">
+        <text class="review-label">本次评分</text>
+        <view class="review-stars-edit">
+          <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+            class="review-star-edit {{reviewForm.rating >= item ? 'review-star-active' : ''}}"
+            data-rating="{{item}}"
+            bindtap="onReviewStarTap">
+            <text>★</text>
+          </view>
+        </view>
+      </view>
+      <view class="review-edit-field">
+        <text class="review-label">本次亮点</text>
+        <textarea class="review-textarea" value="{{reviewForm.highlights}}" maxlength="200" data-field="highlights" bindinput="onReviewInput" placeholder="这次旅行最让你满意的地方…" auto-height />
+      </view>
+      <view class="review-edit-field">
+        <text class="review-label">遗憾与不足</text>
+        <textarea class="review-textarea" value="{{reviewForm.regrets}}" maxlength="200" data-field="regrets" bindinput="onReviewInput" placeholder="有哪些遗憾或可以改进的地方…" auto-height />
+      </view>
+      <view class="review-edit-field">
+        <text class="review-label">下次建议</text>
+        <textarea class="review-textarea" value="{{reviewForm.nextAdvice}}" maxlength="200" data-field="nextAdvice" bindinput="onReviewInput" placeholder="下次来贵州，你有什么建议…" auto-height />
+      </view>
+      <view class="review-edit-actions">
+        <text class="review-edit-cancel" bindtap="onCancelEditReview">取消</text>
+        <text class="review-edit-confirm" bindtap="onSaveReview">确认</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未完成行程复盘提示 -->
+  <view wx:if="{{trip.status !== 'completed'}}" class="section">
+    <view class="section-title">行程复盘</view>
+    <view class="review-hint">
+      <text wx:if="{{trip.status === 'upcoming'}}" class="review-hint-text">完成行程后，可以在这里记录本次旅行体验。</text>
+      <text wx:if="{{trip.status === 'active'}}" class="review-hint-text">行程结束后，可以在这里回顾并记录你的旅行体验。</text>
+    </view>
+  </view>
+
+  <!-- 删除行程 -->
+  <view class="delete-section">
+    <view class="delete-btn" bindtap="onDeleteTrip">
+      <text>删除该行程</text>
+    </view>
+  </view>
+
+  <!-- ⑦ 底部安全间距 -->
+  <view class="bottom-spacer"></view>
+</view>
+
+<!-- 空态：行程不存在 -->
+<view wx:else class="empty-container">
+  <view class="empty-card">
+    <view class="empty-icon-circle"></view>
+    <text class="empty-title">行程不存在或已删除</text>
+    <text class="empty-desc">该行程可能已被移除，请返回我的行程查看最新列表。</text>
+    <view class="empty-back-btn" bindtap="onGoBack">
+      <text>返回我的行程</text>
+    </view>
+  </view>
+</view>

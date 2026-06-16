@@ -70,6 +70,44 @@
       </view>
     </view>
 
+    <!-- 包含该景点的路线 -->
+    <view wx:if="{{relatedRoutes.length > 0}}" class="section-card">
+      <view class="section-header">
+        <view class="section-dot route-dot"></view>
+        <text class="section-title">包含该景点的路线</text>
+      </view>
+      <view class="related-routes-list">
+        <view wx:for="{{relatedRoutes}}" wx:key="id" class="related-route-card"
+              data-route-id="{{item.id}}" bindtap="onTapRelatedRoute">
+          <view class="rr-header">
+            <text class="rr-name">{{item.name}}</text>
+            <view class="rr-meta">
+              <text class="rr-meta-text">{{item.days}}天</text>
+              <text class="rr-meta-divider">·</text>
+              <text class="rr-meta-text">{{item.physicalLevel}}</text>
+              <block wx:if="{{item.budgetRange}}">
+                <text class="rr-meta-divider">·</text>
+                <text class="rr-meta-text">{{item.budgetRange}}</text>
+              </block>
+            </view>
+          </view>
+          <text class="rr-summary">{{item.summary}}</text>
+          <view class="rr-action">
+            <text class="rr-action-text">查看路线</text>
+            <view class="rr-arrow"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{attraction && relatedRoutes.length === 0}}" class="section-card">
+      <view class="section-header">
+        <view class="section-dot route-dot"></view>
+        <text class="section-title">包含该景点的路线</text>
+      </view>
+      <text class="rr-empty-text">暂无包含该景点的推荐路线，你可以返回知识库继续查看其他景点。</text>
+    </view>
+
     <!-- 旅行贴士 -->
     <view wx:if="{{attraction.tips && attraction.tips.length}}" class="section-card">
       <view class="section-header">

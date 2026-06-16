@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "miniprogram-automation": {
+      "source": "whinc/super-skills",
+      "sourceType": "github",
+      "skillPath": "skills/miniprogram-automation/SKILL.md",
+      "computedHash": "054d2b924dff1af91e09bce89b6fd98671e4190669fe2f929a048b7ba29e7d23"
+    },
+    "miniprogram-ci": {
+      "source": "whinc/super-skills",
+      "sourceType": "github",
+      "skillPath": "skills/miniprogram-ci/SKILL.md",
+      "computedHash": "8557c7bdac04261c6ec8339471ecbf51308b032a03356dac8830ed6db27a26fe"
+    },
+    "security-review": {
+      "source": "joneqian/claude-skills-suite",
+      "sourceType": "github",
+      "skillPath": "skills/security-review/SKILL.md",
+      "computedHash": "8bf261d653e14bbc67329bf495dc11f4178246f478f3dddc8e1cb0a0560dc25c"
+    },
+    "wechat-miniprogram": {
+      "source": "joneqian/claude-skills-suite",
+      "sourceType": "github",
+      "skillPath": "skills/wechat-miniprogram/SKILL.md",
+      "computedHash": "54a743ed1792492a7a77dd8a3aa08f75de1a22f4283ffcbbf9eb6d920d0e3949"
+    }
+  }
+}

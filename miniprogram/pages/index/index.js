@@ -19,8 +19,14 @@ Page({
 
   goPlanner() { wx.navigateTo({ url: '/pages/planner/planner' }) },
   goKnowledge() { wx.navigateTo({ url: '/pages/knowledge/knowledge' }) },
-  goRouteDetail() {
-    wx.navigateTo({ url: '/pages/planner/planner' })
+
+  goRouteDetail(e) {
+    const id = e.currentTarget.dataset.id
+    if (id) {
+      wx.navigateTo({ url: `/pages/route-detail/route-detail?id=${id}` })
+    } else {
+      wx.showToast({ title: '路线信息加载中，请稍后再试', icon: 'none' })
+    }
   },
 
   onFeatureTap(e) {
@@ -29,15 +35,33 @@ Page({
       case 'profile':
         wx.navigateTo({ url: '/pages/planner/planner' })
         break
-      case 'route':
-        wx.navigateTo({ url: '/pages/planner/planner' })
+      case 'route': {
+        const profile = wx.getStorageSync('qianxing_profile')
+        if (profile) {
+          wx.navigateTo({ url: '/pages/recommend/recommend' })
+        } else {
+          wx.showToast({ title: '请先选择偏好，为你生成路线', icon: 'none', duration: 1500 })
+          setTimeout(() => {
+            wx.navigateTo({ url: '/pages/planner/planner' })
+          }, 1500)
+        }
         break
+      }
       case 'guide':
         wx.switchTab({ url: '/pages/guide/guide' })
         break
-      case 'safety':
-        wx.navigateTo({ url: '/pages/planner/planner' })
+      case 'safety': {
+        const routes = this.data.topRoutes
+        if (routes && routes.length > 0) {
+          wx.showToast({ title: '正在为你打开路线安全提醒', icon: 'none', duration: 1200 })
+          setTimeout(() => {
+            wx.navigateTo({ url: `/pages/route-detail/route-detail?id=${routes[0].id}&focus=safety` })
+          }, 1200)
+        } else {
+          wx.showToast({ title: '请先查看推荐路线', icon: 'none' })
+        }
         break
+      }
       default:
         wx.navigateTo({ url: '/pages/planner/planner' })
     }

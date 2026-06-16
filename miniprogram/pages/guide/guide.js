@@ -1,25 +1,57 @@
 // pages/guide/guide.js
+var tripRules = require('./guide-trip-rules')
+var attractionRules = require('./guide-attraction-rules')
+
 Page({
   data: {
-    messages: [],           // { id, type: 'ai'|'user', content }
-    inputValue: '',         // current input text
-    isTyping: false,        // AI typing indicator
-    scrollTop: 0,           // scroll-view position
+    messages: [],
+    inputValue: '',
+    isTyping: false,
+    scrollTop: 0,
     quickQuestions: [
       '贵州必去景点有哪些？',
       '贵州有什么特色美食？',
       '什么时候去贵州最好？',
       '贵州旅游交通方便吗？'
     ],
-    knowledgeBase: []       // loaded from mock
+    knowledgeBase: [],
+    currentTrip: null,
+    currentTripId: '',
+    currentAttraction: null,
+    currentAttractionId: ''
   },
 
-  _msgId: 0,  // internal counter for message IDs
+  _msgId: 0,
   _firstShow: true,
+  _defaultQuickQuestions: [
+    '贵州必去景点有哪些？',
+    '贵州有什么特色美食？',
+    '什么时候去贵州最好？',
+    '贵州旅游交通方便吗？'
+  ],
+  _tripQuickQuestions: [
+    '总结这条行程',
+    '查看每日安排',
+    '出行前要准备什么'
+  ],
+  _completedQuickQuestions: [
+    '总结这条行程',
+    '查看旅行复盘',
+    '下次怎么优化'
+  ],
+  _attractionQuickQuestions: [
+    '这个景点怎么玩',
+    '有什么亮点',
+    '需要注意什么',
+    '适合什么人'
+  ],
 
   onLoad() {
     this.loadKnowledgeBase();
-    this.checkRouteAndGreet();
+    var handledPending = this.checkPendingContext();
+    if (!handledPending) {
+      this.sendDefaultGreeting();
+    }
   },
 
   onShow() {
@@ -32,75 +64,70 @@ Page({
 
   /* ========== Data Loading ========== */
 
-  /** Load knowledgeBase from utils/mock.js */
   loadKnowledgeBase() {
-    let kb = [];
+    var kb = [];
     try {
-      const mock = require('../../utils/mock');
-      // Support both direct export and { knowledgeBase } export
-      kb = mock.knowledgeBase || mock.default?.knowledgeBase || [];
+      var mock = require('../../utils/mock');
+      kb = mock.knowledgeBase || mock.default && mock.default.knowledgeBase || [];
     } catch (e) {
-      console.warn('[guide] Failed to load knowledgeBase from mock:', e);
+      /* ignore */
     }
     this.setData({ knowledgeBase: kb });
   },
 
-  /** Check if a route was selected on previous page, greet accordingly */
-  checkRouteAndGreet() {
-    let routeName = '';
-    try {
-      const stored = wx.getStorageSync('qianxing_selected_route');
-      if (typeof stored === 'string' && stored) {
-        routeName = stored;
-      } else if (stored && typeof stored === 'object') {
-        routeName = stored.name || stored.routeName || stored.title || '';
-      }
-    } catch (e) {
-      /* ignore */
-    }
-
-    let greeting;
-    if (routeName) {
-      greeting = `您好！我看到您选择了「${routeName}」路线，真是一个很棒的选择！\n我是您的贵州旅游 AI 伴游，有什么关于贵州旅游的问题都可以问我哦～`;
-      try { wx.removeStorageSync('qianxing_selected_route'); } catch (e) { /* ignore */ }
-    } else {
-      greeting = '您好！我是您的贵州旅游 AI 伴游，有什么关于贵州旅游的问题都可以问我哦～';
-    }
-
-    // Slight delay so the greeting feels natural
-    setTimeout(() => {
-      this.addAIMessage(greeting);
+  sendDefaultGreeting() {
+    var self = this
+    setTimeout(function () {
+      self.addAIMessage('您好！我是您的贵州旅游 AI 伴游，有什么关于贵州旅游的问题都可以问我哦～');
     }, 400);
   },
 
-  /** Check for pending context passed via storage from other pages */
+  /* ========== Pending Context ========== */
+
   checkPendingContext() {
-    // 1. Check for pending question (from scenic-detail / knowledge)
-    let question = ''
+    var tripCtx = null
+    try {
+      tripCtx = wx.getStorageSync('qianxing_pending_context')
+      if (tripCtx) wx.removeStorageSync('qianxing_pending_context')
+    } catch (e) { /* ignore */ }
+
+    if (tripCtx && tripCtx.contextType === 'trip') {
+      this.handleTripContext(tripCtx)
+      return true
+    }
+
+    if (tripCtx && tripCtx.contextType === 'attraction') {
+      this.handleAttractionContext(tripCtx)
+      return true
+    }
+
+    // Check for pending question (from knowledge)
+    var question = ''
     try {
       question = wx.getStorageSync('qianxing_pending_question') || ''
       if (question) wx.removeStorageSync('qianxing_pending_question')
     } catch (e) { /* ignore */ }
 
     if (question) {
-      setTimeout(() => {
-        this.addUserMessage(question)
-        this.setData({ isTyping: true })
-        this.scrollToBottom()
-        setTimeout(() => {
-          const answer = this.matchAnswer(question)
-          this.addAIMessage(answer)
-          this.setData({ isTyping: false })
-          this.scrollToBottom()
+      var self = this
+      setTimeout(function () {
+        self.addUserMessage(question)
+        self.setData({ isTyping: true })
+        self.scrollToBottom()
+        setTimeout(function () {
+          var answer = self.matchAnswer(question)
+          self.addAIMessage(answer)
+          self.setData({ isTyping: false })
+          self.scrollToBottom()
         }, 600)
       }, 300)
-      return
+      return true
     }
 
-    // 2. Check for selected route (from route-detail)
-    let routeName = ''
+    // Check for selected route (from route-detail)
+    var routeName = ''
     try {
-      const stored = wx.getStorageSync('qianxing_selected_route')
+      var stored = wx.getStorageSync('qianxing_selected_route')
       if (typeof stored === 'string' && stored) {
         routeName = stored
       } else if (stored && typeof stored === 'object') {
@@ -110,127 +137,252 @@ Page({
     } catch (e) { /* ignore */ }
 
     if (routeName) {
-      setTimeout(() => {
-        this.addAIMessage(`您好！我看到您选择了「${routeName}」路线，真是一个很棒的选择！\n我是您的贵州旅游 AI 伴游，有什么关于贵州旅游的问题都可以问我哦～`)
-        this.scrollToBottom()
+      var self2 = this
+      setTimeout(function () {
+        self2.addAIMessage('您好！我看到您选择了「' + routeName + '」路线，真是一个很棒的选择！\n我是您的贵州旅游 AI 伴游，有什么关于贵州旅游的问题都可以问我哦～')
+        self2.scrollToBottom()
       }, 400)
+      return true
     }
+
+    return false
+  },
+
+  handleTripContext(ctx) {
+    var tripId = ctx.tripId
+    var trip = null
+    try {
+      var trips = wx.getStorageSync('qianxing_trips') || []
+      trip = trips.find(function (t) { return t.id === tripId })
+    } catch (e) { /* ignore */ }
+
+    if (!trip) {
+      this.setData({
+        currentTrip: null,
+        currentTripId: '',
+        currentAttraction: null,
+        currentAttractionId: '',
+        quickQuestions: this._defaultQuickQuestions.slice()
+      })
+      this.sendDefaultGreeting()
+      return
+    }
+
+    // Normalize trip fields
+    trip.dayCount = trip.dayCount || trip.days || 1
+    trip.energyLevel = trip.energyLevel || trip.physicalLevel || '适中'
+    trip.spotCount = trip.spotCount || (trip.spotNames ? trip.spotNames.length : 0)
+    trip.status = trip.status || 'upcoming'
+
+    var quickQs = trip.status === 'completed' ? this._completedQuickQuestions.slice() : this._tripQuickQuestions.slice()
+
+    this.setData({
+      currentTrip: trip,
+      currentTripId: trip.id,
+      currentAttraction: null,
+      currentAttractionId: '',
+      quickQuestions: quickQs
+    })
+
+    var welcome = this.generateTripWelcome(trip, ctx)
+    var self = this
+    setTimeout(function () {
+      self.addAIMessage(welcome)
+      self.scrollToBottom()
+    }, 400)
+  },
+
+  generateTripWelcome(trip, ctx) {
+    var name = trip.customName || trip.routeName || '你的行程'
+    var dayCount = trip.dayCount || 1
+    var spotCount = trip.spotCount || (trip.spotNames ? trip.spotNames.length : 0)
+    var energyLevel = trip.energyLevel || '适中'
+    var travelDateText = ctx.travelDateText || ''
+    var progress = ctx.checklistProgress || { checkedCount: 0, totalCount: 0 }
+
+    var lines = []
+    lines.push('您好！我看到您正在查看「' + name + '」。')
+    lines.push('这是一条 ' + dayCount + ' 天 ' + spotCount + ' 个景点的行程，体力强度' + energyLevel + '。')
+
+    if (travelDateText) {
+      lines.push('出行日期：' + travelDateText + '。')
+    }
+
+    if (progress.totalCount > 0) {
+      lines.push('出行准备已完成 ' + progress.checkedCount + '/' + progress.totalCount + ' 项。')
+    }
+
+    lines.push('')
+    lines.push('你可以问我：')
+    lines.push('· 总结这条行程')
+    lines.push('· 查看每日安排')
+    lines.push('· 出行前要准备什么')
+
+    return lines.join('\n')
+  },
+
+  /* ========== V13: Attraction Context ========== */
+
+  handleAttractionContext(ctx) {
+    var attractionId = ctx.attractionId
+    if (!attractionId) {
+      this.setData({
+        currentAttraction: null,
+        currentAttractionId: '',
+        currentTrip: null,
+        currentTripId: '',
+        quickQuestions: this._defaultQuickQuestions.slice()
+      })
+      this.sendDefaultGreeting()
+      return
+    }
+
+    var attraction = {
+      attractionId: attractionId,
+      attractionName: ctx.attractionName || '',
+      city: ctx.city || '',
+      description: ctx.description || '',
+      highlights: ctx.highlights || [],
+      tips: ctx.tips || [],
+      tags: ctx.tags || [],
+      category: ctx.category || '',
+      rating: ctx.rating || 0,
+      price: ctx.price || '',
+      duration: ctx.duration || ''
+    }
+
+    this.setData({
+      currentAttraction: attraction,
+      currentAttractionId: attractionId,
+      currentTrip: null,
+      currentTripId: '',
+      quickQuestions: this._attractionQuickQuestions.slice()
+    })
+
+    var welcome = this.generateAttractionWelcome(attraction)
+    var self = this
+    setTimeout(function () {
+      self.addAIMessage(welcome)
+      self.scrollToBottom()
+    }, 400)
+  },
+
+  generateAttractionWelcome(attr) {
+    var name = attr.attractionName || '这个景点'
+    var lines = []
+    lines.push('我看到你正在查看「' + name + '」。')
+    if (attr.city) lines.push('它位于贵州' + attr.city + '。')
+    lines.push('')
+    lines.push('你可以问我：')
+    lines.push('· 这个景点怎么玩')
+    lines.push('· 有什么亮点')
+    lines.push('· 需要注意什么')
+    lines.push('· 适合什么人')
+    return lines.join('\n')
   },
 
   /* ========== Message Handling ========== */
 
-  /** Called on input field change */
   onInput(e) {
     this.setData({ inputValue: e.detail.value });
   },
 
-  /** Send the current input message */
   sendMessage() {
-    const content = (this.data.inputValue || '').trim();
+    var content = (this.data.inputValue || '').trim();
     if (!content || this.data.isTyping) return;
 
-    // 1. Add user message
     this.addUserMessage(content);
     this.setData({ inputValue: '' });
 
-    // 2. Show typing indicator
     this.setData({ isTyping: true });
     this.scrollToBottom();
 
-    // 3. Simulate AI thinking delay (500–1000ms)
-    const delay = 500 + Math.floor(Math.random() * 500);
-    setTimeout(() => {
-      const answer = this.matchAnswer(content);
-      this.addAIMessage(answer);
-      this.setData({ isTyping: false });
-      this.scrollToBottom();
+    var self = this
+    var delay = 500 + Math.floor(Math.random() * 500);
+    setTimeout(function () {
+      var answer = self.resolveAnswer(content);
+      self.addAIMessage(answer);
+      self.setData({ isTyping: false });
+      self.scrollToBottom();
     }, delay);
   },
 
-  /** Handle quick question tap */
   onQuickTap(e) {
-    const question = e.currentTarget.dataset.question;
+    var question = e.currentTarget.dataset.question;
     if (!question || this.data.isTyping) return;
 
-    // Same flow as sending a regular message
     this.addUserMessage(question);
-
     this.setData({ isTyping: true });
     this.scrollToBottom();
 
-    const delay = 500 + Math.floor(Math.random() * 500);
-    setTimeout(() => {
-      const answer = this.matchAnswer(question);
-      this.addAIMessage(answer);
-      this.setData({ isTyping: false });
-      this.scrollToBottom();
+    var self = this
+    var delay = 500 + Math.floor(Math.random() * 500);
+    setTimeout(function () {
+      var answer = self.resolveAnswer(question);
+      self.addAIMessage(answer);
+      self.setData({ isTyping: false });
+      self.scrollToBottom();
     }, delay);
+  },
+
+  resolveAnswer(userMessage) {
+    var trip = this.data.currentTrip
+    if (trip) {
+      var tripAnswer = tripRules.tripRuleMatch(userMessage, trip)
+      if (tripAnswer) return tripAnswer
+    }
+    var attraction = this.data.currentAttraction
+    if (attraction) {
+      var attrAnswer = attractionRules.attractionRuleMatch(userMessage, attraction)
+      if (attrAnswer) return attrAnswer
+    }
+    return this.matchAnswer(userMessage)
   },
 
   /* ========== Helpers ========== */
 
-  /** Append an AI message to the chat */
   addAIMessage(content) {
-    const msg = {
-      id: ++this._msgId,
-      type: 'ai',
-      content
-    };
-    const messages = [...this.data.messages, msg];
-    this.setData({ messages });
+    var msg = { id: ++this._msgId, type: 'ai', content: content };
+    var messages = this.data.messages.slice().concat([msg]);
+    this.setData({ messages: messages });
     this.scrollToBottom();
   },
 
-  /** Append a user message to the chat */
   addUserMessage(content) {
-    const msg = {
-      id: ++this._msgId,
-      type: 'user',
-      content
-    };
-    const messages = [...this.data.messages, msg];
-    this.setData({ messages });
+    var msg = { id: ++this._msgId, type: 'user', content: content };
+    var messages = this.data.messages.slice().concat([msg]);
+    this.setData({ messages: messages });
   },
 
-  /** Scroll the chat to the bottom */
   scrollToBottom() {
-    // Using a large scrollTop value triggers scroll-view to its max position
     this.setData({ scrollTop: 99999 });
   },
 
-  /**
-   * Simple keyword-matching against the knowledgeBase.
-   * Returns the best matching answer, or a friendly fallback.
-   */
   matchAnswer(userMessage) {
-    const kb = this.data.knowledgeBase;
-    if (!kb || kb.length === 0) {
-      return this.getFallback();
-    }
+    var kb = this.data.knowledgeBase;
+    if (!kb || kb.length === 0) return this.getFallback();
 
-    const msg = userMessage.trim();
-    let bestMatch = null;
-    let bestScore = 0;
+    var msg = userMessage.trim();
+    var bestMatch = null;
+    var bestScore = 0;
 
-    for (const item of kb) {
-      const question = item.question || '';
-      let score = 0;
+    for (var i = 0; i < kb.length; i++) {
+      var item = kb[i];
+      var question = item.question || '';
+      var score = 0;
 
-      // 1. Character-level overlap (works well for Chinese)
-      for (const char of msg) {
-        if (question.includes(char)) score += 1;
+      for (var j = 0; j < msg.length; j++) {
+        if (question.indexOf(msg.charAt(j)) !== -1) score += 1;
       }
 
-      // 2. Bigram overlap bonus (stronger signal for Chinese phrases)
       if (msg.length >= 2) {
-        for (let i = 0; i < msg.length - 1; i++) {
-          const bigram = msg.substring(i, i + 2);
-          if (question.includes(bigram)) score += 3;
+        for (var k = 0; k < msg.length - 1; k++) {
+          var bigram = msg.substring(k, k + 2);
+          if (question.indexOf(bigram) !== -1) score += 3;
         }
       }
 
-      // 3. Contains-check bonus
-      if (question.includes(msg) || msg.includes(question)) {
+      if (question.indexOf(msg) !== -1 || msg.indexOf(question) !== -1) {
         score += 10;
       }
 
@@ -240,7 +392,6 @@ Page({
       }
     }
 
-    // Threshold: require at least some overlap
     if (bestMatch && bestScore >= 3) {
       return bestMatch.answer || this.getFallback();
     }
@@ -248,8 +399,10 @@ Page({
     return this.getFallback();
   },
 
-  /** Fallback message when no knowledgeBase match is found */
   getFallback() {
+    if (this.data.currentTrip) {
+      return '这个问题我暂时无法根据当前行程信息回答。你可以问我关于行程概览、每日安排、安全准备和出行日期的问题。';
+    }
     return '抱歉，我暂时还不太了解这个问题的答案～\n不过您可以问我关于贵州的景点、美食、交通、住宿等方面的问题，我会尽力帮您解答！';
   }
-});
+})

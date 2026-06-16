@@ -8,7 +8,8 @@
     "pages/guide/guide",
     "pages/knowledge/knowledge",
     "pages/scenic-detail/scenic-detail",
-    "pages/my-trips/my-trips"
+    "pages/my-trips/my-trips",
+    "pages/trip-detail/trip-detail"
   ],
   "window": {
     "navigationBarTitleText": "黔行智导",

@@ -1,5 +1,7 @@
 const mock = require('../../utils/mock')
 
+var tripStorage = require('../../utils/trip-storage')
+
 Page({
   data: {
     route: null,
@@ -7,7 +9,8 @@ Page({
     attractions: [],
     safety: null,
     emptyState: false,
-    hasSavedTrip: false
+    hasSavedTrip: false,
+    recommendExplanation: null
   },
 
   onLoad(options) {
@@ -35,6 +38,15 @@ Page({
     const safety = this.computeSafety(route)
 
     this.setData({ route, score, attractions, safety, emptyState: false })
+
+    // V11: Generate recommendation explanation
+    var profile = null
+    var sel = null
+    try { profile = wx.getStorageSync('qianxing_profile') } catch (e) { /* ignore */ }
+    try { sel = wx.getStorageSync('qianxing_selection') } catch (e) { /* ignore */ }
+    var recommendExplanation = this._buildRecommendExplanation(profile, sel, route, attractions)
+    this.setData({ recommendExplanation: recommendExplanation })
+
     this.checkIfSaved()
   },
 
@@ -115,6 +127,108 @@ Page({
     }
   },
 
+  /* ========== V11: Recommendation explanation ========== */
+
+  _buildRecommendExplanation(profile, sel, route, attractions) {
+    var result = { summary: '', matchItems: [], notices: [] }
+    var routeTags = route.tags || []
+
+    // Resolve user interest tag names
+    var tags = []
+    try { var mock = require('../../utils/mock'); tags = mock.interestTags || [] } catch (e) { /* ignore */ }
+
+    var userTagNames = []
+    if (sel && sel.selectedTagIds) {
+      sel.selectedTagIds.forEach(function (id) {
+        var tag = tags.find(function (t) { return t.id === id })
+        if (tag) userTagNames.push(tag.name)
+      })
+    }
+
+    var matchedInterests = []
+    routeTags.forEach(function (rt) {
+      if (userTagNames.indexOf(rt) !== -1) matchedInterests.push(rt)
+    })
+
+    // Fallback: no profile and no selection
+    if (!sel && !profile) {
+      result.summary = '该路线覆盖贵州多个代表性目的地，适合作为综合体验路线。你可以先完成兴趣选择，获取更贴近偏好的推荐解释。'
+      result.notices = this._buildRouteNoticesForDetail(route)
+      return result
+    }
+
+    // Summary
+    if (matchedInterests.length >= 2) {
+      result.summary = '这条路线较好匹配你选择的' + matchedInterests.slice(0, 2).join('、') + '等偏好，适合在有限时间内体验贵州山地景观与民族文化。'
+    } else if (matchedInterests.length === 1) {
+      result.summary = '这条路线覆盖了你感兴趣的' + matchedInterests[0] + '相关内容，适合作为贵州山地旅游的入门选择。'
+    } else {
+      result.summary = '这条路线覆盖贵州多个代表性目的地，适合作为综合体验路线。'
+    }
+
+    // Match items: interests
+    matchedInterests.forEach(function (name) {
+      var detail = '路线含' + name + '相关景点'
+      var attrs = attractions || []
+      var matching = []
+      attrs.forEach(function (a) {
+        if (a.tags && a.tags.indexOf(name) !== -1) matching.push(a.name)
+      })
+      if (matching.length > 0) {
+        detail = '路线含' + matching.slice(0, 2).join('、')
+      }
+      result.matchItems.push({ label: name, detail: detail })
+    })
+
+    // Match items: days
+    if (sel && sel.days && route.days) {
+      var daysDiff = Math.abs(sel.days - route.days)
+      if (daysDiff === 0) {
+        result.matchItems.push({ label: route.days + '天行程', detail: '与你计划的出行天数一致' })
+      } else if (daysDiff === 1) {
+        result.matchItems.push({ label: route.days + '天行程', detail: '与你计划的' + sel.days + '天接近，可灵活调整' })
+      }
+    }
+
+    // Match items: physical level
+    if (sel && sel.physicalLevel && route.physicalLevel) {
+      if (sel.physicalLevel === route.physicalLevel) {
+        var levelMap = { '轻松': '轻松节奏', '适中': '体力适中', '挑战': '体力挑战' }
+        result.matchItems.push({ label: levelMap[route.physicalLevel] || route.physicalLevel, detail: '与当前路线节奏匹配' })
+      }
+    }
+
+    // Notices
+    result.notices = this._buildRouteNoticesForDetail(route)
+
+    // Cap match items
+    if (result.matchItems.length > 6) result.matchItems = result.matchItems.slice(0, 6)
+
+    return result
+  },
+
+  _buildRouteNoticesForDetail(route) {
+    var notices = []
+    var physicalLevel = route.physicalLevel || '适中'
+    var days = route.days || 1
+
+    if (physicalLevel === '挑战') {
+      notices.push('山地景区步行较多，建议穿舒适防滑鞋')
+    } else {
+      notices.push('部分景点需要步行，建议穿着舒适鞋子')
+    }
+
+    if (days >= 3) {
+      notices.push('多日行程建议合理分配每日体力，前段保持体力、中段重点游览')
+    } else {
+      notices.push('建议提前查看景区开放时间和预约情况')
+    }
+
+    notices.push('景点之间路程较长，建议预留充足的交通时间')
+
+    return notices.slice(0, 3)
+  },
+
   onSaveOrViewTrip() {
     if (this.data.hasSavedTrip) {
       wx.switchTab({ url: '/pages/my-trips/my-trips' })
@@ -155,17 +269,28 @@ Page({
         routeId: route.id,
         routeName: route.name,
         days: route.days,
+        dayCount: route.days,
         physicalLevel: route.physicalLevel,
+        energyLevel: route.physicalLevel,
+        spotCount: (route.attractionIds && route.attractionIds.length) || (this.data.attractions && this.data.attractions.length) || 0,
+        spotNames: (this.data.attractions || []).map(a => a.name).slice(0, 4),
+        spotIds: route.attractionIds || [],
+        dayPlans: route.dailyPlan || [],
         score: score,
-        savedAt: new Date().toISOString()
+        savedAt: new Date().toISOString(),
+        status: 'upcoming',
+        startedAt: null,
+        completedAt: null,
+        customName: null,
+        travelStartDate: null,
+        travelEndDate: null
       }
 
-      trips.push(trip)
-      wx.setStorageSync('qianxing_trips', trips)
+      tripStorage.addTrip(trip)
 
       const app = getApp()
       if (app && app.globalData) {
-        app.globalData.myTrips = trips
+        app.globalData.myTrips = tripStorage.getTrips()
       }
 
       this.setData({ hasSavedTrip: true })
@@ -200,6 +325,6 @@ Page({
   },
 
   goHome() {
-    wx.reLaunch({ url: '/pages/index/index' })
+    wx.switchTab({ url: '/pages/index/index' })
   }
 })

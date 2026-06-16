@@ -98,5 +98,14 @@ Page({
 
     wx.setStorageSync('qianxing_pending_question', item.question);
     wx.switchTab({ url: '/pages/guide/guide' });
+  },
+
+  onViewAttraction(e) {
+    var attractionId = e.currentTarget.dataset.attractionId;
+    if (!attractionId) return;
+
+    wx.navigateTo({
+      url: '/pages/scenic-detail/scenic-detail?id=' + attractionId
+    });
   }
 });

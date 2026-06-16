@@ -67,6 +67,13 @@
       <view wx:if="{{item.expanded}}" class="card-answer">
         <text class="answer-text">{{item.answer}}</text>
         <view class="answer-actions">
+          <view wx:if="{{item.relatedAttractionIds && item.relatedAttractionIds.length > 0}}"
+                class="action-btn action-btn-scenic"
+                data-attraction-id="{{item.relatedAttractionIds[0]}}"
+                bindtap="onViewAttraction">
+            <view class="action-dot action-dot-scenic"></view>
+            <text class="action-text action-text-scenic">查看景点详情</text>
+          </view>
           <view class="action-btn" data-item="{{item}}" bindtap="onAskAI">
             <view class="action-dot"></view>
             <text class="action-text">问问 AI 伴游</text>
