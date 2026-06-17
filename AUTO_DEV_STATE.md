@@ -10,9 +10,9 @@
 
 ```yaml
 current_phase: PHASE-4
-current_stage: PHASE-4-A-SQL-READY
-current_status: waiting_user_create_database
-last_completed_stage: PHASE-4-A-SQL-READY
+current_stage: PHASE-4-ARCHITECTURE-CONFIRMED
+current_status: waiting_user_confirm_backend_skeleton
+last_completed_stage: PHASE-4-ARCHITECTURE-CONFIRMED
 p0_count: 0
 p1_count: 0
 auto_continue: false

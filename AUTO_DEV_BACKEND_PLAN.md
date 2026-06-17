@@ -1,181 +1,141 @@
-# 黔行智导 — 全项目自动开发总控协议 · 后端规划
+# 黔行智导 · 后端总规划
 
-> 本文件为后端开发规划文档。
-> 当前项目尚未进入后端开发阶段。
-> 后端开发启动前必须先完成 PHASE-3 全部任务（V22-A ~ V22-F）。
-
----
-
-## 一、当前状态
-
-```
-后端开发状态：未启动
-后端目录状态：不存在（需在 V23-A 创建 backend/ 目录）
-技术栈：Spring Boot 3.x + MyBatis-Plus 3.5+ + MySQL 8.0
-数据库设计：docs/DATABASE_DESIGN_FINAL.md (v2.1, 15 张表)
-SQL DDL：docs/DATABASE_SCHEMA_FINAL.sql
-
-DB连接：jdbc:mysql://localhost:3306/qianxing_zhidao
-账号密码：${DB_USERNAME}/${DB_PASSWORD} 环境变量（不提交Git）
-数据库尚未创建，由用户手动执行 SQL
-```
-数据库表结构：未设计
-```
+> Version: 3.0 | 2026-06-17 | PHASE-4-ARCHITECTURE-CONFIRMED
+> DB: qianxing_zhidao (MySQL 8.0+, 15 tables created)
+> Code: not started (PHASE-4-B pending)
 
 ---
 
-## 二、后端开发前置条件
+## 一、后端目标
 
-**必须全部满足才能进入 PHASE-4（后端服务开发）：**
+正式产品基础版。基础架构规范、接口清晰、方便后续后台管理和网页端联调。
 
-1. [ ] V22-A：后端范围规划完成 — 技术栈、模块清单、环境要求明确
-2. [ ] V22-B：数据模型设计完成 — 全部实体定义完整
-3. [ ] V22-C：API 合同设计完成 — 所有端点定义清晰
-4. [ ] V22-D：前端 mock 到后端实体映射完成 — 字段对齐
-5. [ ] V22-E：数据库表结构设计完成 — 完整 DDL
-6. [ ] V22-F：后端开发任务拆分完成 — 可执行任务清单
+## 二、服务形态
 
-**铁律**：
-- 未完成 API 合同前，不允许前端直接接后端
-- 未完成数据库表结构前，不允许写后端实体
-- 未确认技术栈前，优先使用 Spring Boot + MyBatis-Plus
-- 禁止写真实密钥
-- 禁止连接生产数据库
-- 禁止删除数据
+**单体 Spring Boot，内部按模块划分**。高内聚低耦合，后期可拆微服务。
 
----
+## 三、小程序与网页端
 
-## 三、默认技术栈
+- 共用同一套后端 API
+- 网页端等小程序全流程跑通后再做
+- 当前只实现小程序接口，API 设计考虑网页端复用
 
-| 类别 | 选型 | 说明 |
+## 四、技术栈
+
+| 组件 | 版本 | 阶段 |
 |------|------|------|
-| 语言 | Java 17+ | LTS 版本 |
-| 框架 | Spring Boot 3.x | 主框架 |
-| ORM | MyBatis-Plus 3.5+ | 增强 MyBatis |
-| 数据库 | MySQL 8.0+ 或 PostgreSQL 15+ | 关系型数据库 |
-| API 风格 | RESTful | JSON 请求/响应 |
-| 响应格式 | 统一响应结构 `{ code, message, data }` | 前后端约定 |
-| 异常处理 | 全局异常处理器 | 统一错误码 |
-| 构建工具 | Maven 或 Gradle | 视项目情况 |
-| 开发环境 | 本地开发 | localhost |
+| Java | 21 LTS | 4B |
+| Spring Boot | 3.4.x | 4B |
+| Maven | 3.9+ | 4B |
+| MyBatis-Plus | 3.5.9 | 4B |
+| MySQL | 8.0+ | 4A done |
+| Flyway | 10.x | 4C |
+| JWT | jjwt 0.12 | 4D |
+| OpenAPI/Swagger | springdoc 2.6 | 4B |
+| Lombok | 1.18 | 4B |
+| JUnit 5 | — | 4B |
 
----
+暂不引入：Redis, Docker, OSS SDK, Dify SDK, 后台框架, 文件上传, 天气 API
 
-## 四、后端模块优先级
+## 五、数据库版本管理
 
-按以下优先级逐步开发：
+- **Flyway** migration: `V1__init_schema.sql`
+- docs/DATABASE_SCHEMA_FINAL.sql 为设计定稿
+- **不使用 Hibernate ddl-auto update**
+- 不允许启动时自动改表
 
-| 优先级 | 模块 | 说明 |
-|--------|------|------|
-| 1 | 路线数据 | 路线推荐核心数据，前端依赖最重 |
-| 2 | 景点数据 | 景点详情、知识库基础数据 |
-| 3 | 知识库数据 | AI 伴游 KB 匹配数据源 |
-| 4 | 我的行程数据 | 用户行程 CRUD，最高频写入 |
-| 5 | 行程详情更新 | 名称/日期/每日安排/状态/清单/复盘 |
-| 6 | AI 助手上下文占位 | 预留接口，后续接真实大模型 |
+## 六、ORM
 
----
+MyBatis-Plus。简单 CRUD 用 BaseMapper，复杂查询按需补 XML。Entity/Mapper/Service/Controller 分层清晰。
 
-## 五、明确当前不做
+## 七、JSON 策略
 
-以下功能在当前阶段明确不开发：
+核心数据拆表，快照和 AI 结果用 JSON：`route_snapshot_json`, `plan_snapshot_json`, `input_json`, `profile_json`, `context_json`, `raw_result_json`, `normalized_result_json`, `error_json`
 
-| 功能 | 原因 |
-|------|------|
-| 支付 | 不需要，非电商场景 |
-| 用户登录 | 当前不需要用户系统，可后续扩展 |
-| 短信 | 不需要手机验证 |
-| 地图定位 | 需要微信小程序原生能力，后端不涉及 |
-| 实时天气 | 需要第三方 API，未经确认不接入 |
-| 实时路况 | 需要第三方 API，未经确认不接入 |
-| 自动报警 | 需要硬件/运营商集成，超出范围 |
-| 救援 | 需要对接应急系统，超出范围 |
-| 真实 AI 接口 | 需要 API Key 和费用预算，待确认 |
-| Dify 接口 | 需要 Dify 部署和配置，待确认 |
+## 八、登录
 
----
+微信 code → openid → 本地用户 → JWT token。unionid 预留。手机号后续。
 
-## 六、双端共用原则
+## 九、AI 接入
 
-后端必须同时服务：
-1. **Web 管理端** — 景点/路线/知识库管理、数据看板
-2. **小程序游客端** — 推荐/详情/行程/AI问答/安全提醒
+- 后端统一请求 AI/Dify，小程序不直接请求
+- 当前阶段不接真实 AI
+- 必须记录全部 AI 请求/结果/错误
+- AI 回答结构化：
 
-API 路径规划：
-- 公共数据接口：`/api/public/...`
-- 小程序游客端：`/api/app/...`
-- Web 管理端：`/api/admin/...`
-
-同一套业务数据，Web 和小程序共用数据模型。
-
----
-
-## 七、核心数据模型预览
-
-### 景点 (Attraction)
-```
-id, name, city, category, description, highlights, tips
-imageUrl, rating, visitDuration, bestSeason, ticketPrice
-latitude, longitude, createdAt, updatedAt
+```json
+{ "answer": "", "relatedScenicIds": [], "relatedRouteIds": [], "knowledgeRefs": [], "suggestedActions": [], "riskTips": [], "confidence": 0 }
 ```
 
-### 路线 (TourRoute)
-```
-id, name, description, dayCount, energyLevel, budget
-suitableCrowd, tags, attractionIds, dailyPlan, createdAt, updatedAt
-```
+## 十、知识库与动态信息
 
-### 知识库 (Knowledge)
-```
-id, question, answer, category, relatedAttractionIds, createdAt, updatedAt
-```
+- 不可变知识（介绍/文化/建议）→ qx_knowledge_article
+- 可变信息（天气/季节/开放状态）→ 后续 qx_scenic_weather / qx_scenic_dynamic_info + 定时任务
+- 当前不实现
 
-### 行程 (UserTrip)
-```
-id, routeId, routeName, customName, status
-dayCount, energyLevel, spotIds, spotNames, dayPlans
-safetyChecklist, review, travelStartDate, travelEndDate
-startedAt, completedAt, createdAt, updatedAt
-```
+## 十一、图片资产
 
----
+qx_media_asset 表。本地 fallback 图用于演示。正式阶段后台上传+CDN。
 
-## 八、API 端点预览
+## 十二、后台管理
 
-| 方法 | 路径 | 说明 |
+后续再做。数据库保留 status/deleted/sort_order/created_at/updated_at。
+
+## 十三、API 规范
+
+| 前缀 | 用途 | 阶段 |
 |------|------|------|
-| GET | `/api/public/attractions` | 景点列表 |
-| GET | `/api/public/attractions/{id}` | 景点详情 |
-| GET | `/api/public/routes` | 路线列表 |
-| GET | `/api/public/routes/{id}` | 路线详情 |
-| GET | `/api/public/knowledge` | 知识库列表 |
-| POST | `/api/app/trips` | 保存行程 |
-| GET | `/api/app/trips` | 行程列表 |
-| GET | `/api/app/trips/{id}` | 行程详情 |
-| PUT | `/api/app/trips/{id}` | 更新行程 |
-| DELETE | `/api/app/trips/{id}` | 删除行程 |
-| POST | `/api/app/guide/chat` | AI 伴游对话（占位） |
-| GET | `/api/admin/attractions` | 管理端景点列表 |
-| POST | `/api/admin/attractions` | 新增景点 |
-| PUT | `/api/admin/attractions/{id}` | 更新景点 |
-| DELETE | `/api/admin/attractions/{id}` | 删除景点 |
-| GET | `/api/admin/dashboard/stats` | 数据看板统计 |
+| `/api/health` | 健康检查 | 4B |
+| `/api/app/**` | 小程序端 | 4E+ |
+| `/api/web/**` | 网页端预留 | 6 |
+| `/api/admin/**` | 后台预留 | 6 |
+| `/api/public/**` | 公共接口 | 4E+ |
 
----
+返回体：`{ "code": 0, "message": "ok", "data": {} }`
 
-## 九、安全红线
+错误码：0=ok, 400=参数, 401=登录, 404=未找到, 500=服务错误
 
-- **禁止硬编码密钥** — 所有密钥通过 `application.yml` + 环境变量注入
-- **禁止连接生产数据库** — 开发阶段只用本地数据库
-- **禁止写死真实 API Key** — 使用占位符 `${API_KEY}`
-- **禁止提交 `.env` / `application-prod.yml`** — 加入 `.gitignore`
-- **SQL 注入防护** — MyBatis-Plus 参数化查询（`#{}` 不用 `${}`）
-- **输入验证** — 所有接口参数验证
+OpenAPI 3.0 文档 (springdoc)
 
----
+## 十四、模块规划
 
-## 版本历史
+| 模块 | 包 | 阶段 |
+|------|-----|------|
+| common | `.common` | 4B |
+| auth | `.auth` | 4D |
+| user | `.user` | 4D |
+| scenic | `.scenic` | 4E |
+| route | `.route` | 4E |
+| media | `.media` | 4E |
+| trip | `.trip` | 4F |
+| ai | `.ai` | 4G |
+| knowledge | `.knowledge` | 4H |
+| weather | `.weather` | 后续 |
+| admin | `.admin` | 后续 |
+
+## 十五、PHASE-4 阶段
+
+| 阶段 | 内容 | 状态 |
+|------|------|------|
+| 4A | 数据库设计定稿 | done |
+| ARCH | 架构确认（本文档） | current |
+| 4B | 工程骨架 pom.xml+启动类+common+health | pending |
+| 4C | Flyway migration | pending |
+| 4D | 微信登录 JWT | pending |
+| 4E | 景点/路线/媒体只读 API | pending |
+| 4F | 用户行程 CRUD API | pending |
+| 4G | AI 规划记录+模拟 API | pending |
+| 4H | 知识库 API | pending |
+| 4I | 质量门+OpenAPI 验收 | pending |
+| 5 | 小程序前后端联调 | pending |
+| 6 | 网页端/后台管理 | pending |
+
+## 十六、部署
+
+本地 localhost:8080。无服务器。Docker 后续。密钥环境变量注入。
+
+## 版本
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
-| 2026-06-16 | 1.0 | 初始化后端规划占位文档 |
+| 2026-06-17 | 3.0 | 用户确认全部架构决策，阶段细化 |
