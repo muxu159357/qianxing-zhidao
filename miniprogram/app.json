@@ -25,15 +25,21 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "首页"
+        "text": "首页",
+        "iconPath": "assets/icons/tabbar/home.png",
+        "selectedIconPath": "assets/icons/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/guide/guide",
-        "text": "AI助手"
+        "text": "AI助手",
+        "iconPath": "assets/icons/tabbar/ai.png",
+        "selectedIconPath": "assets/icons/tabbar/ai-active.png"
       },
       {
         "pagePath": "pages/my-trips/my-trips",
-        "text": "我的行程"
+        "text": "我的行程",
+        "iconPath": "assets/icons/tabbar/trips.png",
+        "selectedIconPath": "assets/icons/tabbar/trips-active.png"
       }
     ]
   }

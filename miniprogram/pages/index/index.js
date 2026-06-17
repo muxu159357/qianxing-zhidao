@@ -1,4 +1,5 @@
-const mock = require('../../utils/mock')
+var mock = require('../../utils/mock')
+var assetResolver = require('../../utils/asset-resolver')
 
 Page({
   data: {
@@ -12,8 +13,12 @@ Page({
   },
 
   onLoad() {
-    mock.getRoutes().then(routes => {
-      this.setData({ topRoutes: routes.slice(0, 3) })
+    var that = this
+    mock.getRoutes().then(function(routes) {
+      var top = routes.slice(0, 3).map(function(r) {
+        return { route: r, coverImage: assetResolver.resolveRouteCover(r) }
+      })
+      that.setData({ topRoutes: top })
     })
   },
 

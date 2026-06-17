@@ -83,6 +83,13 @@
   gap: 18rpx;
 }
 
+.rc-cover-img {
+  width: 140rpx; height: 90rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  background: #d4ede0;
+}
+
 /* Rank badge */
 .rc-rank {
   width: 68rpx;

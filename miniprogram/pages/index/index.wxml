@@ -43,24 +43,21 @@
   <view class="routes-preview">
     <view class="section-title anim-fade-up">精选路线</view>
     <view class="route-list">
-      <view class="route-preview-card tap-lift anim-fade-up" wx:for="{{topRoutes}}" wx:key="id" wx:for-index="idx"
+      <view class="route-preview-card tap-lift anim-fade-up" wx:for="{{topRoutes}}" wx:key="route.id" wx:for-index="idx"
         style="animation-delay:{{idx * 0.08}}s"
-        bindtap="goRouteDetail" data-id="{{item.id}}">
-        <!-- V20-A: CSS 缩略图占位 -->
+        bindtap="goRouteDetail" data-id="{{item.route.id}}">
         <view class="rpc-thumb">
-          <view class="rpc-thumb-inner">
-            <view class="rpc-thumb-mountain"></view>
-          </view>
+          <image class="rpc-thumb-img" src="{{item.coverImage}}" mode="aspectFill" />
         </view>
         <view class="rpc-body">
-          <view class="rpc-name">{{item.name}}</view>
-          <view class="rpc-desc">{{item.description}}</view>
+          <view class="rpc-name">{{item.route.name}}</view>
+          <view class="rpc-desc">{{item.route.description}}</view>
           <view class="rpc-tags">
-            <text class="tag-mini" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+            <text class="tag-mini" wx:for="{{item.route.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
           </view>
         </view>
         <view class="rpc-right">
-          <view class="rpc-days-badge">{{item.days}}<text class="rpc-days-unit">天</text></view>
+          <view class="rpc-days-badge">{{item.route.days}}<text class="rpc-days-unit">天</text></view>
           <view class="rpc-arrow-icon"></view>
         </view>
       </view>

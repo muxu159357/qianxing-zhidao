@@ -1,6 +1,6 @@
-const mock = require('../../utils/mock')
-
+var mock = require('../../utils/mock')
 var tripStorage = require('../../utils/trip-storage')
+var assetResolver = require('../../utils/asset-resolver')
 
 Page({
   data: {
@@ -10,7 +10,8 @@ Page({
     safety: null,
     emptyState: false,
     hasSavedTrip: false,
-    recommendExplanation: null
+    recommendExplanation: null,
+    routeCoverImage: ''
   },
 
   onLoad(options) {
@@ -37,7 +38,8 @@ Page({
 
     const safety = this.computeSafety(route)
 
-    this.setData({ route, score, attractions, safety, emptyState: false })
+    var coverImage = assetResolver.resolveRouteCover(route)
+    this.setData({ route: route, score: score, attractions: attractions, safety: safety, emptyState: false, routeCoverImage: coverImage })
 
     // V11: Generate recommendation explanation
     var profile = null

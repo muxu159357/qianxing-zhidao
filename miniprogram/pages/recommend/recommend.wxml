@@ -26,6 +26,7 @@
   <view wx:else class="route-list">
     <view class="route-card anim-card-in {{expandedId === item.route.id ? 'expanded' : ''}}" wx:for="{{routes}}" wx:key="route.id" wx:for-index="idx" style="animation-delay:{{idx * 0.06}}s" bindtap="toggleExpand" data-id="{{item.route.id}}">
       <view class="rc-header">
+        <image class="rc-cover-img" src="{{item.coverImage}}" mode="aspectFill" />
         <view class="rc-rank {{idx === 0 ? 'top1' : ''}}">#{{idx + 1}}</view>
         <view class="rc-body">
           <view class="rc-name">{{item.route.name}}</view>

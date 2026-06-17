@@ -1,4 +1,5 @@
-const mock = require('../../utils/mock')
+var mock = require('../../utils/mock')
+var assetResolver = require('../../utils/asset-resolver')
 
 Page({
   data: { routes: [], loading: true, expandedId: null },
@@ -108,11 +109,12 @@ Page({
       if (route.suitableFor.includes(sel.companion)) { score += 15; reasons.push('适合' + sel.companion) }
       if (Math.abs(route.days - sel.days) <= 1) score += 10
 
-      const recommendSummary = self._buildRecommendSummary(sel, route)
-      const matchTags = self._buildMatchTags(sel, route)
-      const routeNotice = self._buildRouteNotice(route)
+      var recommendSummary = self._buildRecommendSummary(sel, route)
+      var matchTags = self._buildMatchTags(sel, route)
+      var routeNotice = self._buildRouteNotice(route)
+      var coverImage = assetResolver.resolveRouteCover(route)
 
-      return { route, score: Math.min(score, 85) + Math.floor(Math.random() * 15), reasons, recommendSummary, matchTags, routeNotice }
+      return { route: route, score: Math.min(score, 85) + Math.floor(Math.random() * 15), reasons: reasons, recommendSummary: recommendSummary, matchTags: matchTags, routeNotice: routeNotice, coverImage: coverImage }
     }))
     ranked.sort((a, b) => b.score - a.score)
     this.setData({ routes: ranked, loading: false })
