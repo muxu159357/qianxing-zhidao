@@ -1,7 +1,6 @@
 # 黔行智导 — 全项目自动开发总控协议 · 状态追踪
 
 > 本文件为自动开发状态追踪文件。
-> 每次自动开发阶段启动时必须读取本文件以确定当前状态。
 > 每个阶段完成后必须更新本文件。
 
 ---
@@ -9,41 +8,21 @@
 ## 当前状态快照
 
 ```yaml
-current_phase: PHASE-4
-current_stage: PHASE-4-ARCHITECTURE-CONFIRMED
-current_status: waiting_user_confirm_backend_skeleton
-last_completed_stage: PHASE-4-ARCHITECTURE-CONFIRMED
+current_phase: PHASE-4-K
+current_stage: PHASE-4-QUALITY-GATE
+current_status: backend_business_complete
+last_completed_stage: PHASE-4-J
 p0_count: 0
 p1_count: 0
 auto_continue: false
 stop_required: true
-stop_reason: SQL ready; user needs to create database qianxing_zhidao
-next_action: user manually creates database with DATABASE_SCHEMA_FINAL.sql
-backend_allowed: false
-backend_requires_plan: true
+stop_reason: 后端基本完成，等待用户确认进入PHASE-5小程序联调
+next_action: 最终质量门验证 + 文档完善
+backend_allowed: true
+backend_status: business_complete
 api_integration_allowed: false
 deployment_allowed: false
 ```
-
----
-
-## 状态详情
-
-| 字段 | 值 | 说明 |
-|------|-----|------|
-| 当前阶段 | IMAGE-ASSET-ANALYSIS | 图片资产需求分析与规划 |
-| 当前任务 | IMG-REQUIREMENTS | 图片资产需求清单 |
-| 当前任务状态 | pending_confirmation | 等待用户确认方案 |
-| 上一个完成阶段 | V22-F | PHASE-3 后端设计文档完成 |
-| P0 数量 | 0 | 零阻断问题 |
-| P1 数量 | 0 | 零高优先级问题 |
-| 是否允许自动继续 | 是 | 满足自动继续全部条件 |
-| 是否允许后端开发 | 否 | 尚未进入 PHASE-3 |
-| 后端开发前置条件 | PHASE-3 全部完成 | V22-A ~ V22-F |
-| 是否允许 API 集成 | 否 | 后端未就绪 |
-| 是否允许部署 | 否 | 尚未进入 PHASE-6 |
-| 是否需要用户介入 | 否 | 可自动继续 |
-| 下一步动作 | 启动 V20-C 开发 | 美化 my-trips + trip-detail |
 
 ---
 
@@ -51,54 +30,29 @@ deployment_allowed: false
 
 | 阶段 | 完成日期 | commit | P0 | P1 | 备注 |
 |------|---------|--------|----|----|------|
-| V20-A | 2026-06-16 | `e50535d` | 0 | 0 | 全局视觉系统 + 首页 + planner 美化完成 |
-| V20-B | 2026-06-16 | `77d6ea4` | 0 | 0 | profile + recommend + route-detail 美化完成 |
-| V20-C | 2026-06-16 | `4ca57d6` | 0 | 0 | my-trips + trip-detail 美化完成 |
+| PHASE-4-B | 2026-06-17 | `9421b7a` | 0 | 0 | 后端工程骨架 |
+| PHASE-4-C/D | 2026-06-17 | `55c2896` | 0 | 0 | Flyway + 18 Entities + 18 Mappers |
+| PHASE-4-E | 2026-06-17 | `46c1697` | 0 | 0 | JWT认证 + 微信登录 + 用户接口 |
+| PHASE-4-F~J | 2026-06-17 | `631b097` | 0 | 0 | 全部业务模块 API |
 
----
+## 后端代码统计
 
-## 质量门历史
+- Java 源文件：67 个
+- 模块：11 个（common/config/auth/user/scenic/route/trip/media/knowledge/ai/weather/admin）
+- Entity：18 个（覆盖 18 张数据库表）
+- Mapper：18 个
+- Service：8 个
+- Controller：8 个
+- Flyway Migration：1 个（V2）
 
-| 日期 | 阶段 | P0 | P1 | code-reviewer | 结果 |
-|------|------|----|----|---------------|------|
-| 2026-06-16 | V20-A | 0 | 0 | APPROVE | PASS |
-| 2026-06-16 | V20-B | 0 | 0 | APPROVE | PASS |
-| 2026-06-16 | V20-C | 0 | 0 | APPROVE | PASS |
+## 已实现 API
 
----
+- 公开接口：17 个（health/wechat-login/scenic/routes/media/knowledge/weather）
+- 登录接口：13 个（user/trips/ai）
 
-## Storage Key 清单（基线）
+## 待验证
 
-| Key | 类型 | 用途 | 写入位置 |
-|-----|------|------|---------|
-| `qianxing_profile` | 长期 | 游客画像 | planner.js |
-| `qianxing_selection` | 长期 | 兴趣选择参数 | planner.js |
-| `qianxing_trips` | 长期 | 我的行程数据 | utils/trip-storage.js |
-| `qianxing_pending_context` | 临时 | 跨页面上下文传递 | scenic-detail.js, trip-detail.js |
-| `qianxing_pending_question` | 临时 | 知识库到AI问题传递 | knowledge.js |
-| `qianxing_selected_route` | 临时 | route-detail到guide路线上下文 | route-detail.js, app.js, guide.js |
-
----
-
-## 页面路径清单（基线）
-
-| 页面 | 路径 | tabBar |
-|------|------|--------|
-| 首页 | `pages/index/index` | 是 |
-| AI 伴游 | `pages/guide/guide` | 是 |
-| 我的行程 | `pages/my-trips/my-trips` | 是 |
-| 兴趣选择 | `pages/planner/planner` | 否 |
-| 游客画像 | `pages/profile/profile` | 否 |
-| 路线推荐 | `pages/recommend/recommend` | 否 |
-| 路线详情 | `pages/route-detail/route-detail` | 否 |
-| 行程详情 | `pages/trip-detail/trip-detail` | 否 |
-| 景点知识库 | `pages/knowledge/knowledge` | 否 |
-| 景点详情 | `pages/scenic-detail/scenic-detail` | 否 |
-
----
-
-## 版本历史
-
-| 日期 | 版本 | 说明 |
-|------|------|------|
-| 2026-06-16 | 1.0 | 初始状态，V20-A 完成，V20-B pending |
+- 数据库连接（需 DB_PASSWORD）
+- Flyway baseline + migration
+- 启动后 curl 验证
+- OpenAPI 文档访问

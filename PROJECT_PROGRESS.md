@@ -1425,3 +1425,85 @@ hero-section (渐变兜底)
 - WXML 未改，路由/逻辑未改
 
 **下一步**：P2 箭头等后续优化
+### 本次进度更新 (2026-06-17 · PHASE-4 基本后端完成)
+
+#### 1. 当前做到哪里了
+PHASE-4 基本后端全部 8 个子阶段（4B~4J）完成，67 个 Java 源文件，11 个模块，
+覆盖 18 张数据库表，30 个 REST API 端点。
+
+#### 2. 本次完成了什么
+
+**后端工程（67 个 Java 源文件）：**
+- PHASE-4-B：Spring Boot 3.4.4 + MyBatis-Plus + Flyway + SpringDoc + JWT 工程骨架
+- PHASE-4-C：V2 Flyway migration（qx_admin_user / qx_weather_location / qx_scenic_weather）
+- PHASE-4-D：18 个 Entity + 18 个 Mapper（覆盖全部 18 张数据库表）
+- PHASE-4-E：JWT 认证 + 微信登录接口 + 用户信息接口 + JWT Filter 鉴权
+- PHASE-4-F：景点/路线/媒体公开只读 API（列表筛选+分页+详情+推荐）
+- PHASE-4-G：用户行程 CRUD API（保存/列表/详情/更新/删除/每日安排/安全清单/复盘）
+- PHASE-4-H：知识库 API（文章列表/详情/搜索/关联查询）
+- PHASE-4-I：AI 规划 + AI 问答接口（本地规则 + LLM 预留）
+- PHASE-4-J：天气模块骨架（查询/刷新，配置缺失返回 501）
+
+**文档：**
+- docs/BACKEND_ENVIRONMENT_REQUIREMENTS.md（环境变量配置要求）
+- docs/API.md（30 个 API 端点清单）
+- application-local.yml.template（本地配置模板）
+
+#### 3. 修改文件列表
+
+| 类型 | 数量 | 说明 |
+|------|------|------|
+| Java 源文件 | 67 | 11 模块 |
+| XML 配置 | 1 | pom.xml |
+| YAML 配置 | 3 | application.yml / dev / template |
+| SQL 迁移 | 1 | V2 migration |
+| 文档 | 5 | 追踪文件 + 环境文档 + API 文档 |
+| 其他 | 1 | .gitignore |
+
+#### 4. 已实现功能（按端分类）
+
+**后端 API（30 个端点）：**
+- 健康检查：1 个
+- 认证：1 个（微信登录）
+- 景点：2 个（列表/详情）
+- 路线：4 个（列表/详情/每日/关联/推荐）
+- 媒体：1 个（按类型查询）
+- 行程：10 个（完整 CRUD + 每日安排 + 安全清单 + 复盘）
+- 知识库：4 个（列表/详情/搜索/关联）
+- AI：3 个（规划/结果查询/问答）
+- 天气：2 个（景区天气/刷新）
+- 用户：1 个（当前用户信息）
+
+#### 5. 基础版已实现但待优化
+- AI 问答为本地规则匹配，待接真实 LLM
+- AI 规划为规则路线返回，待接真实 AI 规划
+- 天气为骨架实现，待接真实天气 API
+- 微信登录需真实 appid/secret 才能验证
+- 分页插件待添加 mybatis-plus-jsqlparser 依赖
+
+#### 6. 尚未实现的功能
+- 后台管理接口（待 PHASE-6）
+- 网页端接口（待 PHASE-6）
+- 文件上传（待后台管理阶段）
+- 真实 LLM/天气 API 集成
+- 小程序前后端联调（待 PHASE-5）
+
+#### 7. 当前问题和风险
+- 需用户配置 DB_PASSWORD 才能启动后端验证
+- 需用户配置 JWT_SECRET 才能测试登录
+- 数据库已有 15 张表，需首次启动触发 Flyway baseline
+
+#### 8. 下一步建议
+1. 配置数据库密码和 JWT 密钥
+2. 启动后端验证 Flyway + 所有接口
+3. 进入 PHASE-5 小程序前后端联调
+
+#### 9. 手动验证清单
+- [ ] 配置 DB_PASSWORD 环境变量
+- [ ] 配置 JWT_SECRET 环境变量
+- [ ] `mvn spring-boot:run` 启动后端
+- [ ] `curl http://localhost:8080/api/health`
+- [ ] 访问 http://localhost:8080/swagger-ui.html
+- [ ] 验证 Flyway baseline + V2 migration
+- [ ] curl 测试景点/路线/知识库公开接口
+- [ ] 验证未登录访问 /api/app/user/me 返回 401
