@@ -1,25 +1,28 @@
 // pages/scenic-detail/scenic-detail.js
-const mock = require('../../utils/mock');
+var mock = require('../../utils/mock');
+var assetResolver = require('../../utils/asset-resolver');
 
 Page({
   data: {
     attraction: null,
-    relatedRoutes: []
+    relatedRoutes: [],
+    scenicCoverImage: ''
   },
 
   onLoad(options) {
-    const id = options.id;
+    var id = options.id;
     if (!id) {
       this.setData({ attraction: null });
       return;
     }
 
-    const attraction = mock.getAttractionById
+    var attraction = mock.getAttractionById
       ? mock.getAttractionById(id)
-      : (mock.attractions || []).find(item => item.id == id || item.id === id);
+      : (mock.attractions || []).find(function(item) { return item.id == id || item.id === id; });
 
     if (attraction) {
-      this.setData({ attraction });
+      var coverImage = assetResolver.resolveAttractionCover(attraction);
+      this.setData({ attraction: attraction, scenicCoverImage: coverImage });
       this._loadRelatedRoutes(attraction);
     } else {
       this.setData({ attraction: null, relatedRoutes: [] });

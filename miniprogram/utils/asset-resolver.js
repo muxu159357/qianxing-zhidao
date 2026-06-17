@@ -43,9 +43,28 @@ function resolveFallbackImage(type) {
   return ROUTE_BASE + 'route-default.png';
 }
 
+var SCENIC_FALLBACK = '/assets/images/fallback/scenic-default.png';
+
+function resolveAttractionCover(attraction) {
+  if (!attraction) return SCENIC_FALLBACK;
+  if (attraction.coverImage) return attraction.coverImage;
+  if (attraction.imageUrl) return attraction.imageUrl;
+  if (attraction.image) return attraction.image;
+  return SCENIC_FALLBACK;
+}
+
+function resolveAttractionThumb(attraction) {
+  if (!attraction) return SCENIC_FALLBACK;
+  if (attraction.thumbImage) return attraction.thumbImage;
+  if (attraction.imageUrl) return attraction.imageUrl;
+  return SCENIC_FALLBACK;
+}
+
 module.exports = {
   resolveRouteCover: resolveRouteCover,
   resolveRouteTheme: resolveRouteTheme,
   resolveFallbackImage: resolveFallbackImage,
+  resolveAttractionCover: resolveAttractionCover,
+  resolveAttractionThumb: resolveAttractionThumb,
   inferTheme: inferTheme
 };

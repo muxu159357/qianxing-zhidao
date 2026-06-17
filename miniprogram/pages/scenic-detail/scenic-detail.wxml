@@ -1,7 +1,8 @@
 <!-- 景点详情页 -->
 <view wx:if="{{attraction}}" class="page-container">
   <!-- 顶部英雄区域 -->
-  <view class="hero-section" style="background: {{attraction.imageUrl ? 'url(' + attraction.imageUrl + ') center/cover no-repeat' : (attraction.imageGradient || 'linear-gradient(135deg, #1f8f5f 0%, #0d5c3a 40%, #2f6bff 100%)')}};">
+  <view class="hero-section" style="background: {{attraction.imageGradient || 'linear-gradient(135deg, #1f8f5f 0%, #0d5c3a 40%, #2f6bff 100%)'}};">
+    <image class="hero-cover-img" src="{{scenicCoverImage}}" mode="aspectFill" />
     <view class="hero-deco-orbs">
       <view class="hero-orb hero-orb-1"></view>
       <view class="hero-orb hero-orb-2"></view>
