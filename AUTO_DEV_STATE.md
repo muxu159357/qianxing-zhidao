@@ -9,16 +9,16 @@
 ## 当前状态快照
 
 ```yaml
-current_phase: PHASE-3.5-COMPLETE
-current_stage: V22-K
-current_status: complete
-last_completed_stage: V22-K
+current_phase: PHASE-4
+current_stage: PHASE-4-A
+current_status: database-design-complete
+last_completed_stage: PHASE-4-A
 p0_count: 0
 p1_count: 0
 auto_continue: false
 stop_required: true
-stop_reason: PHASE-3.5 image asset system complete; awaiting PHASE-4 decision
-next_action: user decides whether to enter PHASE-4 backend development
+stop_reason: database design finalized; awaiting user review before backend coding
+next_action: user reviews DATABASE_DESIGN_FINAL.md, then confirms PHASE-4-B backend coding
 backend_allowed: false
 backend_requires_plan: true
 api_integration_allowed: false
