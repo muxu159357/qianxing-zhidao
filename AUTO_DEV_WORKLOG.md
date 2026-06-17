@@ -59,3 +59,18 @@
 ## 2026-06-17 — PHASE-4-A 数据库设计定稿
 
 - **commit**：`c897de8`
+
+## 2026-06-17 18:00 — PHASE-5-A 联调差距分析
+
+- **阶段**：PHASE-5-A
+- **目标**：只读分析小程序mock数据 vs 后端API 的差距
+- **新增文件**：docs/API_FRONTEND_FIELD_MAPPING.md, docs/SEED_DATA_REQUIREMENTS.md, docs/MINIPROGRAM_BACKEND_INTEGRATION_PLAN.md
+- **修改文件**：AUTO_DEV_STATE.md
+- **未修改**：0 代码改动、0 数据库改动、0 小程序改动
+- **分析成果**：
+  - 字段映射表：4类实体 40+ 字段对比
+  - Seed 需求：10景点/5路线/25日程/7知识库
+  - 联调计划：8阶段（5B→5I）
+- **关键差距**：字段命名(6处重命名)、数据结构(嵌套→分离)、JSON类型(String→Array)、ID类型(Long→String code)
+- **commit**：待提交
+- **下一步**：PHASE-5-B seed data
