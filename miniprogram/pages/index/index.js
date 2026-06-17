@@ -60,7 +60,7 @@ Page({
         if (routes && routes.length > 0) {
           wx.showToast({ title: '正在为你打开路线安全提醒', icon: 'none', duration: 1200 })
           setTimeout(() => {
-            wx.navigateTo({ url: `/pages/route-detail/route-detail?id=${routes[0].id}&focus=safety` })
+            wx.navigateTo({ url: `/pages/route-detail/route-detail?id=${routes[0].route.id}&focus=safety` })
           }, 1200)
         } else {
           wx.showToast({ title: '请先查看推荐路线', icon: 'none' })
