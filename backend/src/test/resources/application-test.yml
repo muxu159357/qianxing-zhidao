@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  flyway:
+    enabled: false
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+jwt:
+  secret: test-jwt-secret-key-for-testing-only
+
+wx:
+  appid:
+  secret:
+
+llm:
+  api-key:
+
+weather:
+  api-key:
+  provider:
+
+logging:
+  level:
+    com.qianxing.zhidao: DEBUG
