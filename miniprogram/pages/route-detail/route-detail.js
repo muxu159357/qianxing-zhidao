@@ -326,6 +326,10 @@ Page({
     wx.navigateTo({ url: '/pages/recommend/recommend' })
   },
 
+  onCoverError() {
+    this.setData({ routeCoverImage: '/assets/images/routes/route-default.png' })
+  },
+
   goHome() {
     wx.switchTab({ url: '/pages/index/index' })
   }
