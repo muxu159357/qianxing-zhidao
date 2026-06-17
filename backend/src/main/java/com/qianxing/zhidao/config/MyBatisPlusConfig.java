@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.qianxing.zhidao.mapper")
+@MapperScan("com.qianxing.zhidao")
 public class MyBatisPlusConfig {
 
     @Bean
