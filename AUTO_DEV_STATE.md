@@ -9,16 +9,16 @@
 ## 当前状态快照
 
 ```yaml
-current_phase: IMAGE-ASSET-ANALYSIS
-current_stage: IMG-REQUIREMENTS
-current_status: pending_confirmation
-last_completed_stage: V22-F (PHASE-3 backend docs)
+current_phase: PHASE-3.5-COMPLETE
+current_stage: V22-K
+current_status: complete
+last_completed_stage: V22-K
 p0_count: 0
 p1_count: 0
 auto_continue: false
 stop_required: true
-stop_reason: waiting for user confirmation on image asset plan
-next_action: user confirms方案A/B/C, then execute image generation or collection
+stop_reason: PHASE-3.5 image asset system complete; awaiting PHASE-4 decision
+next_action: user decides whether to enter PHASE-4 backend development
 backend_allowed: false
 backend_requires_plan: true
 api_integration_allowed: false
