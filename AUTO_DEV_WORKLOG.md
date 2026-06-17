@@ -74,3 +74,27 @@
 - **关键差距**：字段命名(6处重命名)、数据结构(嵌套→分离)、JSON类型(String→Array)、ID类型(Long→String code)
 - **commit**：待提交
 - **下一步**：PHASE-5-B seed data
+
+## 2026-06-17 18:15 — PHASE-5-C API 请求封装
+
+- **阶段**：PHASE-5-C
+- **目标**：创建 miniprogram/utils/api.js 统一请求封装
+- **新增文件**：miniprogram/utils/api.js (214 lines)
+- **commit**：`8c07237`
+- **验证**：后端运行中，API 封装修复后可用于 PHASE-5-D 联调
+- **下一步**：PHASE-5-D 登录与 token 联调
+
+## 2026-06-17 18:12 — PHASE-5-B Seed 数据
+
+- **阶段**：PHASE-5-B
+- **目标**：V3 Flyway migration 导入业务数据
+- **新增文件**：V3__seed_business_data.sql
+- **commit**：`ab49498`
+- **验证**：10 spots, 5 routes, 7 articles, 10 media, 12 days, 12 spots ✅
+- **下一步**：PHASE-5-C API 封装
+
+## 2026-06-17 18:00 — PHASE-5-A 联调差距分析
+
+- **阶段**：PHASE-5-A
+- **目标**：只读分析 + 3 文档
+- **commit**：`b56c662`
