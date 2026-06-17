@@ -36,3 +36,18 @@
 ## 2026-06-17 — V22-H+I tabBar+路线图
 
 - **commit**：`5285aac`, `23eb769` (P0 fix)
+
+## 2026-06-17 17:00 — PHASE-4-B 后端工程骨架
+
+- **阶段**：PHASE-4-B
+- **本次目标**：创建/完善 backend 工程骨架
+- **修改文件**：backend/pom.xml, backend/src/main/resources/application-dev.yml, backend/.gitignore
+- **新增文件**：backend/src/main/resources/application-local.yml.template
+- **删除文件**：无
+- **执行检查**：mvn clean compile BUILD SUCCESS
+- **curl 验证**：暂未（需数据库连接）
+- **code-reviewer**：待调用
+- **quality-gate**：P0=0 P1=0
+- **commit**：待提交
+- **当前状态**：工程骨架完成，准备进入 PHASE-4-C
+- **下一步**：Flyway baseline + 扩展表迁移
