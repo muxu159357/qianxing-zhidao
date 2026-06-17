@@ -1,6 +1,6 @@
 -- ============================================================
 -- 黔行智导 · 数据库建表 DDL (MySQL 8.0+)
--- Version: 2.1 | Charset: utf8mb4 | PHASE-4-A-DB-REVISED
+-- Version: 2.2 | Charset: utf8mb4 | PHASE-4-A-SQL-READY
 -- ============================================================
 -- 数据库名：qianxing_zhidao
 -- 连接信息：
@@ -9,6 +9,8 @@
 --   Spring:  username=${DB_USERNAME:root} password=${DB_PASSWORD:}
 -- 数据库状态：尚未创建，本 SQL 仅用于用户确认后手动执行
 -- 当前阶段：禁止自动执行 SQL，禁止连接数据库
+-- MySQL 版本：待用户最终确认 8.0+（如为 5.7 需另行检查兼容性）
+-- 时间字段：统一使用 CURRENT_TIMESTAMP（MySQL 8.0+ 推荐）
 -- 无强制外键约束，使用逻辑外键 + 索引
 -- ============================================================
 
@@ -28,8 +30,8 @@ CREATE TABLE qx_user (
   phone       VARCHAR(20)                         COMMENT '手机号',
   status      TINYINT      NOT NULL DEFAULT 1     COMMENT '1=正常 0=禁用',
   deleted     TINYINT      NOT NULL DEFAULT 0     COMMENT '逻辑删除',
-  created_at  DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at  DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   UNIQUE INDEX idx_user_openid (openid),
   INDEX idx_user_unionid (unionid),
   INDEX idx_user_status (status)
@@ -58,8 +60,8 @@ CREATE TABLE qx_scenic_spot (
   sort_order     INT          NOT NULL DEFAULT 0     COMMENT '排序',
   status         TINYINT      NOT NULL DEFAULT 1     COMMENT '1=发布 0=下架',
   deleted        TINYINT      NOT NULL DEFAULT 0     COMMENT '逻辑删除',
-  created_at     DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at     DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   UNIQUE INDEX idx_spot_code (spot_code),
   INDEX idx_spot_city (city),
   INDEX idx_spot_category (category),
@@ -85,8 +87,8 @@ CREATE TABLE qx_route (
   sort_order     INT          NOT NULL DEFAULT 0     COMMENT '排序',
   status         TINYINT      NOT NULL DEFAULT 1     COMMENT '1=发布 0=下架',
   deleted        TINYINT      NOT NULL DEFAULT 0     COMMENT '逻辑删除',
-  created_at     DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at     DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   UNIQUE INDEX idx_route_code (route_code),
   INDEX idx_route_energy (energy_level),
   INDEX idx_route_theme (theme),
@@ -105,8 +107,8 @@ CREATE TABLE qx_route_day (
   meals         VARCHAR(256)                        COMMENT '餐饮建议',
   accommodation VARCHAR(256)                        COMMENT '住宿建议',
   sort_order    INT          NOT NULL DEFAULT 0     COMMENT '排序',
-  created_at    DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at    DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   INDEX idx_rday_route (route_id),
   UNIQUE INDEX idx_rday_route_day (route_id, day_number)
 ) ENGINE=InnoDB COMMENT='路线每日安排表';
@@ -122,7 +124,7 @@ CREATE TABLE qx_route_spot (
   spot_order     INT          NOT NULL DEFAULT 0    COMMENT '游玩顺序',
   stay_duration  VARCHAR(20)                        COMMENT '建议停留时间',
   visit_tip      VARCHAR(256)                       COMMENT '游玩建议',
-  created_at     DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
+  created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   INDEX idx_rspot_day (route_day_id),
   INDEX idx_rspot_route (route_id),
   INDEX idx_rspot_spot (scenic_spot_id)
@@ -146,8 +148,8 @@ CREATE TABLE qx_media_asset (
   file_size  INT                                COMMENT '文件大小(字节)',
   sort_order INT          NOT NULL DEFAULT 0    COMMENT '排序',
   status     TINYINT      NOT NULL DEFAULT 1    COMMENT '1=正常 0=禁用',
-  created_at DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   INDEX idx_media_biz (biz_type, biz_id),
   INDEX idx_media_type (asset_type),
   INDEX idx_media_sort (biz_type, biz_id, sort_order)
@@ -173,8 +175,8 @@ CREATE TABLE qx_user_trip (
   started_at          DATETIME                           COMMENT '开始行程时间',
   completed_at        DATETIME                           COMMENT '完成行程时间',
   deleted             TINYINT      NOT NULL DEFAULT 0    COMMENT '逻辑删除',
-  created_at          DATETIME     NOT NULL DEFAULT NOW() COMMENT '保存时间',
-  updated_at          DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '保存时间',
+  updated_at          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   INDEX idx_trip_user (user_id),
   INDEX idx_trip_route (route_id),
   INDEX idx_trip_status (status),
@@ -195,8 +197,8 @@ CREATE TABLE qx_user_trip_day (
   accommodation VARCHAR(256)                        COMMENT '住宿建议',
   is_edited     TINYINT      NOT NULL DEFAULT 0     COMMENT '是否被用户编辑过',
   sort_order    INT          NOT NULL DEFAULT 0     COMMENT '排序',
-  created_at    DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at    DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   INDEX idx_utday_trip (trip_id),
   UNIQUE INDEX idx_utday_trip_day (trip_id, day_number)
 ) ENGINE=InnoDB COMMENT='用户行程每日安排表';
@@ -211,7 +213,7 @@ CREATE TABLE qx_user_trip_spot (
   scenic_spot_id BIGINT                              COMMENT '关联qx_scenic_spot.id(可空)',
   spot_name      VARCHAR(100) NOT NULL               COMMENT '景点名称(快照)',
   spot_order     INT          NOT NULL DEFAULT 0     COMMENT '游玩顺序',
-  created_at     DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
+  created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   INDEX idx_utspot_day (trip_day_id),
   INDEX idx_utspot_trip (trip_id)
 ) ENGINE=InnoDB COMMENT='用户行程景点表';
@@ -225,8 +227,8 @@ CREATE TABLE qx_trip_safety_item (
   item_text  VARCHAR(256) NOT NULL              COMMENT '清单项文字',
   is_checked TINYINT      NOT NULL DEFAULT 0    COMMENT '是否已勾选',
   sort_order INT          NOT NULL DEFAULT 0    COMMENT '排序',
-  created_at DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   INDEX idx_safety_trip (trip_id)
 ) ENGINE=InnoDB COMMENT='行程安全清单表';
 
@@ -240,8 +242,8 @@ CREATE TABLE qx_trip_review (
   highlights  VARCHAR(500)                       COMMENT '本次亮点',
   regrets     VARCHAR(500)                       COMMENT '遗憾与不足',
   next_advice VARCHAR(500)                       COMMENT '下次建议',
-  created_at  DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at  DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   UNIQUE INDEX idx_review_trip (trip_id)
 ) ENGINE=InnoDB COMMENT='行程复盘评价表';
 
@@ -264,7 +266,7 @@ CREATE TABLE qx_ai_plan_request (
   status        VARCHAR(16) NOT NULL DEFAULT 'pending' COMMENT 'pending/processing/completed/failed',
   error_message TEXT                               COMMENT '错误信息',
   elapsed_ms    INT                                COMMENT '耗时(毫秒)',
-  created_at    DATETIME    NOT NULL DEFAULT NOW() COMMENT '创建时间',
+  created_at    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   INDEX idx_aipr_user (user_id),
   INDEX idx_aipr_status (status),
   INDEX idx_aipr_session (session_id)
@@ -287,7 +289,7 @@ CREATE TABLE qx_ai_plan_result (
   prompt_tokens         INT                         COMMENT '输入token数(预留)',
   completion_tokens     INT                         COMMENT '输出token数(预留)',
   elapsed_ms            INT                         COMMENT 'AI调用耗时(毫秒)',
-  created_at            DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
+  created_at            DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   INDEX idx_aipres_req (request_id),
   INDEX idx_aipres_adopted (is_adopted),
   INDEX idx_aipres_trip (adopted_trip_id)
@@ -305,8 +307,8 @@ CREATE TABLE qx_knowledge_article (
   sort_order   INT          NOT NULL DEFAULT 0     COMMENT '排序',
   status       TINYINT      NOT NULL DEFAULT 1     COMMENT '1=发布 0=下架',
   deleted      TINYINT      NOT NULL DEFAULT 0     COMMENT '逻辑删除',
-  created_at   DATETIME     NOT NULL DEFAULT NOW() COMMENT '创建时间',
-  updated_at   DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '更新时间',
+  created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  updated_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   UNIQUE INDEX idx_ka_code (article_code),
   INDEX idx_ka_category (category),
   INDEX idx_ka_status (status)
@@ -320,7 +322,7 @@ CREATE TABLE qx_knowledge_relation (
   article_id BIGINT      NOT NULL              COMMENT '关联qx_knowledge_article.id',
   rel_type   VARCHAR(20) NOT NULL              COMMENT '关联类型:scenic_spot/route/theme/safety/culture/tip',
   rel_id     BIGINT      NOT NULL              COMMENT '关联业务ID',
-  created_at DATETIME    NOT NULL DEFAULT NOW() COMMENT '创建时间',
+  created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   INDEX idx_kr_article (article_id),
   INDEX idx_kr_rel (rel_type, rel_id)
 ) ENGINE=InnoDB COMMENT='知识库关联关系表';

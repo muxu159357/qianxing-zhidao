@@ -1,8 +1,9 @@
 # 黔行智导 · 数据库设计定稿
 
-> Version: 2.1 | DB: MySQL 8.0+ | Charset: utf8mb4
+> Version: 2.2 | DB: MySQL 8.0+ | Charset: utf8mb4
 > 前身：docs/DATABASE.md (v1.0, PostgreSQL) — 已废弃
-> 本文件为 PHASE-4-A-DB-REVISED 定稿
+> 本文件为 PHASE-4-A-SQL-READY 定稿
+> MySQL 版本：待用户最终确认 8.0+
 
 ## 数据库环境
 

@@ -10,15 +10,15 @@
 
 ```yaml
 current_phase: PHASE-4
-current_stage: PHASE-4-A-FIXED
-current_status: waiting_user_db_confirmation
-last_completed_stage: PHASE-4-A-FIXED
+current_stage: PHASE-4-A-SQL-READY
+current_status: waiting_user_create_database
+last_completed_stage: PHASE-4-A-SQL-READY
 p0_count: 0
 p1_count: 0
 auto_continue: false
 stop_required: true
-stop_reason: DB design revised; awaiting user to create database qianxing_zhidao
-next_action: user creates database, then confirms PHASE-4-B backend skeleton
+stop_reason: SQL ready; user needs to create database qianxing_zhidao
+next_action: user manually creates database with DATABASE_SCHEMA_FINAL.sql
 backend_allowed: false
 backend_requires_plan: true
 api_integration_allowed: false
