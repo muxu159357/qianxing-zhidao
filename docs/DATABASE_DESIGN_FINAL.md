@@ -91,6 +91,7 @@ qx_ai_plan_request ──< qx_ai_plan_result
 |------|------|------|
 | id | BIGINT PK AUTO_INCREMENT | |
 | openid | VARCHAR(64) UNIQUE NOT NULL | 微信 openid |
+| unionid | VARCHAR(64) DEFAULT NULL | 微信unionid(预留) |
 | nickname | VARCHAR(64) | 微信昵称 |
 | avatar_url | VARCHAR(512) | 头像 |
 | phone | VARCHAR(20) | 手机号 |
@@ -99,7 +100,7 @@ qx_ai_plan_request ──< qx_ai_plan_result
 | created_at | DATETIME DEFAULT NOW() | |
 | updated_at | DATETIME DEFAULT NOW() ON UPDATE | |
 
-索引：openid, status
+索引：openid, unionid, status
 
 ### 2. qx_scenic_spot
 
@@ -221,13 +222,16 @@ qx_ai_plan_request ──< qx_ai_plan_result
 | energy_level | VARCHAR(8) | |
 | travel_start_date | DATE | |
 | travel_end_date | DATE | |
+| route_snapshot_json | JSON | 保存时路线模板/AI生成路线的完整快照 |
+| plan_snapshot_json | JSON | 保存时完整日程计划快照(dayPlans+spots) |
+| ai_result_id | BIGINT | → qx_ai_plan_result.id (若来自AI规划) |
 | started_at | DATETIME | |
 | completed_at | DATETIME | |
 | deleted | TINYINT DEFAULT 0 | |
 | created_at | DATETIME DEFAULT NOW() | |
 | updated_at | DATETIME DEFAULT NOW() ON UPDATE | |
 
-索引：user_id, route_id, status, created_at DESC
+索引：user_id, route_id, status, ai_result_id, created_at DESC
 
 ### 8. qx_user_trip_day
 
@@ -303,10 +307,12 @@ qx_ai_plan_request ──< qx_ai_plan_result
 | input_crowd | VARCHAR(32) | |
 | input_energy | VARCHAR(8) | |
 | input_pace | VARCHAR(8) | |
-| profile_json | JSON | 画像结果 |
+| input_json | JSON | 完整用户输入JSON |
+| profile_json | JSON | 完整画像结果JSON |
+| context_json | JSON | 多轮规划上下文(预留) |
 | status | VARCHAR(16) DEFAULT 'pending' | pending/processing/completed/failed |
 | error_message | TEXT | |
-| elapsed_ms | INT | 耗时 |
+| elapsed_ms | INT | 耗时(毫秒) |
 | created_at | DATETIME DEFAULT NOW() | |
 
 索引：user_id, status, session_id
@@ -318,15 +324,19 @@ qx_ai_plan_request ──< qx_ai_plan_result
 | id | BIGINT PK AUTO_INCREMENT | |
 | request_id | BIGINT NOT NULL | → qx_ai_plan_request.id |
 | route_name | VARCHAR(128) | AI 生成名称 |
-| route_json | JSON | 完整路线 |
-| route_snapshot_id | BIGINT | → qx_user_trip.id (采纳后) |
+| route_json | JSON | 小程序可渲染的路线结构 |
+| raw_result_json | JSON | 模型原始返回JSON(用于复盘) |
+| normalized_result_json | JSON | 后端清洗后的结构化结果 |
+| error_json | JSON | 失败时保存完整错误上下文 |
+| adopted_trip_id | BIGINT | → qx_user_trip.id (采纳后) |
 | is_adopted | TINYINT DEFAULT 0 | |
 | model_name | VARCHAR(64) | 预留 |
 | prompt_tokens | INT | 预留 |
 | completion_tokens | INT | 预留 |
+| elapsed_ms | INT | AI调用耗时(毫秒) |
 | created_at | DATETIME DEFAULT NOW() | |
 
-索引：request_id, is_adopted
+索引：request_id, is_adopted, adopted_trip_id
 
 ### 14. qx_knowledge_article
 

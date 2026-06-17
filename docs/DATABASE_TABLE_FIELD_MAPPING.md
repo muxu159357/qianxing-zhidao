@@ -12,8 +12,17 @@
 | qianxing_selection.companion | planner.js | qx_ai_plan_request | input_crowd | Y | N |
 | qianxing_selection.physicalLevel | planner.js | qx_ai_plan_request | input_energy | Y | N |
 | qianxing_selection.pace | planner.js | qx_ai_plan_request | input_pace | Y | N |
+| qianxing_selection (完整) | planner.js | qx_ai_plan_request | input_json | Y | N |
 | qianxing_profile | profile.js | qx_ai_plan_request | profile_json | Y | N |
+| AI 多轮上下文 | — | qx_ai_plan_request | context_json | Y | N |
 | qianxing_trips | trip-storage.js | qx_user_trip + 子表 | 多表 | Y | Y |
+| 路线完整快照 | route-detail.js | qx_user_trip | route_snapshot_json | Y | N |
+| 计划完整快照 | route-detail.js | qx_user_trip | plan_snapshot_json | Y | N |
+| AI 结果来源 | route-detail.js | qx_user_trip | ai_result_id | Y | N |
+| AI 原始结果 | — | qx_ai_plan_result | raw_result_json | Y | N |
+| AI 清洗结果 | — | qx_ai_plan_result | normalized_result_json | Y | N |
+| AI 错误信息 | — | qx_ai_plan_result | error_json | Y | N |
+| AI 采纳行程 | — | qx_ai_plan_result | adopted_trip_id | Y | N |
 | qianxing_selected_route | route-detail.js | — | 临时不持久化 | — | — |
 | qianxing_pending_context | scenic/trip-detail | — | 临时不持久化 | — | — |
 | qianxing_pending_question | knowledge.js | — | 临时不持久化 | — | — |
