@@ -11,8 +11,14 @@
 ```
 后端开发状态：未启动
 后端目录状态：不存在（需在 V23-A 创建 backend/ 目录）
-技术栈状态：待确认（默认 Spring Boot + MyBatis-Plus + MySQL）
-API 合同状态：未设计
+技术栈：Spring Boot 3.x + MyBatis-Plus 3.5+ + MySQL 8.0
+数据库设计：docs/DATABASE_DESIGN_FINAL.md (v2.1, 15 张表)
+SQL DDL：docs/DATABASE_SCHEMA_FINAL.sql
+
+DB连接：jdbc:mysql://localhost:3306/qianxing_zhidao
+账号密码：${DB_USERNAME}/${DB_PASSWORD} 环境变量（不提交Git）
+数据库尚未创建，由用户手动执行 SQL
+```
 数据库表结构：未设计
 ```
 

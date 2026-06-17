@@ -1,8 +1,19 @@
 # 黔行智导 · 数据库设计定稿
 
-> Version: 2.0 | DB: MySQL 8.0+ | Charset: utf8mb4
+> Version: 2.1 | DB: MySQL 8.0+ | Charset: utf8mb4
 > 前身：docs/DATABASE.md (v1.0, PostgreSQL) — 已废弃
-> 本文件为 PHASE-4-A 正式定稿
+> 本文件为 PHASE-4-A-DB-REVISED 定稿
+
+## 数据库环境
+
+| 项目 | 值 |
+|------|-----|
+| 数据库名 | `qianxing_zhidao` |
+| JDBC URL | `jdbc:mysql://localhost:3306/qianxing_zhidao?...` |
+| 账号 | `${DB_USERNAME:root}` (环境变量) |
+| 密码 | `${DB_PASSWORD:}` (环境变量，不提交 Git) |
+| 状态 | **数据库尚未创建，由用户手动执行 SQL** |
+| 本阶段 | 禁止自动执行 SQL，禁止连接数据库 |
 
 ---
 

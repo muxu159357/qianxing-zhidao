@@ -10,15 +10,15 @@
 
 ```yaml
 current_phase: PHASE-4
-current_stage: PHASE-4-A
-current_status: database-design-complete
-last_completed_stage: PHASE-4-A
+current_stage: PHASE-4-A-DB-REVISED
+current_status: waiting_user_db_confirmation
+last_completed_stage: PHASE-4-A-DB-REVISED
 p0_count: 0
 p1_count: 0
 auto_continue: false
 stop_required: true
-stop_reason: database design finalized; awaiting user review before backend coding
-next_action: user reviews DATABASE_DESIGN_FINAL.md, then confirms PHASE-4-B backend coding
+stop_reason: DB design revised; awaiting user to create database qianxing_zhidao
+next_action: user creates database, then confirms PHASE-4-B backend skeleton
 backend_allowed: false
 backend_requires_plan: true
 api_integration_allowed: false
