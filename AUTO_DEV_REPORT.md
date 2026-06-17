@@ -117,3 +117,4 @@
 |------|------|------|
 | 2026-06-16 | 1.1 | V20-B 阶段报告：profile + recommend + route-detail 美化完成 |
 | 2026-06-16 | 1.2 | V20-C 阶段报告：my-trips + trip-detail 美化完成 |
+| 2026-06-17 | 1.3 | IMG-REQUIREMENTS：图片资产需求分析完成，等待用户确认方案 |

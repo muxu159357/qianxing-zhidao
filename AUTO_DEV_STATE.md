@@ -9,16 +9,16 @@
 ## 当前状态快照
 
 ```yaml
-current_phase: PHASE-3
-current_stage: V22-A
-current_status: in_progress
-last_completed_stage: V21-F
+current_phase: IMAGE-ASSET-ANALYSIS
+current_stage: IMG-REQUIREMENTS
+current_status: pending_confirmation
+last_completed_stage: V22-F (PHASE-3 backend docs)
 p0_count: 0
 p1_count: 0
-auto_continue: true
-stop_required: false
-stop_reason: none
-next_action: execute V20-E full visual regression (10 pages)
+auto_continue: false
+stop_required: true
+stop_reason: waiting for user confirmation on image asset plan
+next_action: user confirms方案A/B/C, then execute image generation or collection
 backend_allowed: false
 backend_requires_plan: true
 api_integration_allowed: false
@@ -31,10 +31,10 @@ deployment_allowed: false
 
 | 字段 | 值 | 说明 |
 |------|-----|------|
-| 当前阶段 | PHASE-1 | 前端视觉与交互全面美化 |
-| 当前任务 | V20-D | guide + knowledge + scenic-detail 美化 |
-| 当前任务状态 | pending | 等待启动 |
-| 上一个完成阶段 | V20-C | my-trips + trip-detail 美化 |
+| 当前阶段 | IMAGE-ASSET-ANALYSIS | 图片资产需求分析与规划 |
+| 当前任务 | IMG-REQUIREMENTS | 图片资产需求清单 |
+| 当前任务状态 | pending_confirmation | 等待用户确认方案 |
+| 上一个完成阶段 | V22-F | PHASE-3 后端设计文档完成 |
 | P0 数量 | 0 | 零阻断问题 |
 | P1 数量 | 0 | 零高优先级问题 |
 | 是否允许自动继续 | 是 | 满足自动继续全部条件 |
