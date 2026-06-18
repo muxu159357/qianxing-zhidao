@@ -180,6 +180,9 @@ function getAiPlan(requestId) {
 function aiChat(question) {
   return request('/api/app/ai/chat', { method: 'POST', data: { question: question }, needAuth: true })
 }
+function createAiPlanDraft(params) { return request('/api/app/ai/plan-drafts', { method: 'POST', data: params, needAuth: true }) }
+function getAiPlanDraft(draftId) { return request('/api/app/ai/plan-drafts/' + draftId, { needAuth: true }) }
+function confirmAiPlanDraft(draftId) { return request('/api/app/ai/plan-drafts/' + draftId + '/confirm', { method: 'POST', needAuth: true }) }
 
 module.exports = {
   BASE_URL: BASE_URL,
@@ -212,5 +215,8 @@ module.exports = {
   saveTripReview: saveTripReview,
   createAiPlan: createAiPlan,
   getAiPlan: getAiPlan,
-  aiChat: aiChat
+  aiChat: aiChat,
+  createAiPlanDraft: createAiPlanDraft,
+  getAiPlanDraft: getAiPlanDraft,
+  confirmAiPlanDraft: confirmAiPlanDraft
 }
