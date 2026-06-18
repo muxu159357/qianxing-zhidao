@@ -25,6 +25,7 @@ Page({
 
   _msgId: 0,
   _firstShow: true,
+  _typewriterTimer: null,
   _defaultQuickQuestions: [
     '贵州必去景点有哪些？',
     '贵州有什么特色美食？',
@@ -295,6 +296,7 @@ Page({
     var content = (this.data.inputValue || '').trim();
     if (!content || this.data.isTyping) return;
 
+    this._stopTypewriter()
     this.addUserMessage(content);
     this.setData({ inputValue: '' });
     this.setData({ isTyping: true });
@@ -317,6 +319,7 @@ Page({
     var question = e.currentTarget.dataset.question;
     if (!question || this.data.isTyping) return;
 
+    this._stopTypewriter()
     this.addUserMessage(question);
     this.setData({ isTyping: true });
     this.scrollToBottom();
@@ -350,13 +353,41 @@ Page({
 
   /* ========== Helpers ========== */
 
+  _stopTypewriter() {
+    if (this._typewriterTimer) {
+      clearInterval(this._typewriterTimer)
+      this._typewriterTimer = null
+    }
+  },
+
+  _startTypewriter(msgId, fullText) {
+    var self = this
+    var index = 0
+    self._stopTypewriter()
+    self._typewriterTimer = setInterval(function () {
+      index++
+      if (index > fullText.length) {
+        clearInterval(self._typewriterTimer)
+        self._typewriterTimer = null
+        return
+      }
+      var partial = fullText.substring(0, index)
+      var messages = self.data.messages.slice()
+      for (var i = 0; i < messages.length; i++) {
+        if (messages[i].id === msgId) { messages[i].content = partial; break }
+      }
+      self.setData({ messages: messages })
+      self.scrollToBottom()
+    }, 20)
+  },
+
   addAIMessage(content) {
     var clean = (content || '').replace(/\*\*/g, '').replace(/###?\s/g, '').replace(/```/g, '').replace(/\n{3,}/g, '\n\n').trim()
     if (!clean) clean = '智能助手正在为你分析，请稍后再次提问。'
-    var msg = { id: ++this._msgId, type: 'ai', content: clean };
-    var messages = this.data.messages.slice().concat([msg]);
-    this.setData({ messages: messages });
-    this.scrollToBottom();
+    var msg = { id: ++this._msgId, type: 'ai', content: '' }
+    var messages = this.data.messages.slice().concat([msg])
+    this.setData({ messages: messages })
+    this._startTypewriter(msg.id, clean)
   },
 
   addUserMessage(content) {
