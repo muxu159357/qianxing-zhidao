@@ -33,9 +33,6 @@ public class AdminScenicController {
         return ApiResponse.ok(scenicService.updateSpot(id, patch));
     }
 
-    @DeleteMapping("/spots/{id}")
-    public ApiResponse<Void> delete(@PathVariable Long id) {
-        scenicService.deleteSpot(id);
-        return ApiResponse.ok();
-    }
+    @DeleteMapping("/spots/{id}") public ApiResponse<Void> delete(@PathVariable Long id) { scenicService.deleteSpot(id); return ApiResponse.ok(); }
+    @PutMapping("/spots/{id}/status") public ApiResponse<QxScenicSpot> toggleStatus(@PathVariable Long id, @RequestParam int status) { var patch = new QxScenicSpot(); patch.setStatus(status); return ApiResponse.ok(scenicService.updateSpot(id, patch)); }
 }
