@@ -1,6 +1,8 @@
 // pages/scenic-detail/scenic-detail.js
 var mock = require('../../utils/mock');
 var assetResolver = require('../../utils/asset-resolver');
+var api = require('../../utils/api');
+var adapters = require('../../utils/adapters');
 
 Page({
   data: {
@@ -16,9 +18,30 @@ Page({
       return;
     }
 
+    var self = this;
+    api.getScenicSpots({ keyword: id, size: 10 }).then(function (data) {
+      var records = data.records || [];
+      var spot = null;
+      for (var i = 0; i < records.length; i++) {
+        if (records[i].spotCode === id) { spot = records[i]; break; }
+      }
+      if (spot) {
+        var attraction = adapters.scenicSpotToAttraction(spot);
+        var coverImage = assetResolver.resolveAttractionCover(attraction);
+        self.setData({ attraction: attraction, scenicCoverImage: coverImage });
+        self._loadRelatedRoutes(attraction);
+      } else {
+        self._loadFromMock(id);
+      }
+    }).catch(function () {
+      self._loadFromMock(id);
+    });
+  },
+
+  _loadFromMock: function (id) {
     var attraction = mock.getAttractionById
       ? mock.getAttractionById(id)
-      : (mock.attractions || []).find(function(item) { return item.id == id || item.id === id; });
+      : (mock.attractions || []).find(function (item) { return item.id == id || item.id === id; });
 
     if (attraction) {
       var coverImage = assetResolver.resolveAttractionCover(attraction);

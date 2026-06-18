@@ -1,5 +1,7 @@
 // pages/knowledge/knowledge.js
 const mock = require('../../utils/mock');
+var api = require('../../utils/api');
+var adapters = require('../../utils/adapters');
 
 Page({
   data: {
@@ -27,6 +29,19 @@ Page({
   },
 
   loadKnowledge() {
+    var self = this
+    api.getKnowledgeArticles({ page: 1, size: 30 }).then(function (data) {
+      var records = data.records || []
+      if (records.length > 0) {
+        var list = records.map(function (item) { var k = adapters.articleToKnowledge(item); k.expanded = false; return k })
+        self.setData({ knowledgeList: list, filteredList: list })
+        return
+      }
+      throw new Error('empty')
+    }).catch(function () { self._loadMockKnowledge() })
+  },
+
+  _loadMockKnowledge: function () {
     const list = (mock.knowledgeBase || []).map(item => ({
       ...item,
       expanded: false

@@ -1,17 +1,28 @@
 var mock = require('../../utils/mock')
 var assetResolver = require('../../utils/asset-resolver')
+var api = require('../../utils/api')
+var adapters = require('../../utils/adapters')
 
 Page({
   data: { routes: [], loading: true, expandedId: null },
 
   onLoad() {
-    const sel = wx.getStorageSync('qianxing_selection')
-    if (!sel || sel.selectedTagIds.length < 2) {
-      wx.showToast({ title: '请先设置偏好', icon: 'none' })
-      setTimeout(() => wx.navigateBack(), 1500)
-      return
-    }
-    this.loadRoutes(sel)
+    var self = this
+    api.getRoutes({ page: 1, size: 20 }).then(function (data) {
+      var routes = adapters.apiRoutesToRoutes(data.records || [])
+      if (routes.length > 0) {
+        self.loadRoutes(routes)
+        return
+      }
+      throw new Error('empty')
+    }).catch(function () {
+      self._loadMockRoutes()
+    })
+  },
+
+  _loadMockRoutes: function () {
+    var self = this
+    mock.getRoutes().then(function (routes) { self.loadRoutes(routes) })
   },
 
   /* ========== V11: Recommendation explanation helpers ========== */
@@ -93,10 +104,17 @@ Page({
     return notices.slice(0, 2).join('；')
   },
 
-  async loadRoutes(sel) {
-    const tags = mock.interestTags
-    const self = this
-    const ranked = await Promise.all(mock.routes.map(async (route) => {
+  async loadRoutes(routes) {
+    var sel = wx.getStorageSync('qianxing_selection')
+    if (!sel || !sel.selectedTagIds || sel.selectedTagIds.length < 2) {
+      wx.showToast({ title: '请先设置偏好', icon: 'none' })
+      setTimeout(function () { wx.navigateBack() }, 1500)
+      return
+    }
+    var tags = mock.interestTags
+    var self = this
+    var routeList = (routes && routes.length > 0) ? routes : (mock.routes || [])
+    const ranked = await Promise.all(routeList.map(async (route) => {
       let score = 0
       const reasons = []
       for (const tag of route.tags) {

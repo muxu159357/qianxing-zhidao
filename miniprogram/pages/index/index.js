@@ -1,5 +1,7 @@
 var mock = require('../../utils/mock')
 var assetResolver = require('../../utils/asset-resolver')
+var api = require('../../utils/api')
+var adapters = require('../../utils/adapters')
 
 Page({
   data: {
@@ -14,11 +16,23 @@ Page({
 
   onLoad() {
     var that = this
-    mock.getRoutes().then(function(routes) {
-      var top = routes.slice(0, 3).map(function(r) {
-        return { route: r, coverImage: assetResolver.resolveRouteCover(r) }
+    api.getRoutes({ page: 1, size: 3 }).then(function (data) {
+      var routes = adapters.apiRoutesToRoutes(data.records || [])
+      if (routes.length > 0) {
+        var top = routes.slice(0, 3).map(function (r) {
+          return { route: r, coverImage: assetResolver.resolveRouteCover(r) }
+        })
+        that.setData({ topRoutes: top })
+        return
+      }
+      throw new Error('empty')
+    }).catch(function () {
+      mock.getRoutes().then(function (routes) {
+        var top = routes.slice(0, 3).map(function (r) {
+          return { route: r, coverImage: assetResolver.resolveRouteCover(r) }
+        })
+        that.setData({ topRoutes: top })
       })
-      that.setData({ topRoutes: top })
     })
   },
 

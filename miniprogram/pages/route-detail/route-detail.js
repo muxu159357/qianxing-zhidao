@@ -2,6 +2,8 @@ var mock = require('../../utils/mock')
 var tripStorage = require('../../utils/trip-storage')
 var assetResolver = require('../../utils/asset-resolver')
 var auth = require('../../utils/auth')
+var api = require('../../utils/api')
+var adapters = require('../../utils/adapters')
 
 Page({
   data: {
@@ -27,20 +29,43 @@ Page({
     this.loadRoute(id, score)
   },
 
-  async loadRoute(id, score) {
-    const route = await mock.getRouteById(id)
+  loadRoute(id, score) {
+    var self = this
+    api.getRoutes({ keyword: id, page: 1, size: 5 }).then(function (data) {
+      var records = data.records || []
+      var apiRoute = null
+      for (var i = 0; i < records.length; i++) {
+        if (records[i].routeCode === id) { apiRoute = records[i]; break }
+      }
+      if (apiRoute) {
+        api.getRouteDays(apiRoute.id).then(function (days) {
+          var route = adapters.apiRouteToRoute(apiRoute, days)
+          self._finishLoadRoute(route, score)
+        }).catch(function () { self._mockLoadRoute(id, score) })
+      } else {
+        self._mockLoadRoute(id, score)
+      }
+    }).catch(function () { self._mockLoadRoute(id, score) })
+  },
 
-    if (!route) {
-      this.setData({ emptyState: true })
-      return
-    }
+  _mockLoadRoute: function (id, score) {
+    var self = this
+    mock.getRouteById(id).then(function (route) {
+      if (!route) { self.setData({ emptyState: true }); return }
+      self._finishLoadRoute(route, score)
+    })
+  },
 
-    const attractions = await mock.getAttractionsByIds(route.attractionIds || [])
+  _finishLoadRoute: async function (route, score) {
+    if (!route) { this.setData({ emptyState: true }); return }
+
+    var attractionIds = route.attractionIds || []
+    const attractions = await mock.getAttractionsByIds(attractionIds)
 
     const safety = this.computeSafety(route)
 
     var coverImage = assetResolver.resolveRouteCover(route)
-    this.setData({ route: route, score: score, attractions: attractions, safety: safety, emptyState: false, routeCoverImage: coverImage })
+    this.setData({ route: route, score: score || 0, attractions: attractions, safety: safety, emptyState: false, routeCoverImage: coverImage })
 
     // V11: Generate recommendation explanation
     var profile = null
