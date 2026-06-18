@@ -122,7 +122,7 @@ function handleLoginError(err) {
   } else if (code === 401) {
     clearToken()
     clearStoredUser()
-    wx.showToast({ title: '登录已过期，请重新登录', icon: 'none', duration: 2000 })
+    wx.reLaunch({ url: '/pages/login/login' })
   } else {
     wx.showToast({
       title: err.message || '登录暂不可用，请稍后再试',
@@ -138,6 +138,22 @@ function logout() {
   wx.showToast({ title: '已退出登录', icon: 'none', duration: 1500 })
 }
 
+/**
+ * 登录守卫：在页面 onShow 中调用，未登录时跳转登录页。
+ * 登录页自身不会触发跳转（避免循环）。
+ */
+function requireLoginRedirect() {
+  var pages = getCurrentPages()
+  var current = pages.length > 0 ? pages[pages.length - 1].route : ''
+  // 登录页自身不跳转
+  if (current === 'pages/login/login') return false
+  if (!hasLogin()) {
+    wx.reLaunch({ url: '/pages/login/login' })
+    return false
+  }
+  return true
+}
+
 module.exports = {
   getToken: getToken,
   setToken: setToken,
@@ -149,5 +165,6 @@ module.exports = {
   loginWithWechat: loginWithWechat,
   ensureLogin: ensureLogin,
   handleLoginError: handleLoginError,
-  logout: logout
+  logout: logout,
+  requireLoginRedirect: requireLoginRedirect
 }

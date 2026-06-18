@@ -38,6 +38,8 @@ function request(path, options) {
         var body = res.data
         if (res.statusCode === 401) {
           wx.removeStorageSync('qianxing_auth_token')
+          wx.removeStorageSync('qianxing_auth_user')
+          wx.reLaunch({ url: '/pages/login/login' })
           reject({ code: 401, message: body ? body.message : '登录已过期' })
           return
         }
