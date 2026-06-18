@@ -17,4 +17,5 @@ public class AdminRouteController {
     @PostMapping public ApiResponse<QxRoute> create(@RequestBody QxRoute r) { return ApiResponse.ok(routeService.createRoute(r)); }
     @PutMapping("/{id}") public ApiResponse<QxRoute> update(@PathVariable Long id, @RequestBody QxRoute p) { return ApiResponse.ok(routeService.updateRoute(id, p)); }
     @DeleteMapping("/{id}") public ApiResponse<Void> delete(@PathVariable Long id) { routeService.deleteRoute(id); return ApiResponse.ok(); }
+    @PutMapping("/{id}/status") public ApiResponse<QxRoute> toggleStatus(@PathVariable Long id, @RequestParam int status) { var p = new QxRoute(); p.setStatus(status); return ApiResponse.ok(routeService.updateRoute(id, p)); }
 }
