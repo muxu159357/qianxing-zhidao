@@ -304,7 +304,7 @@ Page({
 
     var self = this
     api.aiChat(content).then(function (data) {
-      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。');
+      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。', data.actions);
       self.setData({ isTyping: false });
       self.scrollToBottom();
     }).catch(function () {
@@ -326,7 +326,7 @@ Page({
 
     var self = this
     api.aiChat(question).then(function (data) {
-      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。');
+      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。', data.actions);
       self.setData({ isTyping: false });
       self.scrollToBottom();
     }).catch(function () {
@@ -381,13 +381,32 @@ Page({
     }, 20)
   },
 
-  addAIMessage(content) {
+  addAIMessage(content, actions) {
     var clean = (content || '').replace(/\*\*/g, '').replace(/###?\s/g, '').replace(/```/g, '').replace(/\n{3,}/g, '\n\n').trim()
     if (!clean) clean = '智能助手正在为你分析，请稍后再次提问。'
-    var msg = { id: ++this._msgId, type: 'ai', content: '' }
+    var msg = { id: ++this._msgId, type: 'ai', content: '', actions: actions || [] }
     var messages = this.data.messages.slice().concat([msg])
     this.setData({ messages: messages })
     this._startTypewriter(msg.id, clean)
+  },
+
+  onActionTap(e) {
+    var action = e.currentTarget.dataset.action
+    if (!action) return
+    if (action.type === 'navigate' && action.page) {
+      var tabPages = ['pages/index/index', 'pages/guide/guide', 'pages/my-trips/my-trips']
+      var isTab = tabPages.indexOf(action.page.replace(/^\//, '')) !== -1
+      var params = action.params || {}
+      var query = ''
+      Object.keys(params).forEach(function (k) { query += (query ? '&' : '?') + k + '=' + encodeURIComponent(params[k]) })
+      if (isTab) wx.switchTab({ url: '/' + action.page.replace(/^\//, '') })
+      else wx.navigateTo({ url: '/' + action.page.replace(/^\//, '') + query })
+    } else if (action.type === 'create_ai_plan') {
+      var p = action.params || {}
+      var msg = '请帮我规划一条贵州旅游路线：' + (p.days || 3) + '天，喜欢' + (p.interests ? p.interests.join('、') : '自然风光') + '，节奏' + (p.pace || '轻松')
+      this.setData({ inputValue: msg })
+      this.sendMessage()
+    }
   },
 
   addUserMessage(content) {

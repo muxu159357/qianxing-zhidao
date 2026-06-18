@@ -14,6 +14,7 @@ import com.qianxing.zhidao.route.mapper.QxRouteMapper;
 import com.qianxing.zhidao.scenic.entity.QxScenicSpot;
 import com.qianxing.zhidao.scenic.mapper.QxScenicSpotMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.qianxing.zhidao.ai.action.AiAction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,10 +171,18 @@ public class AiService {
         r.put("answer", answer);
         r.put("outOfScope", outOfScope);
         r.put("confidence", confidence);
+        r.put("actions", outOfScope ? List.of(
+                AiAction.navigate("规划贵州行程", "告诉我你的喜好，帮你规划一条贵州路线", "/pages/guide/guide", Map.of()),
+                AiAction.navigate("查看推荐路线", "浏览已有的贵州旅游路线", "/pages/index/index", Map.of())
+        ) : List.of(
+                AiAction.navigate("查看景点详情", "了解贵州必去景点", "/pages/knowledge/knowledge", Map.of()),
+                AiAction.navigate("查看推荐路线", "浏览精品贵州旅游路线", "/pages/route-detail/route-detail", Map.of("id", "route-1")),
+                AiAction.navigate("我的行程", "管理已保存的行程", "/pages/my-trips/my-trips", Map.of())
+        ));
         r.put("relatedScenicIds", List.of());
         r.put("relatedRouteIds", List.of());
         r.put("knowledgeRefs", List.of());
-        r.put("suggestedActions", outOfScope ? List.of("规划贵州行程", "查看推荐路线") : List.of("查看景点详情", "规划我的行程"));
+        r.put("suggestedActions", List.of());
         r.put("riskTips", List.of());
         return r;
     }

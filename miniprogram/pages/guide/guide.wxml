@@ -6,7 +6,12 @@
         <!-- AI message: avatar left, bubble right -->
         <view class="msg-row msg-ai" wx:if="{{item.type === 'ai'}}">
           <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
-          <view class="bubble bubble-ai">{{item.content}}</view>
+          <view class="bubble-wrap">
+            <view class="bubble bubble-ai">{{item.content}}</view>
+            <view class="ai-actions" wx:if="{{item.actions && item.actions.length > 0}}">
+              <view class="ai-action-btn" wx:for="{{item.actions}}" wx:key="label" wx:for-item="action" bindtap="onActionTap" data-action="{{action}}">{{action.label}}</view>
+            </view>
+          </view>
         </view>
         <!-- User message: bubble left, avatar right -->
         <view class="msg-row msg-user" wx:else>
