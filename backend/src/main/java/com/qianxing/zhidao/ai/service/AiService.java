@@ -159,7 +159,7 @@ public class AiService {
         return 3;
     }
 
-    static String sanitizeAnswer(String text) {
+    public static String sanitizeAnswer(String text) {
         if (text == null || text.isBlank()) return null;
         String t = text
                 .replace("**", "")
