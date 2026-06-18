@@ -9,7 +9,8 @@ Page({
   data: {
     attraction: null,
     relatedRoutes: [],
-    scenicCoverImage: ''
+    scenicCoverImage: '',
+    knowledgeRelations: null
   },
 
   onShow() { if (!auth.requireLoginRedirect()) return },
