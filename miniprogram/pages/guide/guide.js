@@ -46,6 +46,8 @@ Page({
     '适合什么人'
   ],
 
+  onShow() { if (!auth.requireLoginRedirect()) return },
+
   onLoad() {
     this.loadKnowledgeBase();
     var handledPending = this.checkPendingContext();

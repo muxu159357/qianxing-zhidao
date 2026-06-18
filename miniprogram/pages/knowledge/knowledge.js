@@ -1,5 +1,6 @@
 // pages/knowledge/knowledge.js
 const mock = require('../../utils/mock');
+var auth = require('../../utils/auth')
 var api = require('../../utils/api');
 var adapters = require('../../utils/adapters');
 
@@ -24,7 +25,7 @@ Page({
   },
 
   onShow() {
-    // 从 mock 重新加载，保持数据新鲜
+    if (!auth.requireLoginRedirect()) return
     this.loadKnowledge();
   },
 

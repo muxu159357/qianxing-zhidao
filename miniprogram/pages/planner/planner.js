@@ -1,5 +1,6 @@
 const mock = require('../../utils/mock')
 
+var auth = require('../../utils/auth')
 Page({
   data: {
     interestTags: [],
@@ -10,6 +11,8 @@ Page({
     physicalLevel: '适中',
     pace: '均衡'
   },
+
+  onShow() { if (!auth.requireLoginRedirect()) return },
 
   onLoad() {
     mock.getInterestTags().then(tags => {

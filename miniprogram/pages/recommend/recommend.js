@@ -1,10 +1,13 @@
 var mock = require('../../utils/mock')
+var auth = require('../../utils/auth')
 var assetResolver = require('../../utils/asset-resolver')
 var api = require('../../utils/api')
 var adapters = require('../../utils/adapters')
 
 Page({
   data: { routes: [], loading: true, expandedId: null },
+
+  onShow() { if (!auth.requireLoginRedirect()) return },
 
   onLoad() {
     var self = this

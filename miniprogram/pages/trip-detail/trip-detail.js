@@ -35,6 +35,8 @@ Page({
     reviewDateText: ''
   },
 
+  onShow() { if (!auth.requireLoginRedirect()) return },
+
   onLoad(options) {
     var id = options.id
     if (!id) {

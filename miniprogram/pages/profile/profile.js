@@ -1,7 +1,10 @@
 const mock = require('../../utils/mock')
 
+var auth = require('../../utils/auth')
 Page({
   data: { loading: true, selection: null, profile: null },
+
+  onShow() { if (!auth.requireLoginRedirect()) return },
 
   onLoad() {
     const sel = wx.getStorageSync('qianxing_selection')

@@ -1,5 +1,6 @@
 // pages/scenic-detail/scenic-detail.js
 var mock = require('../../utils/mock');
+var auth = require('../../utils/auth')
 var assetResolver = require('../../utils/asset-resolver');
 var api = require('../../utils/api');
 var adapters = require('../../utils/adapters');
@@ -10,6 +11,8 @@ Page({
     relatedRoutes: [],
     scenicCoverImage: ''
   },
+
+  onShow() { if (!auth.requireLoginRedirect()) return },
 
   onLoad(options) {
     var id = options.id;

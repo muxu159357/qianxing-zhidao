@@ -17,6 +17,8 @@ Page({
     routeCoverImage: ''
   },
 
+  onShow() { if (!auth.requireLoginRedirect()) return },
+
   onLoad(options) {
     const id = options.id
     const score = parseInt(options.score) || 0
