@@ -94,10 +94,95 @@ function apiRoutesToRoutes(apiRoutes) {
   return apiRoutes.map(function (r) { return apiRouteToRoute(r) }).filter(Boolean)
 }
 
+// ============ 行程适配 ============
+
+function backendTripToUnified(apiTrip) {
+  if (!apiTrip) return null
+  return {
+    source: 'remote',
+    remoteId: apiTrip.id,
+    id: 'remote_' + apiTrip.id,
+    routeId: apiTrip.routeId,
+    routeName: apiTrip.routeName || '',
+    customName: apiTrip.customName || null,
+    displayName: apiTrip.customName || apiTrip.routeName || '',
+    status: apiTrip.status || 'upcoming',
+    days: apiTrip.dayCount || 1,
+    dayCount: apiTrip.dayCount || 1,
+    physicalLevel: apiTrip.energyLevel || '适中',
+    energyLevel: apiTrip.energyLevel || '适中',
+    spotCount: 0,
+    spotNames: [],
+    spotIds: [],
+    dayPlans: [],
+    score: 0,
+    savedAt: apiTrip.createdAt || '',
+    _rawSavedAt: apiTrip.createdAt || '',
+    startedAt: apiTrip.startedAt || null,
+    completedAt: apiTrip.completedAt || null,
+    travelStartDate: apiTrip.travelStartDate || null,
+    travelEndDate: apiTrip.travelEndDate || null,
+    safetyChecklist: [],
+    review: { rating: 0, highlights: '', regrets: '', nextAdvice: '', updatedAt: null },
+    routeSnapshotJson: apiTrip.routeSnapshotJson || null,
+    planSnapshotJson: apiTrip.planSnapshotJson || null
+  }
+}
+
+function localTripToUnified(trip) {
+  if (!trip) return null
+  return {
+    source: 'local',
+    localId: trip.id,
+    remoteId: null,
+    id: trip.id,
+    routeId: trip.routeId,
+    routeName: trip.routeName || '',
+    customName: trip.customName || null,
+    displayName: trip.customName || trip.routeName || '',
+    status: trip.status || 'upcoming',
+    days: trip.dayCount || trip.days || 1,
+    dayCount: trip.dayCount || trip.days || 1,
+    physicalLevel: trip.energyLevel || trip.physicalLevel || '适中',
+    energyLevel: trip.energyLevel || trip.physicalLevel || '适中',
+    spotCount: trip.spotCount || (trip.spotNames ? trip.spotNames.length : 0),
+    spotNames: trip.spotNames || [],
+    spotIds: trip.spotIds || [],
+    dayPlans: trip.dayPlans || [],
+    score: trip.score || 0,
+    savedAt: trip.savedAt || trip._rawSavedAt || '',
+    _rawSavedAt: trip._rawSavedAt || trip.savedAt || '',
+    startedAt: trip.startedAt || null,
+    completedAt: trip.completedAt || null,
+    travelStartDate: trip.travelStartDate || null,
+    travelEndDate: trip.travelEndDate || null,
+    safetyChecklist: trip.safetyChecklist || [],
+    review: trip.review || { rating: 0, highlights: '', regrets: '', nextAdvice: '', updatedAt: null }
+  }
+}
+
+function unifiedTripToCreateRequest(trip, route) {
+  return {
+    routeId: route && route._dbId ? route._dbId : null,
+    routeName: trip.routeName || (route ? route.name : ''),
+    customName: trip.customName || null,
+    status: trip.status || 'upcoming',
+    dayCount: trip.dayCount || trip.days || 1,
+    energyLevel: trip.energyLevel || trip.physicalLevel || '适中',
+    travelStartDate: trip.travelStartDate || null,
+    travelEndDate: trip.travelEndDate || null,
+    routeSnapshotJson: route ? JSON.stringify(route) : null,
+    planSnapshotJson: trip.dayPlans ? JSON.stringify({ dayPlans: trip.dayPlans, spotNames: trip.spotNames }) : null
+  }
+}
+
 module.exports = {
   parseJsonArray: parseJsonArray,
   scenicSpotToAttraction: scenicSpotToAttraction,
   apiRouteToRoute: apiRouteToRoute,
   articleToKnowledge: articleToKnowledge,
-  apiRoutesToRoutes: apiRoutesToRoutes
+  apiRoutesToRoutes: apiRoutesToRoutes,
+  backendTripToUnified: backendTripToUnified,
+  localTripToUnified: localTripToUnified,
+  unifiedTripToCreateRequest: unifiedTripToCreateRequest
 }

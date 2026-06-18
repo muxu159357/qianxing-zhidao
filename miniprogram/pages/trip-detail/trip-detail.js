@@ -1,6 +1,8 @@
 // pages/trip-detail/trip-detail.js
 var tripStorage = require('../../utils/trip-storage')
 var auth = require('../../utils/auth')
+var api = require('../../utils/api')
+var adapters = require('../../utils/adapters')
 
 Page({
   data: {
@@ -701,21 +703,33 @@ Page({
   onDeleteTrip() {
     var trip = this.data.trip
     if (!trip) return
+    var self = this
     wx.showModal({
       title: '确认删除',
       content: '确定要删除「' + (trip.customName || trip.routeName || '该行程') + '」吗？删除后无法恢复。',
       confirmText: '删除', confirmColor: '#ef4444',
       success: function (res) {
         if (!res.confirm) return
-        try {
-          tripStorage.deleteTrip(trip.id)
-          var app = getApp()
-          if (app && app.globalData) app.globalData.myTrips = tripStorage.getTrips()
-        } catch (e) { wx.showToast({ title: '删除失败，请重试', icon: 'none' }); return }
-        wx.showToast({ title: '已删除', icon: 'success', duration: 1200 })
-        setTimeout(function () { wx.switchTab({ url: '/pages/my-trips/my-trips' }) }, 1200)
+        var done = function () {
+          wx.showToast({ title: '已删除', icon: 'success', duration: 1200 })
+          setTimeout(function () { wx.switchTab({ url: '/pages/my-trips/my-trips' }) }, 1200)
+        }
+        if (trip.source === 'remote' && trip.remoteId) {
+          api.deleteTrip(trip.remoteId).then(done).catch(function () { self._localDelete(trip, done) })
+        } else {
+          self._localDelete(trip, done)
+        }
       }
     })
+  },
+
+  _localDelete: function (trip, done) {
+    try {
+      tripStorage.deleteTrip(trip.id || trip.localId)
+      var app = getApp()
+      if (app && app.globalData) app.globalData.myTrips = tripStorage.getTrips()
+      done()
+    } catch (e) { wx.showToast({ title: '删除失败，请重试', icon: 'none' }) }
   },
 
   onViewScenic(e) {

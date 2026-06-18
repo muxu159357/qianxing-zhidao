@@ -2,6 +2,8 @@
 var app = getApp();
 
 var tripStorage = require('../../utils/trip-storage')
+var api = require('../../utils/api')
+var adapters = require('../../utils/adapters')
 var auth = require('../../utils/auth')
 
 Page({
@@ -27,13 +29,12 @@ Page({
     }
   },
 
-  onShow() { auth.requireLoginRedirect() },
-
   onLoad() {
     this.loadTrips();
   },
 
   onShow() {
+    if (!auth.requireLoginRedirect()) return
     this.loadTrips();
   },
 
