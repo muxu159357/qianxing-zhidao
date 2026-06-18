@@ -61,6 +61,7 @@ function request(path, options) {
 // ============ 公开接口 ============
 
 function searchAll(keyword) { return request('/api/app/search', { params: { q: keyword, limit: 5 } }) }
+function getHomeSummary() { return request('/api/app/home/summary') }
 function getScenicSpots(params) { return request('/api/app/scenic/spots', { params: params }) }
 
 function getScenicSpot(id) {
@@ -187,6 +188,7 @@ module.exports = {
   BASE_URL: BASE_URL,
   request: request,
   searchAll: searchAll,
+  getHomeSummary: getHomeSummary,
   getScenicSpots: getScenicSpots,
   getScenicSpot: getScenicSpot,
   getRoutes: getRoutes,
