@@ -1,6 +1,7 @@
 var mock = require('../../utils/mock')
 var tripStorage = require('../../utils/trip-storage')
 var assetResolver = require('../../utils/asset-resolver')
+var auth = require('../../utils/auth')
 
 Page({
   data: {
@@ -252,6 +253,17 @@ Page({
   },
 
   onSaveToMyTrips() {
+    var self = this
+    auth.ensureLogin({
+      title: '保存行程需要登录',
+      content: '登录后可将路线保存到我的行程，方便随时查看。'
+    }).then(function (loggedIn) {
+      if (!loggedIn) return
+      self._doSaveTrip()
+    })
+  },
+
+  _doSaveTrip() {
     const { route, score } = this.data
     if (!route) return
 

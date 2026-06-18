@@ -1,5 +1,6 @@
 // pages/trip-detail/trip-detail.js
 var tripStorage = require('../../utils/trip-storage')
+var auth = require('../../utils/auth')
 
 Page({
   data: {
@@ -604,6 +605,14 @@ Page({
   /* ========== Status Actions ========== */
 
   onStartTrip() {
+    var self = this
+    auth.ensureLogin({ title: '需要登录', content: '登录后可管理行程状态，同步行程数据。' }).then(function (loggedIn) {
+      if (!loggedIn) return
+      self._doStartTrip()
+    })
+  },
+
+  _doStartTrip() {
     var trip = this.data.trip
     if (!trip || trip.status !== 'upcoming') return
     var self = this
@@ -619,6 +628,14 @@ Page({
   },
 
   onCompleteTrip() {
+    var self = this
+    auth.ensureLogin({ title: '需要登录', content: '登录后可管理行程状态，同步行程数据。' }).then(function (loggedIn) {
+      if (!loggedIn) return
+      self._doCompleteTrip()
+    })
+  },
+
+  _doCompleteTrip() {
     var trip = this.data.trip
     if (!trip || trip.status !== 'active') return
     var self = this
