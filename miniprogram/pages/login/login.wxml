@@ -38,8 +38,7 @@
 
     <view class="login-error" wx:if="{{errorMsg}}">{{errorMsg}}</view>
 
-    <view class="login-footer">
-      登录后可使用路线规划、我的行程与个性化推荐
-    </view>
+    <view class="login-footer">登录后可使用路线规划、我的行程与个性化推荐</view>
+    <view class="login-skip" bindtap="handleSkip">先看看，稍后登录</view>
   </view>
 </view>

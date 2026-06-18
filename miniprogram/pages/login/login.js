@@ -42,5 +42,6 @@ Page({
           self.setData({ errorMsg: '微信登录暂不可用，请稍后重试' })
         }
       })
-  }
+  },
+  handleSkip() { wx.switchTab({ url: '/pages/index/index' }) }
 })
