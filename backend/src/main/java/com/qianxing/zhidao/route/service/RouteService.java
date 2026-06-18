@@ -69,4 +69,25 @@ public class RouteService {
         qw.last("LIMIT " + Math.min(limit, 20));
         return routeMapper.selectList(qw);
     }
+
+    public PageResult<QxRoute> adminList(String keyword, int page, int size) {
+        LambdaQueryWrapper<QxRoute> qw = new LambdaQueryWrapper<>();
+        if (keyword != null && !keyword.isBlank()) qw.like(QxRoute::getName, keyword);
+        qw.orderByAsc(QxRoute::getSortOrder);
+        Page<QxRoute> mp = new Page<>(page, size);
+        Page<QxRoute> r = routeMapper.selectPage(mp, qw);
+        return PageResult.of(r.getRecords(), r.getTotal(), page, size);
+    }
+    public QxRoute createRoute(QxRoute r) { routeMapper.insert(r); return r; }
+    public QxRoute updateRoute(Long id, QxRoute p) {
+        QxRoute r = routeMapper.selectById(id);
+        if (r == null) throw new BusinessException(404, "路线不存在");
+        if (p.getName() != null) r.setName(p.getName());
+        if (p.getDayCount() != null) r.setDayCount(p.getDayCount());
+        if (p.getEnergyLevel() != null) r.setEnergyLevel(p.getEnergyLevel());
+        if (p.getStatus() != null) r.setStatus(p.getStatus());
+        routeMapper.updateById(r);
+        return r;
+    }
+    public void deleteRoute(Long id) { routeMapper.deleteById(id); }
 }
