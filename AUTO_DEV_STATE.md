@@ -1,36 +1,34 @@
-# 黔行智导 — 全项目自动开发总控协议 · 状态追踪
-
-> 当前状态：检查点修复完成，等待用户确认进入 PHASE-5-E
-
----
-
-## 当前状态快照
+# 黔行智导 — 自动开发状态
 
 ```yaml
-current_phase: PHASE-CHECKPOINT-FIX
-current_stage: RULE_REVIEW_AND_PAGINATION_DEPENDENCY_FIX
-current_status: waiting_user_confirm_continue_phase_5_e
-last_completed_phase: PHASE-5-D
-last_completed_status: auth-token-integration-complete
-next_planned_phase: PHASE-5-E
-next_action: wait_user_confirm_continue_public_api_integration
-p0_count: 0
-p1_count: 0
-p2_count: 0
+phase: CONTINUOUS-DEV
+status: active
+last_commit: 1c82ae9
+total_commits_session: 20
+backend_files: 80+
+admin_controllers: 8
+test_count: 8
+weather_cities: 贵阳/安顺/遵义/铜仁/毕节/黔东南/黔南/黔西南
+redis: memory_fallback
 ```
 
-## 检查点修复完成项
+## 已覆盖优先级
 
-| 项目 | 修复前 | 修复后 |
-|------|--------|--------|
-| mybatis-plus-jsqlparser | 缺失，P2 风险 | 已添加 3.5.9 |
-| code-reviewer | 未调用 | 已审查，通过 |
-| 分页接口 | 可能 count 不准确 | 零 500，数据正确 |
+| P | 状态 |
+|----|------|
+| P0 核心可用 | ✅ |
+| P1 AI回答精修 | ✅ |
+| P2 AI线路草稿 | ✅ 内存版 |
+| P3 AI动作协议 | ✅ |
+| P4 天气模块 | ✅ 高德 |
+| P5 行程进度 | ✅ |
+| P6 后台管理 | ✅ 8控制器 |
+| P7 Web前端 | ✅ API接入 |
+| P8 测试 | ✅ 8个 |
 
-## 中文提交规则
+## 待做
 
-已写入 `AUTO_DEV_RULES.md` 第十五节，后续所有 commit 必须使用中文。
-
-## 暂停状态
-
-禁止进入 PHASE-5-E，等待用户确认。
+- 小程序定位授权
+- Redis替换内存缓存
+- Web后台管理页面完善
+- 小程序project.config.json appid
