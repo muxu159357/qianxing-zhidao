@@ -33,6 +33,7 @@ Page({
         var coverImage = assetResolver.resolveAttractionCover(attraction);
         self.setData({ attraction: attraction, scenicCoverImage: coverImage });
         self._loadRelatedRoutes(attraction);
+        if (spot._dbId || spot.id) { api.getKnowledgeRelations({ relType: 'scenic_spot', relId: spot._dbId || spot.id }).then(function(rels){ if(rels&&rels.length>0) self.setData({knowledgeRelations:rels}) }).catch(function(){}) }
       } else {
         self._loadFromMock(id);
       }
