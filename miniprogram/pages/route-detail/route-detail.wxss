@@ -708,3 +708,9 @@
   color: #909399;
   line-height: 1.55;
 }
+
+/* weather card */
+.weather-card { background: rgba(47,107,255,0.04); border-radius: 20rpx; padding: 24rpx; border: 1rpx solid rgba(47,107,255,0.12); }
+.weather-temp { font-size: 36rpx; font-weight: 700; color: #2f6bff; margin-bottom: 8rpx; }
+.weather-desc { font-size: 26rpx; color: #4d5f6f; margin-bottom: 6rpx; }
+.weather-date { font-size: 22rpx; color: #8a9bb5; }

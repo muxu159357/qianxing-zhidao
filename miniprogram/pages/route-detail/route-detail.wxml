@@ -127,6 +127,15 @@
       </view>
     </view>
 
+    <view class="section" wx:if="{{scenicWeather}}">
+      <view class="section-title">景区天气</view>
+      <view class="weather-card">
+        <view class="weather-temp">{{scenicWeather.temperatureLow}}°C ~ {{scenicWeather.temperatureHigh}}°C</view>
+        <view class="weather-desc">{{scenicWeather.weatherDesc}} · {{scenicWeather.windDirection}}{{scenicWeather.windLevel}}级</view>
+        <view class="weather-date">{{scenicWeather.weatherDate}} · 以官方公告为准</view>
+      </view>
+    </view>
+
     <!-- 注意事项 -->
     <view class="section">
       <view class="section-title">注意事项</view>
