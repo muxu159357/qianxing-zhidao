@@ -16,5 +16,16 @@ jwt:
   expiration-ms: 86400000
 
 wx:
-  appid: ${WX_APPID:}
+  appid: ${WX_APPID:wxaba2cf77773a606f}
   secret: ${WX_SECRET:}
+
+llm:
+  api-base-url: ${LLM_API_BASE_URL:}
+  api-key: ${LLM_API_KEY:}
+  model: ${LLM_MODEL:}
+
+weather:
+  provider: ${WEATHER_PROVIDER:}
+  api-base-url: ${WEATHER_API_BASE_URL:}
+  api-key: ${WEATHER_API_KEY:}
+  update-enabled: ${WEATHER_UPDATE_ENABLED:false}
