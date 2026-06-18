@@ -117,30 +117,14 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { PictureFilled, MapLocation, Collection, TrendCharts } from '@element-plus/icons-vue'
 import gsap from 'gsap'
-import { attractions as mockAttractions } from '@shared/mock/attractions'
-
-interface EditableAttraction {
-  id: string
-  name: string
-  city: string
-  category: string
-  rating: number
-  price: number
-  duration: string
-  description: string
-  highlights: string[]
-  tips: string
-  tags: string[]
-}
+import { useAdminApi, type ScenicItem } from '@/composables/useAdminApi'
 
 const router = useRouter()
 const headerRef = ref<HTMLElement | null>(null)
 const statsRef = ref<HTMLElement | null>(null)
 const gridRef = ref<HTMLElement | null>(null)
-
-const attractions = ref<EditableAttraction[]>(
-  mockAttractions.map((a) => ({ ...a, tags: [...a.tags], highlights: [...a.highlights] }))
-)
+const adminApi = useAdminApi()
+const attractions = ref<ScenicItem[]>([])
 const searchKeyword = ref('')
 const editingRow = ref<EditableAttraction | null>(null)
 const editForm = ref({ name: '', city: '', price: 0, category: '', description: '' })
@@ -174,7 +158,11 @@ const categoryStats = computed(() => {
   return Object.entries(map).map(([name, count]) => ({ name, count, percent: Math.round((count / total) * 100) }))
 })
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    const data = await adminApi.listScenic({ page: '1', size: '100' })
+    attractions.value = (data.records || []).map(a => ({ ...a, price: a.ticketPrice } as any))
+  } catch (e) { /* fallback to empty, page still renders */ }
   const tl = gsap.timeline()
   tl.from(headerRef.value, { y: 24, opacity: 0, duration: 0.5, ease: 'power3.out' })
   const statCards = statsRef.value?.querySelectorAll('.stat-card') ?? []
