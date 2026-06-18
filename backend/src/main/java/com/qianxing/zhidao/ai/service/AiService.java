@@ -126,7 +126,7 @@ public class AiService {
         // Tier 1: travel — call LLM
         if (tier == 1 && llmClient.isConfigured()) {
             try {
-                String prompt = SYSTEM_PROMPT + buildTripContext(userId, q) + buildWeatherContext(q);
+                String prompt = SYSTEM_PROMPT + buildTripContext(userId, q) + buildWeatherContext(q) + buildDatabaseContext();
                 String rawAnswer = llmClient.chat(prompt, q);
                 return buildChatResult(sanitizeAnswer(rawAnswer), false, 0.9, q);
             } catch (Exception e) {
