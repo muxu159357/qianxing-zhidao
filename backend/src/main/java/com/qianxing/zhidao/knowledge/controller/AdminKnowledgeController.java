@@ -38,4 +38,5 @@ public class AdminKnowledgeController {
         return ApiResponse.ok(a);
     }
     @DeleteMapping("/articles/{id}") public ApiResponse<Void> delete(@PathVariable Long id) { articleMapper.deleteById(id); return ApiResponse.ok(); }
+    @PutMapping("/articles/{id}/status") public ApiResponse<QxKnowledgeArticle> toggleStatus(@PathVariable Long id, @RequestParam int status) { var a = articleMapper.selectById(id); if (a==null) throw new BusinessException(404,"文章不存在"); a.setStatus(status); articleMapper.updateById(a); return ApiResponse.ok(a); }
 }
