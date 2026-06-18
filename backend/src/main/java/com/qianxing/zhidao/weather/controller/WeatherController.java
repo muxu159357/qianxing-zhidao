@@ -26,9 +26,9 @@ public class WeatherController {
         return ApiResponse.ok(weatherService.getScenicWeather(scenicId));
     }
 
-    @Operation(summary = "刷新天气数据")
-    @PostMapping("/refresh")
-    public ApiResponse<String> refresh() {
-        return ApiResponse.ok(weatherService.refreshWeather());
+    @Operation(summary = "刷新景区天气")
+    @PostMapping("/scenic/{scenicId}/refresh")
+    public ApiResponse<List<QxScenicWeather>> refreshScenicWeather(@PathVariable Long scenicId) {
+        return ApiResponse.ok(weatherService.refreshScenicWeather(scenicId));
     }
 }
