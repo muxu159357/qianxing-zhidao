@@ -5,11 +5,9 @@
 
 ---
 
-## 2026-06-18 — Redis 不可用
+## 2026-06-18 — Redis 不可用（已降级解决）
 
-- 所属模块：AI 线路草稿（P2）
-- 阻塞原因：本地未安装 Redis，pom.xml 无依赖
-- 已尝试：方案文档就绪（docs/AI_ACTION_AND_DRAFT_PLAN.md）
-- 跳过方式：先推进 P1/P3 功能，Redis 草稿后续接入
-- 风险：AI 草稿无法持久化，不影响当前对话和行程功能
-- 恢复条件：安装 Redis + 添加 spring-boot-starter-data-redis
+- 模块：AI 线路草稿（P2）
+- 当前：ConcurrentHashMap 内存缓存，TTL=3600s，commit 4febdd1
+- 风险：重启后草稿丢失（开发阶段可接受）
+- 后续：安装 Redis 后替换 AiPlanDraftCache
