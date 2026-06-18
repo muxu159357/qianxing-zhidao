@@ -2,6 +2,7 @@
 var app = getApp();
 
 var tripStorage = require('../../utils/trip-storage')
+var auth = require('../../utils/auth')
 
 Page({
   data: {
@@ -25,6 +26,8 @@ Page({
       latestTripName: ''
     }
   },
+
+  onShow() { auth.requireLoginRedirect() },
 
   onLoad() {
     this.loadTrips();

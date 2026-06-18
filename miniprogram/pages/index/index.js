@@ -2,6 +2,7 @@ var mock = require('../../utils/mock')
 var assetResolver = require('../../utils/asset-resolver')
 var api = require('../../utils/api')
 var adapters = require('../../utils/adapters')
+var auth = require('../../utils/auth')
 
 Page({
   data: {
@@ -13,6 +14,8 @@ Page({
     ],
     topRoutes: []
   },
+
+  onShow() { auth.requireLoginRedirect() },
 
   onLoad() {
     var that = this
