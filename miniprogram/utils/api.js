@@ -60,9 +60,8 @@ function request(path, options) {
 
 // ============ 公开接口 ============
 
-function getScenicSpots(params) {
-  return request('/api/app/scenic/spots', { params: params })
-}
+function searchAll(keyword) { return request('/api/app/search', { params: { q: keyword, limit: 5 } }) }
+function getScenicSpots(params) { return request('/api/app/scenic/spots', { params: params }) }
 
 function getScenicSpot(id) {
   return request('/api/app/scenic/spots/' + id)
@@ -187,6 +186,7 @@ function confirmAiPlanDraft(draftId) { return request('/api/app/ai/plan-drafts/'
 module.exports = {
   BASE_URL: BASE_URL,
   request: request,
+  searchAll: searchAll,
   getScenicSpots: getScenicSpots,
   getScenicSpot: getScenicSpot,
   getRoutes: getRoutes,
