@@ -132,3 +132,25 @@
 - **当前状态**：暂停开发，等待用户确认继续 PHASE-5-E
 - **下一步**：用户确认后进入 PHASE-5-E 公开接口联调
 - **是否需要用户确认**：是
+
+## 2026-06-18 — PHASE-CHECKPOINT-FIX 检查点规则补全与分页风险修复
+
+- **阶段**：PHASE-CHECKPOINT-FIX
+- **本次目标**：补充 mybatis-plus-jsqlparser 依赖 + 调用 code-reviewer
+- **修改文件**：backend/pom.xml
+- **新增文件**：无
+- **删除文件**：无
+- **执行检查**：
+  - mvn clean compile: BUILD SUCCESS
+  - mvn test: BUILD SUCCESS (1 test, 0 failures)
+  - 景点分页: code=0, 10 records ✅
+  - 路线分页: code=0, 5 records ✅
+  - 知识库分页: code=0, 7 records ✅
+  - 零 500 错误
+- **code-reviewer 结果**：APPROVE（依赖版本正确、无无关升级、无安全风险）
+- **未改**：小程序 0、数据库 0、业务代码 0
+- **commit**：待提交（中文）
+- **push**：待推送
+- **当前状态**：检查点修复完成，P2 分页风险已消除
+- **下一步**：等待用户确认进入 PHASE-5-E
+- **是否需要用户确认**：是
