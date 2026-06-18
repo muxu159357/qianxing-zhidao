@@ -1,4 +1,6 @@
 // pages/guide/guide.js
+var api = require('../../utils/api')
+var auth = require('../../utils/auth')
 var tripRules = require('./guide-trip-rules')
 var attractionRules = require('./guide-attraction-rules')
 
@@ -295,18 +297,20 @@ Page({
 
     this.addUserMessage(content);
     this.setData({ inputValue: '' });
-
     this.setData({ isTyping: true });
     this.scrollToBottom();
 
     var self = this
-    var delay = 500 + Math.floor(Math.random() * 500);
-    setTimeout(function () {
+    api.aiChat(content).then(function (data) {
+      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。');
+      self.setData({ isTyping: false });
+      self.scrollToBottom();
+    }).catch(function () {
       var answer = self.resolveAnswer(content);
       self.addAIMessage(answer);
       self.setData({ isTyping: false });
       self.scrollToBottom();
-    }, delay);
+    })
   },
 
   onQuickTap(e) {
@@ -318,13 +322,16 @@ Page({
     this.scrollToBottom();
 
     var self = this
-    var delay = 500 + Math.floor(Math.random() * 500);
-    setTimeout(function () {
+    api.aiChat(question).then(function (data) {
+      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。');
+      self.setData({ isTyping: false });
+      self.scrollToBottom();
+    }).catch(function () {
       var answer = self.resolveAnswer(question);
       self.addAIMessage(answer);
       self.setData({ isTyping: false });
       self.scrollToBottom();
-    }, delay);
+    })
   },
 
   resolveAnswer(userMessage) {
