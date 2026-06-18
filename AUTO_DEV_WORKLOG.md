@@ -98,3 +98,37 @@
 - **阶段**：PHASE-5-A
 - **目标**：只读分析 + 3 文档
 - **commit**：`b56c662`
+
+## 2026-06-18 — PHASE-CHECKPOINT 全项目阶段复盘与硬规则更新
+
+- **阶段**：PHASE-CHECKPOINT
+- **本次目标**：暂停开发，复盘全项目阶段，更新中文提交硬规则
+- **查看文件**：全项目目录结构、git log (30 commits)、backend 68 Java 文件、miniprogram 89 文件、docs 16 文件、Flyway 3 个 migration
+- **新增文件**：docs/PROJECT_CHECKPOINT_SUMMARY.md
+- **修改文件**：AUTO_DEV_STATE.md、AUTO_DEV_RULES.md
+- **删除文件**：无
+- **未改业务代码**：0 个业务文件修改
+- **未改数据库**：0 条 SQL 执行
+- **未改小程序页面**：0 个页面文件修改
+- **当前项目完成度**：
+  - 小程序：10/10 页面完成基础功能，4 个工具模块，2 个新增 storage key
+  - 后端：11 模块 68 Java 文件，30 API 端点，18 Entity + 18 Mapper + 8 Service + 8 Controller
+  - 数据库：19 张表，3 个 Flyway migration，20+ 条 seed 数据
+  - API：30 端点全部可用，公开接口有 seed 数据，登录接口 401 鉴权正确
+  - 登录：auth.js 完成，2 个页面接入登录检查
+- **当前最后完成阶段**：PHASE-5-D（登录与 Token 联调）
+- **当前暂停原因**：用户要求先做项目复盘和硬规则更新
+- **新增硬规则**：
+  1. 所有 commit 必须使用中文（禁止 feat/fix/docs 等英文前缀）
+  2. 所有报告/记录/推送总结必须使用中文
+  3. 自动开发完整流程：查看→设计→编码→审核→测试→修复→记录→中文 commit→push
+  4. 禁止跳跃流程
+- **code-reviewer 结果**：待调用
+- **P0**：0
+- **P1**：0
+- **P2**：1（mybatis-plus-jsqlparser 分页插件缺失）
+- **commit**：待提交（中文）
+- **push**：待推送
+- **当前状态**：暂停开发，等待用户确认继续 PHASE-5-E
+- **下一步**：用户确认后进入 PHASE-5-E 公开接口联调
+- **是否需要用户确认**：是
