@@ -119,7 +119,7 @@ public class AiService {
         if (tier == 1 && llmClient.isConfigured()) {
             try {
                 String rawAnswer = llmClient.chat(SYSTEM_PROMPT, q);
-                return buildChatResult(sanitizeAnswer(rawAnswer), false, 0.9);
+                return buildChatResult(sanitizeAnswer(rawAnswer), false, 0.9, q);
             } catch (Exception e) {
                 log.error("LLM failed, fallback to rule: {}", e.getMessage());
                 return ruleBasedAnswer(q);
@@ -131,7 +131,7 @@ public class AiService {
         // Tier 3: gently redirect
         return buildChatResult(
                 "这个问题不属于贵州旅游助手的服务范围，我不能提供这方面的建议。\n\n如果你正在准备出行，我可以继续帮你规划贵州路线、推荐适合的景点，或者整理一份轻松的行程攻略。",
-                true, 0.1);
+                true, 0.1, null);
     }
 
     private int classifyQuestion(String q) {
@@ -166,19 +166,35 @@ public class AiService {
         return t;
     }
 
-    private Map<String, Object> buildChatResult(String answer, boolean outOfScope, double confidence) {
+    private Map<String, Object> buildChatResult(String answer, boolean outOfScope, double confidence, String question) {
         Map<String, Object> r = new LinkedHashMap<>();
         r.put("answer", answer);
         r.put("outOfScope", outOfScope);
         r.put("confidence", confidence);
-        r.put("actions", outOfScope ? List.of(
-                AiAction.navigate("规划贵州行程", "告诉我你的喜好，帮你规划一条贵州路线", "/pages/guide/guide", Map.of()),
-                AiAction.navigate("查看推荐路线", "浏览已有的贵州旅游路线", "/pages/index/index", Map.of())
-        ) : List.of(
-                AiAction.navigate("查看景点详情", "了解贵州必去景点", "/pages/knowledge/knowledge", Map.of()),
-                AiAction.navigate("查看推荐路线", "浏览精品贵州旅游路线", "/pages/route-detail/route-detail", Map.of("id", "route-1")),
-                AiAction.navigate("我的行程", "管理已保存的行程", "/pages/my-trips/my-trips", Map.of())
-        ));
+
+        List<AiAction> actions = new ArrayList<>();
+        if (outOfScope) {
+            actions.add(AiAction.navigate("规划贵州行程", "告诉我你的喜好，帮你规划路线", "/pages/guide/guide", Map.of()));
+            actions.add(AiAction.navigate("查看推荐路线", "浏览已有的贵州旅游路线", "/pages/index/index", Map.of()));
+        } else {
+            // 根据问题动态匹配景点/路线的导航按钮
+            List<QxScenicSpot> relatedSpots = scenicSpotMapper.selectList(
+                    new LambdaQueryWrapper<QxScenicSpot>().eq(QxScenicSpot::getStatus, 1));
+            for (QxScenicSpot spot : relatedSpots) {
+                if (question != null && question.contains(spot.getName())) {
+                    actions.add(AiAction.navigate("查看" + spot.getName(), "了解" + spot.getName() + "的亮点与游玩建议",
+                            "/pages/scenic-detail/scenic-detail", Map.of("id", spot.getSpotCode())));
+                    if (actions.size() >= 2) break;
+                }
+            }
+            // 默认动作
+            if (actions.isEmpty()) {
+                actions.add(AiAction.navigate("查看必去景点", "浏览贵州精选景点信息", "/pages/knowledge/knowledge", Map.of()));
+            }
+            actions.add(AiAction.navigate("查看推荐路线", "浏览精品旅游路线", "/pages/index/index", Map.of()));
+            actions.add(AiAction.createPlan("生成行程攻略", "根据你的偏好生成路线方案", Map.of("days", 3, "pace", "轻松")));
+        }
+        r.put("actions", actions);
         r.put("relatedScenicIds", List.of());
         r.put("relatedRouteIds", List.of());
         r.put("knowledgeRefs", List.of());
@@ -188,35 +204,32 @@ public class AiService {
     }
 
     private Map<String, Object> simpleAnswer(String answer, boolean oos) {
-        return buildChatResult(answer, oos, 0.5);
+        return buildChatResult(answer, oos, 0.5, null);
     }
 
     private Map<String, Object> ruleBasedAnswer(String q) {
         // Try keyword match first
         for (var entry : RULE_ANSWERS.entrySet()) {
-            if (q.contains(entry.getKey())) return buildChatResult(entry.getValue(), false, 0.85);
+            if (q.contains(entry.getKey())) return buildChatResult(entry.getValue(), false, 0.85, q);
         }
 
-        // Try knowledge base
         List<QxKnowledgeArticle> articles = articleMapper.selectList(
                 new LambdaQueryWrapper<QxKnowledgeArticle>().eq(QxKnowledgeArticle::getStatus, 1)
                         .and(w -> w.like(QxKnowledgeArticle::getQuestion, q).or().like(QxKnowledgeArticle::getAnswer, q)).last("LIMIT 3"));
 
         if (!articles.isEmpty()) {
-            return buildChatResult(articles.get(0).getAnswer(), false, 0.85);
+            return buildChatResult(articles.get(0).getAnswer(), false, 0.85, q);
         }
 
-        // Tier 2 fallback
         if (classifyQuestion(q) == 2) {
             return buildChatResult(
                     "我是黔行智导的贵州旅游AI助手，可以帮你规划贵州路线、推荐景点、美食和行程攻略。\n\n你可以直接告诉我出行天数、出发城市、喜欢自然风光还是民族文化，我会帮你整理一份适合的贵州旅行方案。",
-                    false, 0.8);
+                    false, 0.8, q);
         }
 
-        // Generic fallback
         return buildChatResult(
                 "你可以问我贵州有哪些必去景点、什么时候去最好、怎么安排三天行程、有什么特色美食等问题。\n\n告诉我你的出行天数、喜好和节奏，我来帮你规划一条合适的贵州旅行路线。",
-                classifyQuestion(q) == 3, 0.5);
+                classifyQuestion(q) == 3, 0.5, q);
     }
 
     private String buildDatabaseContext() {
