@@ -15,6 +15,8 @@ import com.qianxing.zhidao.scenic.entity.QxScenicSpot;
 import com.qianxing.zhidao.scenic.mapper.QxScenicSpotMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.qianxing.zhidao.ai.action.AiAction;
+import com.qianxing.zhidao.weather.entity.QxScenicWeather;
+import com.qianxing.zhidao.weather.mapper.QxScenicWeatherMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,18 +63,20 @@ public class AiService {
     private final QxKnowledgeArticleMapper articleMapper;
     private final QxRouteMapper routeMapper;
     private final QxScenicSpotMapper scenicSpotMapper;
+    private final QxScenicWeatherMapper weatherMapper;
     private final ObjectMapper objectMapper;
     private final LlmClient llmClient;
 
     public AiService(QxAiPlanRequestMapper planRequestMapper, QxAiPlanResultMapper planResultMapper,
                      QxKnowledgeArticleMapper articleMapper, QxRouteMapper routeMapper,
-                     QxScenicSpotMapper scenicSpotMapper, ObjectMapper objectMapper,
-                     LlmClient llmClient) {
+                     QxScenicSpotMapper scenicSpotMapper, QxScenicWeatherMapper weatherMapper,
+                     ObjectMapper objectMapper, LlmClient llmClient) {
         this.planRequestMapper = planRequestMapper;
         this.planResultMapper = planResultMapper;
         this.articleMapper = articleMapper;
         this.routeMapper = routeMapper;
         this.scenicSpotMapper = scenicSpotMapper;
+        this.weatherMapper = weatherMapper;
         this.objectMapper = objectMapper;
         this.llmClient = llmClient;
     }
@@ -118,7 +122,8 @@ public class AiService {
         // Tier 1: travel — call LLM
         if (tier == 1 && llmClient.isConfigured()) {
             try {
-                String rawAnswer = llmClient.chat(SYSTEM_PROMPT, q);
+                String prompt = SYSTEM_PROMPT + buildWeatherContext(q);
+                String rawAnswer = llmClient.chat(prompt, q);
                 return buildChatResult(sanitizeAnswer(rawAnswer), false, 0.9, q);
             } catch (Exception e) {
                 log.error("LLM failed, fallback to rule: {}", e.getMessage());
@@ -230,6 +235,30 @@ public class AiService {
         return buildChatResult(
                 "你可以问我贵州有哪些必去景点、什么时候去最好、怎么安排三天行程、有什么特色美食等问题。\n\n告诉我你的出行天数、喜好和节奏，我来帮你规划一条合适的贵州旅行路线。",
                 classifyQuestion(q) == 3, 0.5, q);
+    }
+
+    /** 当问题涉及特定景区时，附上最近的天气数据 */
+    private String buildWeatherContext(String q) {
+        if (q == null) return "";
+        List<QxScenicSpot> spots = scenicSpotMapper.selectList(
+                new LambdaQueryWrapper<QxScenicSpot>().eq(QxScenicSpot::getStatus, 1));
+        for (QxScenicSpot s : spots) {
+            if (q.contains(s.getName())) {
+                List<QxScenicWeather> weather = weatherMapper.selectList(
+                        new LambdaQueryWrapper<QxScenicWeather>().eq(QxScenicWeather::getScenicSpotId, s.getId())
+                                .orderByDesc(QxScenicWeather::getWeatherDate).last("LIMIT 3"));
+                if (weather.isEmpty()) return "";
+                StringBuilder sb = new StringBuilder();
+                sb.append("\n").append(s.getName()).append("最近天气（参考，以官方公告为准）：");
+                for (QxScenicWeather w : weather) {
+                    sb.append("\n").append(w.getWeatherDate()).append(" ").append(w.getWeatherDesc())
+                            .append(" ").append(w.getTemperatureLow()).append("°C~").append(w.getTemperatureHigh()).append("°C");
+                }
+                sb.append("\n注意：以上不是实时天气，仅供参考。");
+                return sb.toString();
+            }
+        }
+        return "";
     }
 
     private String buildDatabaseContext() {
