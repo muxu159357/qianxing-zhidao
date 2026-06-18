@@ -402,10 +402,17 @@ Page({
       if (isTab) wx.switchTab({ url: '/' + action.page.replace(/^\//, '') })
       else wx.navigateTo({ url: '/' + action.page.replace(/^\//, '') + query })
     } else if (action.type === 'create_ai_plan') {
-      var p = action.params || {}
-      var msg = '请帮我规划一条贵州旅游路线：' + (p.days || 3) + '天，喜欢' + (p.interests ? p.interests.join('、') : '自然风光') + '，节奏' + (p.pace || '轻松')
-      this.setData({ inputValue: msg })
-      this.sendMessage()
+      var self = this; var p = action.params || {}
+      self.setData({ isTyping: true })
+      api.createAiPlanDraft({ days: p.days || 3, interests: (p.interests || ['自然风光']).join('、'), pace: p.pace || '轻松', budget: p.budget || '中等' }).then(function (draft) {
+        self.setData({ isTyping: false })
+        self.addAIMessage((draft.summary || '已生成路线草稿') + '\n\n可点击下方按钮保存到我的行程。', [{ type: 'confirm_save', label: '保存到我的行程', draftId: draft.draftId }])
+      }).catch(function () { self.setData({ isTyping: false }); self.addAIMessage('路线生成暂不可用，请稍后再试。') })
+    } else if (action.type === 'confirm_save' && action.draftId) {
+      var self2 = this
+      api.confirmAiPlanDraft(action.draftId).then(function (r) {
+        self2.addAIMessage('已保存到我的行程！', [{ type: 'navigate', label: '查看行程详情', page: '/pages/trip-detail/trip-detail', params: { id: r.tripId, source: 'remote' } }])
+      }).catch(function () { self2.addAIMessage('保存失败，请稍后再试。') })
     }
   },
 
