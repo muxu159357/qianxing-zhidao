@@ -34,7 +34,8 @@ Page({
       regrets: '',
       nextAdvice: ''
     },
-    reviewDateText: ''
+    reviewDateText: '',
+    scenicWeather: null
   },
 
   onShow() { if (!auth.requireLoginRedirect()) return },
