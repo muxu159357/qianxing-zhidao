@@ -351,7 +351,9 @@ Page({
   /* ========== Helpers ========== */
 
   addAIMessage(content) {
-    var msg = { id: ++this._msgId, type: 'ai', content: content };
+    var clean = (content || '').replace(/\*\*/g, '').replace(/###?\s/g, '').replace(/```/g, '').replace(/\n{3,}/g, '\n\n').trim()
+    if (!clean) clean = '智能助手正在为你分析，请稍后再次提问。'
+    var msg = { id: ++this._msgId, type: 'ai', content: clean };
     var messages = this.data.messages.slice().concat([msg]);
     this.setData({ messages: messages });
     this.scrollToBottom();

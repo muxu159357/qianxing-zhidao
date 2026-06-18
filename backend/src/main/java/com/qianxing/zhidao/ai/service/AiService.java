@@ -27,15 +27,33 @@ public class AiService {
     private static final Logger log = LoggerFactory.getLogger(AiService.class);
 
     private static final String SYSTEM_PROMPT = """
-            你是"黔行智导"的贵州山地旅游AI助手。
-            你只能回答贵州旅游、山地旅行、景区路线、行程攻略、出行建议、文化体验相关问题。
-            不要回答与旅游无关的问题。
-            不要编造实时天气、实时路况、实时开放状态、实时票价，涉及实时信息时提示以官方平台为准。
-            不要提供危险户外行为建议，不要建议进入未开放区域。
-            不要提供医疗、法律、金融等非旅游专业建议。
+            你是"黔行智导"的贵州山地旅游AI助手，面向手机小程序用户。
+            你的任务：推荐贵州景点、规划路线、安排每日行程、介绍民族文化美食、提供交通住宿建议。
+
+            回答要求：
+            1. 使用自然中文，像朋友聊天一样温和具体；
+            2. 面向手机小程序，每段1-3句；
+            3. 不使用Markdown符号（禁止 **粗体**、### 标题、``` 代码块、表格管道符 |）；
+            4. 列点用中文短句换行，不出现 -、* 等符号；
+            5. 普通回答120-300字，行程攻略可稍长但分段清晰；
+            6. 不要出现"AI生成""测试""Mock""假数据""Demo""临时""TODO""AI导游""AI向导"等禁用文案；
+            7. 可正常使用"AI助手""AI伴游""智能规划""行程攻略""路线建议"。
+
             已知贵州景点：黄果树瀑布(安顺)、荔波小七孔(黔南)、西江千户苗寨(黔东南)、梵净山(铜仁)、青岩古镇(贵阳)、镇远古镇(黔东南)、肇兴侗寨(黔东南)、万峰林(黔西南)、织金洞(毕节)、赤水丹霞(遵义)。
-            请基于真实景点推荐，不要编造不存在的景区。
+            已知路线：黔中精华三日游、黔东秘境二日、黔南风情三日、黔西胜境二日、黔中人文二日。
+            请基于真实景点推荐，不要编造。不要编造实时天气、票价、开放状态，涉及这些提示以官方平台为准。不要提供危险户外建议。
             """;
+
+    private static final Map<String, String> RULE_ANSWERS = new LinkedHashMap<>();
+    static {
+        RULE_ANSWERS.put("必去景点", "第一次来贵州推荐这几个地方：黄果树瀑布（亚洲第一大瀑布）、荔波小七孔（碧水青山）、梵净山（世界自然遗产）、西江千户苗寨（苗族文化）、青岩古镇（明清建筑与美食）。\n\n喜欢自然风光可以重点看黄果树、小七孔和梵净山；喜欢民族文化就安排西江苗寨；时间不多的话，贵阳周边的青岩古镇也很方便。");
+        RULE_ANSWERS.put("美食", "贵州美食以酸辣为主，很开胃。推荐试试：酸汤鱼（苗家经典）、丝娃娃（清爽小吃）、肠旺面（贵阳早餐标配）、豆腐圆子、花溪牛肉粉、青岩卤猪脚。\n\n各地还有特色：黔东南的苗家酸汤鱼、黔西南的布依族五色饭。到了当地可以多问问当地人推荐的小店，往往比大饭店更好吃。");
+        RULE_ANSWERS.put("什么时候去", "贵州比较适合春季（4-6月）和秋季（9-10月）出行。\n\n春天适合看花、感受民族节庆，气温舒服。秋天雨水相对少，天气清爽，特别适合黄果树、荔波小七孔、梵净山这类自然风光路线。\n\n夏天虽然雨水多，但也是避暑的好时候，而且瀑布水量充沛更壮观。冬天人少安静，适合古镇慢游。");
+        RULE_ANSWERS.put("交通", "贵州交通以贵阳为中心很方便。贵阳龙洞堡机场连通全国主要城市，高铁可以到安顺（黄果树）、凯里（西江苗寨）、铜仁（梵净山）等。\n\n山地景区之间的路程比较长，建议每天安排1-2个主景点，预留充足的交通和休息时间。如果是第一次来，可以从贵阳出发，先玩周边再往远走。");
+        RULE_ANSWERS.put("三天", "三天时间可以玩贵阳加安顺这条线。第一天到贵阳，逛逛青岩古镇适应节奏；第二天去黄果树瀑布，感受大瀑布的震撼；第三天可以安排荔波小七孔或者西江苗寨。\n\n如果喜欢轻松一点，建议贵阳-黄果树-青岩两天就够了，留一天自由探索。具体路线可以根据你的偏好调整。");
+        RULE_ANSWERS.put("轻松", "如果喜欢轻松节奏的旅行，建议选择贵阳和安顺这条线。青岩古镇适合悠闲漫步，黄果树瀑布虽然壮观但游览路线不长。\n\n每天最多安排1-2个景点，住宿固定少换酒店。不建议安排梵净山这样的高强度登山路线。贵州的喀斯特风光在路上也能欣赏，不用赶路也是一种享受。");
+        RULE_ANSWERS.put("民族文化", "贵州的民族文化非常有特色。西江千户苗寨是体验苗族文化最好的地方，有吊脚楼、长桌宴和苗族歌舞。肇兴侗寨可以听侗族大歌（世界非遗），镇远古镇有千年历史和青龙洞古建筑。\n\n如果时间有限，西江苗寨是最推荐的民族文化体验地点，从贵阳出发高铁到凯里再转车即可。");
+    }
 
     private final QxAiPlanRequestMapper planRequestMapper;
     private final QxAiPlanResultMapper planResultMapper;
@@ -62,35 +80,23 @@ public class AiService {
         request.setUserId(userId);
         request.setStatus("processing");
         planRequestMapper.insert(request);
-
         try {
             if (llmClient.isConfigured()) {
-                String dbContext = buildDatabaseContext();
-                String userInput = buildPlanUserInput(request);
-                String llmResponse = llmClient.chat(SYSTEM_PROMPT, dbContext + "\n\n用户需求：" + userInput);
-
+                String llmResponse = llmClient.chat(SYSTEM_PROMPT, buildDatabaseContext() + "\n\n用户需求：" + buildPlanUserInput(request));
                 QxAiPlanResult result = new QxAiPlanResult();
                 result.setRequestId(request.getId());
-                result.setRouteName("大模型智能规划");
+                result.setRouteName("智能规划");
                 result.setRawResultJson(llmResponse);
                 result.setNormalizedResultJson(llmResponse);
                 result.setIsAdopted(0);
                 result.setModelName(llmClient.getModelName());
                 planResultMapper.insert(result);
                 request.setStatus("completed");
-            } else {
-                fallbackRulePlan(request);
-            }
+            } else { fallbackRulePlan(request); }
         } catch (Exception e) {
             log.error("AI plan failed", e);
             request.setStatus("failed");
             request.setErrorMessage(e.getMessage());
-            try {
-                QxAiPlanResult errResult = new QxAiPlanResult();
-                errResult.setRequestId(request.getId());
-                errResult.setErrorJson("{\"error\":\"" + e.getMessage() + "\"}");
-                planResultMapper.insert(errResult);
-            } catch (Exception ignored) {}
         }
         planRequestMapper.updateById(request);
         return request;
@@ -98,130 +104,163 @@ public class AiService {
 
     public QxAiPlanRequest getPlan(Long requestId, Long userId) {
         QxAiPlanRequest req = planRequestMapper.selectById(requestId);
-        if (req == null || !req.getUserId().equals(userId))
-            throw new BusinessException(404, "规划请求不存在");
+        if (req == null || !req.getUserId().equals(userId)) throw new BusinessException(404, "规划请求不存在");
         return req;
     }
 
     public Map<String, Object> chat(Long userId, String question) {
-        if (!llmClient.isConfigured()) return ruleBasedAnswer(question);
+        String q = question != null ? question.trim() : "";
+        if (q.isEmpty()) return simpleAnswer("请告诉我你想了解贵州旅游的哪个方面？", false);
 
-        if (!isGuizhouTravelRelated(question)) {
-            return Map.of(
-                    "answer", "这个问题超出了贵州旅游助手的服务范围。我可以继续帮你规划贵州路线、景点游玩建议或行程攻略。",
-                    "outOfScope", true, "relatedScenicIds", List.of(), "relatedRouteIds", List.of(),
-                    "knowledgeRefs", List.of(), "suggestedActions", List.of("规划贵州行程", "查看推荐路线"), "confidence", 0.1);
+        int tier = classifyQuestion(q);
+
+        // Tier 1: travel — call LLM
+        if (tier == 1 && llmClient.isConfigured()) {
+            try {
+                String rawAnswer = llmClient.chat(SYSTEM_PROMPT, q);
+                return buildChatResult(sanitizeAnswer(rawAnswer), false, 0.9);
+            } catch (Exception e) {
+                log.error("LLM failed, fallback to rule: {}", e.getMessage());
+                return ruleBasedAnswer(q);
+            }
+        }
+        // Tier 1 without LLM or Tier 2: rule-based
+        if (tier <= 2) return ruleBasedAnswer(q);
+
+        // Tier 3: gently redirect
+        return buildChatResult(
+                "这个问题不属于贵州旅游助手的服务范围，我不能提供这方面的建议。\n\n如果你正在准备出行，我可以继续帮你规划贵州路线、推荐适合的景点，或者整理一份轻松的行程攻略。",
+                true, 0.1);
+    }
+
+    private int classifyQuestion(String q) {
+        // Tier 3 keywords: clearly off-topic
+        String[] offTopic = {"股票", "投资", "医学", "诊断", "法律", "诉讼", "写代码", "编程", "作弊", "违法", "犯罪", "自杀", "暴力"};
+        for (String kw : offTopic) if (q.contains(kw)) return 3;
+
+        // Tier 2: identity, help, chat
+        String[] chatWords = {"你是谁", "你能做什么", "怎么用", "你好", "谢谢", "你会什么", "帮助", "功能", "介绍一下自己", "你好吗", "在吗"};
+        for (String kw : chatWords) if (q.contains(kw)) return 2;
+
+        // Tier 1: Guizhou travel related
+        if (isGuizhouTravelRelated(q)) return 1;
+
+        // Default: tier 3
+        return 3;
+    }
+
+    static String sanitizeAnswer(String text) {
+        if (text == null || text.isBlank()) return null;
+        String t = text
+                .replace("**", "")
+                .replace("### ", "")
+                .replace("## ", "")
+                .replace("# ", "")
+                .replace("```", "")
+                .replaceAll("(?m)^[-*]\\s+", "")
+                .replaceAll("\\|", " ")
+                .replaceAll("\n{3,}", "\n\n")
+                .trim();
+        if (t.isBlank()) return null;
+        return t;
+    }
+
+    private Map<String, Object> buildChatResult(String answer, boolean outOfScope, double confidence) {
+        Map<String, Object> r = new LinkedHashMap<>();
+        r.put("answer", answer);
+        r.put("outOfScope", outOfScope);
+        r.put("confidence", confidence);
+        r.put("relatedScenicIds", List.of());
+        r.put("relatedRouteIds", List.of());
+        r.put("knowledgeRefs", List.of());
+        r.put("suggestedActions", outOfScope ? List.of("规划贵州行程", "查看推荐路线") : List.of("查看景点详情", "规划我的行程"));
+        r.put("riskTips", List.of());
+        return r;
+    }
+
+    private Map<String, Object> simpleAnswer(String answer, boolean oos) {
+        return buildChatResult(answer, oos, 0.5);
+    }
+
+    private Map<String, Object> ruleBasedAnswer(String q) {
+        // Try keyword match first
+        for (var entry : RULE_ANSWERS.entrySet()) {
+            if (q.contains(entry.getKey())) return buildChatResult(entry.getValue(), false, 0.85);
         }
 
-        try {
-            String llmAnswer = llmClient.chat(SYSTEM_PROMPT, question);
-            Map<String, Object> result = new LinkedHashMap<>();
-            result.put("answer", llmAnswer);
-            result.put("relatedScenicIds", findRelatedScenicNames(question));
-            result.put("relatedRouteIds", List.of());
-            result.put("knowledgeRefs", findRelatedKnowledge(question));
-            result.put("suggestedActions", List.of("查看景点详情", "规划我的行程"));
-            result.put("confidence", 0.9);
-            result.put("outOfScope", false);
-            return result;
-        } catch (Exception e) {
-            log.error("LLM chat failed: {}", e.getMessage());
-            return ruleBasedAnswer(question);
+        // Try knowledge base
+        List<QxKnowledgeArticle> articles = articleMapper.selectList(
+                new LambdaQueryWrapper<QxKnowledgeArticle>().eq(QxKnowledgeArticle::getStatus, 1)
+                        .and(w -> w.like(QxKnowledgeArticle::getQuestion, q).or().like(QxKnowledgeArticle::getAnswer, q)).last("LIMIT 3"));
+
+        if (!articles.isEmpty()) {
+            return buildChatResult(articles.get(0).getAnswer(), false, 0.85);
         }
+
+        // Tier 2 fallback
+        if (classifyQuestion(q) == 2) {
+            return buildChatResult(
+                    "我是黔行智导的贵州旅游AI助手，可以帮你规划贵州路线、推荐景点、美食和行程攻略。\n\n你可以直接告诉我出行天数、出发城市、喜欢自然风光还是民族文化，我会帮你整理一份适合的贵州旅行方案。",
+                    false, 0.8);
+        }
+
+        // Generic fallback
+        return buildChatResult(
+                "你可以问我贵州有哪些必去景点、什么时候去最好、怎么安排三天行程、有什么特色美食等问题。\n\n告诉我你的出行天数、喜好和节奏，我来帮你规划一条合适的贵州旅行路线。",
+                classifyQuestion(q) == 3, 0.5);
     }
 
     private String buildDatabaseContext() {
         StringBuilder sb = new StringBuilder();
-        List<QxScenicSpot> spots = scenicSpotMapper.selectList(
-                new LambdaQueryWrapper<QxScenicSpot>().eq(QxScenicSpot::getStatus, 1));
+        List<QxScenicSpot> spots = scenicSpotMapper.selectList(new LambdaQueryWrapper<QxScenicSpot>().eq(QxScenicSpot::getStatus, 1));
         sb.append("已知景点：\n");
         for (QxScenicSpot s : spots)
-            sb.append("- ").append(s.getName()).append("（").append(s.getCity()).append("，").append(s.getCategory()).append("，评分").append(s.getRating()).append("）\n");
-
-        List<QxRoute> routes = routeMapper.selectList(
-                new LambdaQueryWrapper<QxRoute>().eq(QxRoute::getStatus, 1));
+            sb.append(s.getName()).append("（").append(s.getCity()).append("，").append(s.getCategory()).append("）\n");
+        List<QxRoute> routes = routeMapper.selectList(new LambdaQueryWrapper<QxRoute>().eq(QxRoute::getStatus, 1));
         sb.append("\n已知路线：\n");
         for (QxRoute r : routes)
-            sb.append("- ").append(r.getName()).append("（").append(r.getDayCount()).append("天，").append(r.getEnergyLevel()).append("）\n");
+            sb.append(r.getName()).append("（").append(r.getDayCount()).append("天，").append(r.getEnergyLevel()).append("）\n");
         return sb.toString();
     }
 
     private String buildPlanUserInput(QxAiPlanRequest req) {
-        return "请帮我规划一条贵州旅游路线：" +
-                "天数=" + (req.getInputDays() != null ? req.getInputDays() : "3") + "天，" +
+        return "请帮我规划一条贵州旅游路线：天数=" + (req.getInputDays() != null ? req.getInputDays() : "3") + "天，" +
                 "兴趣=" + (req.getInputTags() != null ? req.getInputTags() : "自然风光") + "，" +
                 "预算=" + (req.getInputBudget() != null ? req.getInputBudget() : "中等") + "，" +
                 "人群=" + (req.getInputCrowd() != null ? req.getInputCrowd() : "情侣/朋友") + "，" +
                 "体力=" + (req.getInputEnergy() != null ? req.getInputEnergy() : "适中") + "，" +
-                "节奏=" + (req.getInputPace() != null ? req.getInputPace() : "均衡") +
-                "。请给出每日详细安排、推荐景点和注意事项。";
+                "节奏=" + (req.getInputPace() != null ? req.getInputPace() : "均衡") + "。请给出每日详细安排、推荐景点和注意事项。";
     }
 
     private void fallbackRulePlan(QxAiPlanRequest request) throws JsonProcessingException {
-        List<QxRoute> routes = routeMapper.selectList(
-                new LambdaQueryWrapper<QxRoute>().eq(QxRoute::getStatus, 1).last("LIMIT 5"));
+        List<QxRoute> routes = routeMapper.selectList(new LambdaQueryWrapper<QxRoute>().eq(QxRoute::getStatus, 1).last("LIMIT 5"));
         String routeJson = objectMapper.writeValueAsString(routes);
         QxAiPlanResult result = new QxAiPlanResult();
-        result.setRequestId(request.getId());
-        result.setRouteName("智能推荐路线");
-        result.setRouteJson(routeJson);
-        result.setRawResultJson("{\"source\":\"rule-based\"}");
-        result.setNormalizedResultJson(routeJson);
-        result.setIsAdopted(0);
+        result.setRequestId(request.getId()); result.setRouteName("智能推荐路线");
+        result.setRouteJson(routeJson); result.setRawResultJson("{\"source\":\"rule-based\"}");
+        result.setNormalizedResultJson(routeJson); result.setIsAdopted(0);
         planResultMapper.insert(result);
         request.setStatus("completed");
     }
 
     private List<String> findRelatedScenicNames(String question) {
-        return scenicSpotMapper.selectList(
-                        new LambdaQueryWrapper<QxScenicSpot>().eq(QxScenicSpot::getStatus, 1))
-                .stream().filter(s -> question.contains(s.getName())).map(QxScenicSpot::getName)
-                .collect(Collectors.toList());
+        return scenicSpotMapper.selectList(new LambdaQueryWrapper<QxScenicSpot>().eq(QxScenicSpot::getStatus, 1))
+                .stream().filter(s -> question.contains(s.getName())).map(QxScenicSpot::getName).collect(Collectors.toList());
     }
 
     private List<Map<String, Object>> findRelatedKnowledge(String question) {
-        return articleMapper.selectList(
-                        new LambdaQueryWrapper<QxKnowledgeArticle>().eq(QxKnowledgeArticle::getStatus, 1)
-                                .and(w -> w.like(QxKnowledgeArticle::getQuestion, question)
-                                        .or().like(QxKnowledgeArticle::getAnswer, question)).last("LIMIT 3"))
-                .stream().map(a -> Map.<String, Object>of("id", a.getId(), "question", a.getQuestion()))
-                .collect(Collectors.toList());
-    }
-
-    private Map<String, Object> ruleBasedAnswer(String question) {
-        Map<String, Object> result = new LinkedHashMap<>();
-        List<QxKnowledgeArticle> articles = articleMapper.selectList(
-                new LambdaQueryWrapper<QxKnowledgeArticle>().eq(QxKnowledgeArticle::getStatus, 1)
-                        .and(w -> w.like(QxKnowledgeArticle::getQuestion, question)
-                                .or().like(QxKnowledgeArticle::getAnswer, question)).last("LIMIT 3"));
-
-        if (!articles.isEmpty()) {
-            result.put("answer", articles.get(0).getAnswer());
-            result.put("knowledgeRefs", articles.stream().map(a ->
-                    Map.<String, Object>of("id", a.getId(), "question", a.getQuestion())).collect(Collectors.toList()));
-            result.put("confidence", 0.85);
-            result.put("outOfScope", false);
-        } else {
-            boolean oos = !isGuizhouTravelRelated(question);
-            result.put("answer", oos ? "抱歉，我是贵州山地旅游专属AI助手，暂时只能回答贵州旅游相关问题。"
-                    : "正在为你整理相关信息，你可以先查看景点知识库或联系AI伴游获取更多帮助。");
-            result.put("confidence", oos ? 0.1 : 0.5);
-            result.put("outOfScope", oos);
-            result.put("knowledgeRefs", List.of());
-        }
-        result.put("relatedScenicIds", List.of());
-        result.put("relatedRouteIds", List.of());
-        result.put("suggestedActions", List.of("查看景点知识库", "规划我的行程"));
-        result.put("riskTips", List.of());
-        return result;
+        return articleMapper.selectList(new LambdaQueryWrapper<QxKnowledgeArticle>().eq(QxKnowledgeArticle::getStatus, 1)
+                        .and(w -> w.like(QxKnowledgeArticle::getQuestion, question).or().like(QxKnowledgeArticle::getAnswer, question)).last("LIMIT 3"))
+                .stream().map(a -> Map.<String, Object>of("id", a.getId(), "question", a.getQuestion())).collect(Collectors.toList());
     }
 
     private boolean isGuizhouTravelRelated(String question) {
         if (question == null) return false;
-        String[] keywords = {"贵州", "贵阳", "黔", "黄果树", "小七孔", "苗寨", "侗寨", "梵净山",
-                "万峰林", "织金洞", "赤水", "镇远", "青岩", "旅游", "景点", "路线",
-                "美食", "酸汤", "米粉", "攻略", "行程", "交通", "住宿", "门票", "民族",
-                "苗族", "布依族", "侗族", "瀑布", "溶洞", "梯田", "古镇", "漂流", "黔行"};
+        String[] keywords = {"贵州", "贵阳", "黔", "黄果树", "小七孔", "苗寨", "侗寨", "梵净山", "万峰林", "织金洞",
+                "赤水", "镇远", "青岩", "旅游", "景点", "路线", "美食", "酸汤", "米粉", "攻略", "行程", "交通",
+                "住宿", "门票", "民族", "苗族", "布依族", "侗族", "瀑布", "溶洞", "梯田", "古镇", "漂流", "黔行",
+                "几天", "几日游", "拍照", "轻松", "亲子", "避暑", "山地", "徒步", "观景", "出发", "预算", "安排",
+                "规划", "推荐", "好吃", "好玩", "季节", "天气", "穿什么", "准备", "注意"};
         for (String kw : keywords) if (question.contains(kw)) return true;
         return false;
     }
