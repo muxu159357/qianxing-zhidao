@@ -295,37 +295,21 @@ Page({
     const { route, score } = this.data
     if (!route) return
 
-    var tripData = {
-      routeId: route._dbId || null,
-      routeName: route.name,
-      customName: null,
-      status: 'upcoming',
-      dayCount: route.days || route.dayCount || 1,
-      energyLevel: route.physicalLevel || route.energyLevel || '适中',
-      travelStartDate: null,
-      travelEndDate: null,
-      routeSnapshotJson: JSON.stringify(route),
-      planSnapshotJson: JSON.stringify({
-        dayPlans: route.dailyPlan || [],
-        spotNames: (self.data.attractions || []).map(function (a) { return a.name }).slice(0, 4),
-        spotIds: route.attractionIds || [],
-        score: score
-      })
-    }
+    var trip = { routeName: route.name, dayCount: route.days || route.dayCount || 1, dayPlans: route.dailyPlan || [] }
+    var tripData = adapters.unifiedTripToCreateRequest(trip, route)
 
     api.createTrip(tripData).then(function () {
       self.setData({ hasSavedTrip: true })
       wx.showToast({ title: '已保存到我的行程', icon: 'success' })
     }).catch(function () {
       try {
-        var localTrip = {
+        var localTrip = adapters.localTripToUnified({
           id: 'trip_' + route.id + '_' + Date.now(),
           routeId: route.id,
           routeName: route.name,
           days: route.days || route.dayCount || 1,
           dayCount: route.days || route.dayCount || 1,
           physicalLevel: route.physicalLevel || '适中',
-          energyLevel: route.physicalLevel || '适中',
           spotCount: (route.attractionIds && route.attractionIds.length) || (self.data.attractions && self.data.attractions.length) || 0,
           spotNames: (self.data.attractions || []).map(function (a) { return a.name }).slice(0, 4),
           spotIds: route.attractionIds || [],
@@ -338,7 +322,7 @@ Page({
           customName: null,
           travelStartDate: null,
           travelEndDate: null
-        }
+        })
         tripStorage.addTrip(localTrip)
         var app = getApp()
         if (app && app.globalData) { app.globalData.myTrips = tripStorage.getTrips() }

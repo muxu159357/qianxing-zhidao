@@ -39,69 +39,52 @@ Page({
   },
 
   loadTrips() {
-    var trips = [];
-
-    try {
-      var stored = wx.getStorageSync('qianxing_trips');
-      if (stored && Array.isArray(stored)) {
-        trips = stored;
-      }
-    } catch (e) {
-      console.warn('读取行程存储失败:', e);
-    }
-
-    if ((!trips || trips.length === 0) && app && app.globalData && app.globalData.myTrips) {
-      trips = app.globalData.myTrips;
-    }
-
     var that = this
-
-    trips = trips.map(function (trip, index) {
-      return {
-        id: trip.id || 'trip_' + index + '_' + Date.now(),
-        routeId: trip.routeId || trip.id || '',
-        routeName: trip.routeName || trip.name || '未命名行程',
-        customName: trip.customName || null,
-        displayName: trip.customName || trip.routeName || trip.name || '未命名行程',
-        days: trip.days || trip.dayCount || 1,
-        dayCount: trip.dayCount || trip.days || 1,
-        energyLevel: trip.energyLevel || trip.physicalLevel || '适中',
-        spotCount: trip.spotCount || (trip.spotNames ? trip.spotNames.length : 0),
-        spotNames: trip.spotNames || [],
-        spotIds: trip.spotIds || [],
-        dayPlans: trip.dayPlans || [],
-        score: trip.score || 0,
-        savedAt: that.formatSavedAt(trip.savedAt),
-        _rawSavedAt: trip.savedAt || '',
-        status: trip.status || 'upcoming',
-        startedAt: trip.startedAt || null,
-        completedAt: trip.completedAt || null,
-        travelStartDate: trip.travelStartDate || null,
-        travelEndDate: trip.travelEndDate || null,
-        travelDateText: that.formatTravelDate(trip.travelStartDate, trip.travelEndDate),
-        review: trip.review || null,
-        reviewStatusText: ''
-      };
-    });
-
-    // Compute review status for completed trips
-    trips.forEach(function (trip) {
-      if (trip.status === 'completed' && trip.review) {
-        var hasReview = trip.review.rating > 0 || trip.review.highlights || trip.review.regrets || trip.review.nextAdvice
-        trip.reviewStatusText = hasReview ? '已复盘' : '待复盘'
+    api.getTrips().then(function (remoteTrips) {
+      var unified = (remoteTrips || []).map(function (t) { return adapters.backendTripToUnified(t) })
+      try {
+        var stored = wx.getStorageSync('qianxing_trips') || []
+        if (stored && Array.isArray(stored)) {
+          for (var i = 0; i < stored.length; i++) { unified.push(adapters.localTripToUnified(stored[i])) }
+        }
+      } catch (e) { /* ignore */ }
+      if (unified.length === 0 && app && app.globalData && app.globalData.myTrips) {
+        var g = app.globalData.myTrips
+        for (var j = 0; j < g.length; j++) { unified.push(adapters.localTripToUnified(g[j])) }
       }
-    })
+      that._processTrips(unified)
+    }).catch(function () { that._loadLocalTripsOnly() })
+  },
 
-    // Sort: active → upcoming → completed
-    var order = { active: 0, upcoming: 1, completed: 2 };
-    trips.sort(function (a, b) {
-      return (order[a.status] || 2) - (order[b.status] || 2);
-    });
+  _loadLocalTripsOnly: function () {
+    var trips = []
+    try {
+      var stored = wx.getStorageSync('qianxing_trips') || []
+      if (stored && Array.isArray(stored)) trips = stored
+    } catch (e) { /* ignore */ }
+    if (trips.length === 0 && app && app.globalData && app.globalData.myTrips) {
+      trips = app.globalData.myTrips
+    }
+    trips = trips.map(function (t) { return adapters.localTripToUnified(t) })
+    this._processTrips(trips)
+  },
 
+  _processTrips: function (trips) {
+    var that = this
+    for (var i = 0; i < trips.length; i++) {
+      var t = trips[i]
+      t.savedAt = that.formatSavedAt(t.savedAt || t._rawSavedAt)
+      t.travelDateText = that.formatTravelDate(t.travelStartDate, t.travelEndDate)
+      t.reviewStatusText = ''
+      if (t.status === 'completed' && t.review && (t.review.rating > 0 || t.review.highlights || t.review.regrets || t.review.nextAdvice)) {
+        t.reviewStatusText = '已复盘'
+      }
+    }
+    var order = { active: 0, upcoming: 1, completed: 2 }
+    trips.sort(function (a, b) { return (order[a.status] || 2) - (order[b.status] || 2) })
     var tripStats = this.getTripStats(trips)
-
     this.setData({ trips: trips, tripStats: tripStats }, function () {
-      this.applyFilter();
+      this.applyFilter()
     });
   },
 
