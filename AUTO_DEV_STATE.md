@@ -1,34 +1,23 @@
-# 黔行智导 — 自动开发状态
+# 黔行智导 · 自动开发状态
 
 ```yaml
 phase: CONTINUOUS-DEV
+commits: 35+
+controllers: 15 (6 app + 9 admin)
+api_endpoints: 80+
+java_files: 85+
+tests: 11
 status: active
-last_commit: 1c82ae9
-total_commits_session: 20
-backend_files: 80+
-admin_controllers: 8
-test_count: 8
-weather_cities: 贵阳/安顺/遵义/铜仁/毕节/黔东南/黔南/黔西南
-redis: memory_fallback
 ```
 
-## 已覆盖优先级
+## 本次完成 (35 commits)
 
-| P | 状态 |
-|----|------|
-| P0 核心可用 | ✅ |
-| P1 AI回答精修 | ✅ |
-| P2 AI线路草稿 | ✅ 内存版 |
-| P3 AI动作协议 | ✅ |
-| P4 天气模块 | ✅ 高德 |
-| P5 行程进度 | ✅ |
-| P6 后台管理 | ✅ 8控制器 |
-| P7 Web前端 | ✅ API接入 |
-| P8 测试 | ✅ 8个 |
-
-## 待做
-
-- 小程序定位授权
-- Redis替换内存缓存
-- Web后台管理页面完善
-- 小程序project.config.json appid
+| 模块 | 新增/重写文件数 | 说明 |
+|------|---------------|------|
+| AI | 7 | LlmClient/AiAction/AiContext/AiDraft全套 |
+| 天气 | 2 | WeatherService接入高德API |
+| 后台 | 11 | 景点/路线/日程/关联/知识库/媒体/天气/行程/安全/AI记录/看板 |
+| 小程序 | 10 | 登录页/守卫/AI chat/动作按钮/草稿/天气双页 |
+| Web | 2 | AdminAPI封装/管理后台真实数据 |
+| 测试 | 3 | AI清洗/草稿缓存/ApiResponse |
+| 文档 | 6 | 部署清单/API文档/测试样例/方案设计/阻塞/分歧 |
