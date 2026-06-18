@@ -15,6 +15,8 @@ import com.qianxing.zhidao.scenic.entity.QxScenicSpot;
 import com.qianxing.zhidao.scenic.mapper.QxScenicSpotMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.qianxing.zhidao.ai.action.AiAction;
+import com.qianxing.zhidao.trip.entity.QxUserTrip;
+import com.qianxing.zhidao.trip.mapper.QxUserTripMapper;
 import com.qianxing.zhidao.weather.entity.QxScenicWeather;
 import com.qianxing.zhidao.weather.mapper.QxScenicWeatherMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,19 +66,21 @@ public class AiService {
     private final QxRouteMapper routeMapper;
     private final QxScenicSpotMapper scenicSpotMapper;
     private final QxScenicWeatherMapper weatherMapper;
+    private final QxUserTripMapper tripMapper;
     private final ObjectMapper objectMapper;
     private final LlmClient llmClient;
 
     public AiService(QxAiPlanRequestMapper planRequestMapper, QxAiPlanResultMapper planResultMapper,
                      QxKnowledgeArticleMapper articleMapper, QxRouteMapper routeMapper,
                      QxScenicSpotMapper scenicSpotMapper, QxScenicWeatherMapper weatherMapper,
-                     ObjectMapper objectMapper, LlmClient llmClient) {
+                     QxUserTripMapper tripMapper, ObjectMapper objectMapper, LlmClient llmClient) {
         this.planRequestMapper = planRequestMapper;
         this.planResultMapper = planResultMapper;
         this.articleMapper = articleMapper;
         this.routeMapper = routeMapper;
         this.scenicSpotMapper = scenicSpotMapper;
         this.weatherMapper = weatherMapper;
+        this.tripMapper = tripMapper;
         this.objectMapper = objectMapper;
         this.llmClient = llmClient;
     }
@@ -122,7 +126,7 @@ public class AiService {
         // Tier 1: travel — call LLM
         if (tier == 1 && llmClient.isConfigured()) {
             try {
-                String prompt = SYSTEM_PROMPT + buildWeatherContext(q);
+                String prompt = SYSTEM_PROMPT + buildTripContext(userId, q) + buildWeatherContext(q);
                 String rawAnswer = llmClient.chat(prompt, q);
                 return buildChatResult(sanitizeAnswer(rawAnswer), false, 0.9, q);
             } catch (Exception e) {
@@ -235,6 +239,18 @@ public class AiService {
         return buildChatResult(
                 "你可以问我贵州有哪些必去景点、什么时候去最好、怎么安排三天行程、有什么特色美食等问题。\n\n告诉我你的出行天数、喜好和节奏，我来帮你规划一条合适的贵州旅行路线。",
                 classifyQuestion(q) == 3, 0.5, q);
+    }
+
+    /** 当用户有 active 行程且问"今天怎么玩"时，附上行程进度 */
+    private String buildTripContext(Long userId, String q) {
+        if (userId == null || q == null || !(q.contains("今天") || q.contains("现在") || q.contains("当前"))) return "";
+        List<QxUserTrip> active = tripMapper.selectList(
+                new LambdaQueryWrapper<QxUserTrip>().eq(QxUserTrip::getUserId, userId).eq(QxUserTrip::getStatus, "active"));
+        if (active.isEmpty()) return "";
+        QxUserTrip t = active.get(0);
+        return "\n用户当前有活跃行程：" + t.getRouteName() + "，" + t.getDayCount() + "天行程。" +
+                "行程开始于" + (t.getStartedAt() != null ? t.getStartedAt().toString() : "最近") + "。" +
+                "请结合当前行程进度给出具体建议。如果无法判断当前是第几天，提示用户确认。\n";
     }
 
     /** 当问题涉及特定景区时，附上最近的天气数据 */
