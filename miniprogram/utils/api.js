@@ -63,7 +63,8 @@ function request(path, options) {
 function searchAll(keyword) { return request('/api/app/search', { params: { q: keyword, limit: 5 } }) }
 function getHomeSummary() { return request('/api/app/home/summary') }
 function getScenicSpots(params) { return request('/api/app/scenic/spots', { params: params }) }
-
+function getScenicCities() { return request('/api/app/scenic/cities') }
+function getScenicCategories() { return request('/api/app/scenic/categories') }
 function getScenicSpot(id) {
   return request('/api/app/scenic/spots/' + id)
 }
@@ -190,6 +191,8 @@ module.exports = {
   searchAll: searchAll,
   getHomeSummary: getHomeSummary,
   getScenicSpots: getScenicSpots,
+  getScenicCities: getScenicCities,
+  getScenicCategories: getScenicCategories,
   getScenicSpot: getScenicSpot,
   getRoutes: getRoutes,
   getRoute: getRoute,
