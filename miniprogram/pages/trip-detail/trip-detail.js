@@ -662,6 +662,7 @@ Page({
     trip.status = newStatus
     trip[timeField] = new Date().toISOString()
     try { this.updateCurrentTrip({ status: trip.status, startedAt: trip.startedAt, completedAt: trip.completedAt }) } catch (e) { return }
+    if (trip.source === 'remote' && trip.remoteId) { api.updateTrip(trip.remoteId, { status: newStatus }).catch(function(){}) }
     var statusInfo = this.getStatusInfo(trip.status)
     this.setData({
       trip: trip,
