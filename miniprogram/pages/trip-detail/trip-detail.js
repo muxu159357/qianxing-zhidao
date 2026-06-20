@@ -593,9 +593,9 @@ Page({
       updatedAt: new Date().toISOString()
     }
 
-    try { this.updateCurrentTrip({ review: review }) } catch (e) { return }
-
     var trip = this.data.trip
+    try { this.updateCurrentTrip({ review: review }) } catch (e) { return }
+    if (trip.source === 'remote' && trip.remoteId) { api.saveTripReview(trip.remoteId, review).catch(function(){}) }
     trip.review = review
     var reviewDateText = this.formatReviewDate(review)
     this.setData({
