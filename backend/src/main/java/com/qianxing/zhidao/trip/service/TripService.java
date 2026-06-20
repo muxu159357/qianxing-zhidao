@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.qianxing.zhidao.common.BusinessException;
 import com.qianxing.zhidao.trip.entity.*;
 import com.qianxing.zhidao.trip.mapper.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TripService {
@@ -18,6 +20,7 @@ public class TripService {
     private final QxUserTripSpotMapper tripSpotMapper;
     private final QxTripSafetyItemMapper safetyItemMapper;
     private final QxTripReviewMapper reviewMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public TripService(QxUserTripMapper tripMapper, QxUserTripDayMapper tripDayMapper,
                        QxUserTripSpotMapper tripSpotMapper, QxTripSafetyItemMapper safetyItemMapper,
@@ -49,6 +52,40 @@ public class TripService {
     public QxUserTrip createTrip(QxUserTrip trip) {
         trip.setStatus(trip.getStatus() != null ? trip.getStatus() : "upcoming");
         tripMapper.insert(trip);
+
+        // 从 planSnapshotJson 解析日计划并写入 qx_user_trip_day / qx_user_trip_spot
+        String planJson = trip.getPlanSnapshotJson();
+        if (planJson != null && !planJson.isBlank()) {
+            try {
+                Map<String, Object> plan = objectMapper.readValue(planJson, new TypeReference<>() {});
+                List<Map<String, Object>> dayPlans = (List<Map<String, Object>>) plan.getOrDefault("dayPlans", List.of());
+                List<String> spotNames = (List<String>) plan.getOrDefault("spotNames", List.of());
+                for (int i = 0; i < dayPlans.size(); i++) {
+                    Map<String, Object> dp = dayPlans.get(i);
+                    QxUserTripDay day = new QxUserTripDay();
+                    day.setTripId(trip.getId()); day.setDayNumber(i + 1);
+                    day.setTitle((String) dp.getOrDefault("title", "第" + (i + 1) + "天"));
+                    day.setDescription((String) dp.getOrDefault("description", ""));
+                    day.setMeals((String) dp.getOrDefault("meals", ""));
+                    day.setAccommodation((String) dp.getOrDefault("accommodation", ""));
+                    tripDayMapper.insert(day);
+                }
+                for (int j = 0; j < spotNames.size(); j++) {
+                    QxUserTripSpot spot = new QxUserTripSpot();
+                    spot.setTripId(trip.getId()); spot.setSpotName(spotNames.get(j)); spot.setSpotOrder(j + 1);
+                    tripSpotMapper.insert(spot);
+                }
+            } catch (Exception e) { /* ignore parse failure */ }
+        }
+
+        // 生成默认安全清单
+        String[] items = {"提前查看景区开放时间", "准备好舒适的徒步鞋", "携带雨具和防晒用品",
+                "检查手机电量和存储空间", "了解当地紧急联系电话", "合理安排每日体力"};
+        for (int k = 0; k < items.length; k++) {
+            QxTripSafetyItem si = new QxTripSafetyItem();
+            si.setTripId(trip.getId()); si.setItemText(items[k]); si.setSortOrder(k + 1); si.setIsChecked(0);
+            safetyItemMapper.insert(si);
+        }
         return trip;
     }
 
