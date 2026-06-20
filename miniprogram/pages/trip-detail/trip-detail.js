@@ -441,6 +441,7 @@ Page({
     if (!found) return
     try { this.updateCurrentTrip({ safetyChecklist: checklist }) } catch (e) { return }
     var trip = this.data.trip
+    if (trip.source === 'remote' && trip.remoteId) { api.updateTripSafetyItem(trip.remoteId, id, { isChecked: checklist.find(function(c){return c.id===id}).checked ? 1 : 0 }).catch(function(){}) }
     trip.safetyChecklist = checklist
     var progress = this.getChecklistProgress(checklist)
     this.setData({ trip: trip, safetyChecklist: checklist, checklistProgress: progress })
