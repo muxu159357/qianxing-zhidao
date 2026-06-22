@@ -50,13 +50,17 @@ public class JwtUtil {
                     );
                 }
                 log.warn("JWT_SECRET is too short ({} bytes, minimum {}). "
-                        + "Please use a longer secret for production. "
-                        + "Dev/test env: add {} more chars.",
+                        + "Token generation disabled until a longer secret is configured. "
+                        + "Add {} more chars.",
                         keyBytes.length, MIN_SECRET_LENGTH, MIN_SECRET_LENGTH - keyBytes.length);
+                this.key = null;
+                this.expirationMs = expirationMs;
+                this.configured = false;
+            } else {
+                this.key = Keys.hmacShaKeyFor(keyBytes);
+                this.expirationMs = expirationMs;
+                this.configured = true;
             }
-            this.key = Keys.hmacShaKeyFor(keyBytes);
-            this.expirationMs = expirationMs;
-            this.configured = true;
         }
     }
 
