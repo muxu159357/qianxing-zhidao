@@ -6,3 +6,13 @@
 ---
 
 （暂无待确认分歧）
+
+## 2026-06-22 — Splash页与强制登录冲突
+
+- 所属模块：小程序开屏体验（PHASE-UI-1-F）
+- 当前问题：新增 splash 作为 app.json pages[0] 会绕过 login 强制登录守卫
+- 方案 A：splash 作为独立页面 → 未登录用户可直接看到开屏内容
+- 方案 B：splash 作为 login 页内 overlay → 不改变入口，登录守卫不变
+- 推荐方案：B — 风险最低，splash 作为 login 页 onLoad 中的动画层
+- 暂定处理：UI-1B 先做，splash 推迟到 P2，采用方案 B
+- 后续需要用户确认：是否需要独立 splash 页（会改变登录流程）
