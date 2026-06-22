@@ -12,21 +12,43 @@ Page({
     scrollTop: 0,
     quickQuestions: [
       '贵州必去景点有哪些？',
-      '贵州有什么特色美食？',
       '什么时候去贵州最好？',
-      '贵州旅游交通方便吗？'
+      '帮我安排三日轻松游',
+      '今天怎么玩？',
+      '贵州有什么特色美食？',
+      '山地旅行要注意什么？'
     ],
     knowledgeBase: [],
     currentTrip: null,
     currentTripId: '',
     currentAttraction: null,
-    currentAttractionId: ''
+    currentAttractionId: '',
+    scenicName: '贵州山地旅游',
+    scenicIntro: '为你提供贵州景点推荐、路线规划与出行建议',
+    infoCards: [
+      { title: '今日建议', desc: '山地天气多变，出发前建议查看景区官方信息，并准备雨具和舒适鞋。' },
+      { title: '出行提醒', desc: '建议合理安排每日体力，提前确认交通衔接，预留充足车程时间。' },
+      { title: '路线推荐', desc: '第一次来贵州推荐黄荔西三日线，覆盖黄果树、小七孔和西江苗寨。' }
+    ]
+  },
+
+  onBottomNav(e) {
+    var key = e.currentTarget.dataset.key
+    if (key === 'guide') { this.setData({ inputValue: '这个景区怎么玩比较好？' }); this.sendMessage() }
+    else if (key === 'route') { wx.switchTab({ url: '/pages/index/index' }) }
+    else if (key === 'trip') { wx.switchTab({ url: '/pages/my-trips/my-trips' }) }
+    else if (key === 'service') { wx.pageScrollTo({ scrollTop: 0, duration: 300 }) }
   },
 
   _msgId: 0,
   _firstShow: true,
   _typewriterTimer: null,
   _defaultQuickQuestions: [
+    '贵州必去景点有哪些？', '什么时候去贵州最好？',
+    '帮我安排三日轻松游', '今天怎么玩？',
+    '贵州有什么特色美食？', '山地旅行要注意什么？'
+  ],
+  _defaultQuickQuestionsOld: [
     '贵州必去景点有哪些？',
     '贵州有什么特色美食？',
     '什么时候去贵州最好？',
