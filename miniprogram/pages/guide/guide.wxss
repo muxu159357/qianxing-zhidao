@@ -83,3 +83,13 @@
 .ai-card-tips { background:rgba(47,107,255,0.04); border-radius:20rpx; padding:20rpx; margin-top:12rpx; border:1rpx solid rgba(47,107,255,0.1); }
 .ai-card-tips-title { font-size:26rpx; font-weight:600; color:#2f6bff; margin-bottom:8rpx; }
 .ai-card-tips-text { font-size:24rpx; color:#4d5f6f; line-height:1.5; }
+
+/* location modal */
+.location-modal-mask { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:100; }
+.location-modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:580rpx; background:#fff; border-radius:24rpx; padding:48rpx 40rpx 32rpx; z-index:101; box-shadow:0 16rpx 48rpx rgba(0,0,0,0.15); }
+.location-modal-title { font-size:34rpx; font-weight:700; color:#10251d; text-align:center; margin-bottom:20rpx; }
+.location-modal-body { font-size:26rpx; color:#5d6b7a; line-height:1.7; text-align:center; margin-bottom:36rpx; }
+.location-modal-actions { display:flex; gap:20rpx; }
+.location-modal-btn { flex:1; height:84rpx; line-height:84rpx; text-align:center; border-radius:42rpx; font-size:28rpx; font-weight:600; }
+.location-modal-btn-cancel { background:#f4f8f5; color:#5d6b7a; }
+.location-modal-btn-ok { background:linear-gradient(135deg,#1f8f5f,#2f6bff); color:#fff; }

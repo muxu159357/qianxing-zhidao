@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Tag(name = "ai", description = "AI规划与问答接口")
@@ -40,12 +41,12 @@ public class AiController {
     @Operation(summary = "AI问答")
     @PostMapping("/chat")
     public ApiResponse<Map<String, Object>> chat(
-            @Parameter(description = "用户问题") @RequestBody Map<String, String> body,
+            @Parameter(description = "用户问题及可选上下文") @RequestBody Map<String, Object> body,
             HttpServletRequest req) {
-        String question = body.getOrDefault("question", "");
+        String question = (String) body.getOrDefault("question", "");
         if (question.isBlank()) {
             return ApiResponse.fail(400, "问题不能为空");
         }
-        return ApiResponse.ok(aiService.chat(uid(req), question));
+        return ApiResponse.ok(aiService.chat(uid(req), question, body));
     }
 }

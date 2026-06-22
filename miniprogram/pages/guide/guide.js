@@ -25,6 +25,8 @@ Page({
     currentAttractionId: '',
     scenicName: '贵州山地旅游',
     scenicIntro: '为你提供贵州景点推荐、路线规划与出行建议',
+    showLocationModal: false,
+    locationPendingQuestion: '',
     infoCards: [
       { title: '今日建议', desc: '山地天气多变，出发前建议查看景区官方信息，并准备雨具和舒适鞋。' },
       { title: '出行提醒', desc: '建议合理安排每日体力，提前确认交通衔接，预留充足车程时间。' },
@@ -71,8 +73,6 @@ Page({
     '适合什么人'
   ],
 
-  onShow() { if (!auth.requireLoginRedirect()) return },
-
   onLoad() {
     this.loadKnowledgeBase();
     var handledPending = this.checkPendingContext();
@@ -82,6 +82,7 @@ Page({
   },
 
   onShow() {
+    if (!auth.requireLoginRedirect()) return;
     if (this._firstShow) {
       this._firstShow = false
       return
@@ -318,38 +319,77 @@ Page({
     var content = (this.data.inputValue || '').trim();
     if (!content || this.data.isTyping) return;
 
-    this._stopTypewriter()
-    this.addUserMessage(content);
     this.setData({ inputValue: '' });
-    this.setData({ isTyping: true });
-    this.scrollToBottom();
 
-    var self = this
-    api.aiChat(content).then(function (data) {
-      var acts = self._normalizeActions(data.actions, data.suggestedActions)
-      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。', acts);
-      self.setData({ isTyping: false });
-      self.scrollToBottom();
-    }).catch(function () {
-      var answer = self.resolveAnswer(content);
-      self.addAIMessage(answer);
-      self.setData({ isTyping: false });
-      self.scrollToBottom();
-    })
+    if (this._isTodaySuggestion(content)) {
+      this.setData({ locationPendingQuestion: content, showLocationModal: true });
+      return;
+    }
+    this._doSend(content, null);
   },
+
+  _todayKeywords: ['今天怎么玩', '今天怎么安排', '现在去哪玩', '接下来怎么走', '今天适合去哪', '今天有什么推荐', '今天去哪', '今日建议', '今日怎么玩'],
 
   onQuickTap(e) {
     var question = e.currentTarget.dataset.question;
     if (!question || this.data.isTyping) return;
 
-    this._stopTypewriter()
-    this.addUserMessage(question);
-    this.setData({ isTyping: true });
-    this.scrollToBottom();
+    if (this._isTodaySuggestion(question)) {
+      this.setData({ locationPendingQuestion: question, showLocationModal: true });
+      return;
+    }
+    this._doSend(question, null);
+  },
 
-    var self = this
-    api.aiChat(question).then(function (data) {
-      var acts = self._normalizeActions(data.actions, data.suggestedActions)
+  onCloseLocationModal() {
+    var question = this.data.locationPendingQuestion;
+    this.setData({ showLocationModal: false, locationPendingQuestion: '' });
+    if (question) {
+      this._doSend(question, { locationContext: { enabled: false }, clientContext: { sourcePage: 'guide', intent: 'today_suggestion' } });
+    }
+  },
+
+  onAllowLocation() {
+    var self = this;
+    var question = this.data.locationPendingQuestion;
+    this.setData({ showLocationModal: false, locationPendingQuestion: '' });
+
+    wx.getLocation({
+      type: 'gcj02',
+      success: function (res) {
+        var locCtx = { enabled: true, latitude: res.latitude, longitude: res.longitude, accuracy: res.accuracy || 0 };
+        self._doSend(question, { locationContext: locCtx, clientContext: { sourcePage: 'guide', intent: 'today_suggestion' } });
+      },
+      fail: function () {
+        self._doSend(question, { locationContext: { enabled: false }, clientContext: { sourcePage: 'guide', intent: 'today_suggestion' } });
+      }
+    });
+  },
+
+  _isTodaySuggestion(q) {
+    if (!q) return false;
+    for (var i = 0; i < this._todayKeywords.length; i++) {
+      if (q.indexOf(this._todayKeywords[i]) !== -1) return true;
+    }
+    return false;
+  },
+
+  _doSend(question, options) {
+    var self = this;
+    self._stopTypewriter();
+    self.addUserMessage(question);
+    self.setData({ isTyping: true });
+    self.scrollToBottom();
+
+    var callOptions = options || undefined;
+    api.aiChat(question, callOptions).then(function (data) {
+      var acts = self._normalizeActions(data.actions, data.suggestedActions);
+      // Add trip-related actions for today suggestion
+      if (data.tripProgressContext && data.tripProgressContext.available) {
+        if (!acts || acts.length === 0) acts = [];
+        acts.push({ type: 'navigate', label: '查看我的行程', page: '/pages/my-trips/my-trips', params: {} });
+        acts.push({ type: 'ask_followup', label: '继续追问', question: '明天怎么安排？' });
+      }
       self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。', acts);
       self.setData({ isTyping: false });
       self.scrollToBottom();
@@ -358,7 +398,7 @@ Page({
       self.addAIMessage(answer);
       self.setData({ isTyping: false });
       self.scrollToBottom();
-    })
+    });
   },
 
   resolveAnswer(userMessage) {

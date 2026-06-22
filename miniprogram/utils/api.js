@@ -182,8 +182,13 @@ function getAiPlan(requestId) {
   return request('/api/app/ai/plans/' + requestId, { needAuth: true })
 }
 
-function aiChat(question) {
-  return request('/api/app/ai/chat', { method: 'POST', data: { question: question }, needAuth: true })
+function aiChat(question, options) {
+  var data = { question: question }
+  if (options) {
+    if (options.locationContext) data.locationContext = options.locationContext
+    if (options.clientContext) data.clientContext = options.clientContext
+  }
+  return request('/api/app/ai/chat', { method: 'POST', data: data, needAuth: true })
 }
 function createAiPlanDraft(params) { return request('/api/app/ai/plan-drafts', { method: 'POST', data: params, needAuth: true }) }
 function getAiPlanDraft(draftId) { return request('/api/app/ai/plan-drafts/' + draftId, { needAuth: true }) }

@@ -16,7 +16,9 @@ import com.qianxing.zhidao.scenic.mapper.QxScenicSpotMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.qianxing.zhidao.ai.action.AiAction;
 import com.qianxing.zhidao.trip.entity.QxUserTrip;
+import com.qianxing.zhidao.trip.entity.QxUserTripDay;
 import com.qianxing.zhidao.trip.mapper.QxUserTripMapper;
+import com.qianxing.zhidao.trip.mapper.QxUserTripDayMapper;
 import com.qianxing.zhidao.weather.entity.QxScenicWeather;
 import com.qianxing.zhidao.weather.mapper.QxScenicWeatherMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,13 +71,15 @@ public class AiService {
     private final QxScenicSpotMapper scenicSpotMapper;
     private final QxScenicWeatherMapper weatherMapper;
     private final QxUserTripMapper tripMapper;
+    private final QxUserTripDayMapper tripDayMapper;
     private final ObjectMapper objectMapper;
     private final LlmClient llmClient;
 
     public AiService(QxAiPlanRequestMapper planRequestMapper, QxAiPlanResultMapper planResultMapper,
                      QxKnowledgeArticleMapper articleMapper, QxRouteMapper routeMapper,
                      QxScenicSpotMapper scenicSpotMapper, QxScenicWeatherMapper weatherMapper,
-                     QxUserTripMapper tripMapper, ObjectMapper objectMapper, LlmClient llmClient) {
+                     QxUserTripMapper tripMapper, QxUserTripDayMapper tripDayMapper,
+                     ObjectMapper objectMapper, LlmClient llmClient) {
         this.planRequestMapper = planRequestMapper;
         this.planResultMapper = planResultMapper;
         this.articleMapper = articleMapper;
@@ -81,6 +87,7 @@ public class AiService {
         this.scenicSpotMapper = scenicSpotMapper;
         this.weatherMapper = weatherMapper;
         this.tripMapper = tripMapper;
+        this.tripDayMapper = tripDayMapper;
         this.objectMapper = objectMapper;
         this.llmClient = llmClient;
     }
@@ -118,10 +125,20 @@ public class AiService {
     }
 
     public Map<String, Object> chat(Long userId, String question) {
+        return chat(userId, question, Map.of());
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> chat(Long userId, String question, Map<String, Object> body) {
         String q = question != null ? question.trim() : "";
         if (q.isEmpty()) return simpleAnswer("请告诉我你想了解贵州旅游的哪个方面？", false);
 
         int tier = classifyQuestion(q);
+
+        // Today suggestion: build full context
+        if (isTodaySuggestionQuestion(q)) {
+            return todaySuggestion(userId, q, body);
+        }
 
         // Tier 1: travel — call LLM
         if (tier == 1 && llmClient.isConfigured()) {
@@ -319,6 +336,206 @@ public class AiService {
         return articleMapper.selectList(new LambdaQueryWrapper<QxKnowledgeArticle>().eq(QxKnowledgeArticle::getStatus, 1)
                         .and(w -> w.like(QxKnowledgeArticle::getQuestion, question).or().like(QxKnowledgeArticle::getAnswer, question)).last("LIMIT 3"))
                 .stream().map(a -> Map.<String, Object>of("id", a.getId(), "question", a.getQuestion())).collect(Collectors.toList());
+    }
+
+    // ========== Today suggestion ==========
+
+    private boolean isTodaySuggestionQuestion(String q) {
+        if (q == null) return false;
+        String[] keywords = {"今天怎么玩", "今天怎么安排", "现在去哪玩", "接下来怎么走", "今天适合去哪",
+                "今天有什么推荐", "今天去哪", "今日建议", "今日怎么玩"};
+        for (String kw : keywords) if (q.contains(kw)) return true;
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> todaySuggestion(Long userId, String q, Map<String, Object> body) {
+        Map<String, Object> tripCtx = buildTripProgressContext(userId);
+        Map<String, Object> locCtx = buildLocationContext(body);
+        String weatherCtx = buildWeatherContext(q);
+
+        if (llmClient.isConfigured()) {
+            try {
+                StringBuilder prompt = new StringBuilder(SYSTEM_PROMPT);
+                prompt.append("\n\n用户正在询问今日建议，请使用 today-suggestion 模式回答：\n");
+                prompt.append("1. 先看用户是否有行程，有行程优先围绕当天安排给建议；\n");
+                prompt.append("2. 如果有天气参考，结合天气给出山地提醒；\n");
+                prompt.append("3. 如果有位置上下文，可以提及\"结合你当前附近情况\"，但不要暴露经纬度；\n");
+                prompt.append("4. 如果没有行程，给出贵州通用当日建议；\n");
+                prompt.append("5. 短段落，不使用 Markdown；\n");
+                prompt.append("6. 不编造天气、票价、开放状态；\n");
+                prompt.append("7. 涉及时效信息，提醒以景区官方公告为准。\n");
+
+                // Trip progress context
+                prompt.append("\n行程进度信息：\n");
+                if (Boolean.TRUE.equals(tripCtx.get("available"))) {
+                    prompt.append("用户当前行程：").append(tripCtx.get("tripTitle")).append("，状态：").append(tripCtx.get("status")).append("\n");
+                    prompt.append("当前是第").append(tripCtx.get("currentDayNumber")).append("天，共").append(tripCtx.get("totalDays")).append("天\n");
+                    Map<String, Object> todayPlan = (Map<String, Object>) tripCtx.get("todayPlan");
+                    if (todayPlan != null && !todayPlan.isEmpty()) {
+                        prompt.append("今日安排：").append(todayPlan.get("title")).append(" — ").append(todayPlan.get("description")).append("\n");
+                    }
+                } else {
+                    prompt.append("用户暂无有效行程\n");
+                }
+
+                // Location context
+                if (Boolean.TRUE.equals(locCtx.get("hasCoordinates"))) {
+                    prompt.append("\n用户授权了当前位置（坐标已脱敏），可结合附近景区给建议。\n");
+                }
+
+                prompt.append("\n").append(weatherCtx);
+                prompt.append(buildDatabaseContext());
+
+                String rawAnswer = llmClient.chat(prompt.toString(), q);
+                Map<String, Object> result = buildChatResult(sanitizeAnswer(rawAnswer), false, 0.9, q);
+                result.put("tripProgressContext", tripCtx);
+                result.put("locationContext", locCtx);
+                return result;
+            } catch (Exception e) {
+                log.error("Today suggestion LLM failed, fallback to rule: {}", e.getMessage());
+            }
+        }
+
+        // Rule-based fallback for today suggestion
+        StringBuilder answer = new StringBuilder();
+        if (Boolean.TRUE.equals(tripCtx.get("available"))) {
+            answer.append("根据你当前的行程「").append(tripCtx.get("tripTitle")).append("」，");
+            answer.append("今天是第").append(tripCtx.get("currentDayNumber")).append("天。\n\n");
+            Map<String, Object> todayPlan = (Map<String, Object>) tripCtx.get("todayPlan");
+            if (todayPlan != null && !todayPlan.isEmpty()) {
+                answer.append("今日建议围绕").append(todayPlan.get("title")).append("展开。\n\n");
+            }
+        } else {
+            answer.append("你当前暂无有效行程。\n\n");
+        }
+        answer.append("贵州山地天气变化较快，出发前建议查看景区官方信息，准备雨具和舒适鞋。\n\n");
+        answer.append("你可以告诉我出行天数、偏好和节奏，我来帮你规划今天的行程安排。");
+
+        Map<String, Object> result = buildChatResult(answer.toString(), false, 0.8, q);
+        result.put("tripProgressContext", tripCtx);
+        result.put("locationContext", locCtx);
+        return result;
+    }
+
+    private Map<String, Object> buildTripProgressContext(Long userId) {
+        Map<String, Object> ctx = new LinkedHashMap<>();
+        ctx.put("enabled", true);
+        if (userId == null) {
+            ctx.put("available", false);
+            ctx.put("tips", List.of("用户未登录，无法查询行程进度"));
+            return ctx;
+        }
+
+        // Priority: ongoing > upcoming
+        List<QxUserTrip> trips = tripMapper.selectList(
+                new LambdaQueryWrapper<QxUserTrip>().eq(QxUserTrip::getUserId, userId)
+                        .eq(QxUserTrip::getStatus, "ongoing").last("LIMIT 1"));
+        if (trips.isEmpty()) {
+            trips = tripMapper.selectList(
+                    new LambdaQueryWrapper<QxUserTrip>().eq(QxUserTrip::getUserId, userId)
+                            .eq(QxUserTrip::getStatus, "upcoming").last("LIMIT 1"));
+        }
+        if (trips.isEmpty()) {
+            trips = tripMapper.selectList(
+                    new LambdaQueryWrapper<QxUserTrip>().eq(QxUserTrip::getUserId, userId)
+                            .eq(QxUserTrip::getStatus, "active").last("LIMIT 1"));
+        }
+
+        if (trips.isEmpty()) {
+            ctx.put("available", false);
+            ctx.put("tips", List.of("用户当前暂无有效行程，可给出通用贵州当日游建议。"));
+            return ctx;
+        }
+
+        QxUserTrip trip = trips.get(0);
+        ctx.put("available", true);
+        ctx.put("tripId", trip.getId());
+        ctx.put("tripTitle", trip.getCustomName() != null ? trip.getCustomName() : trip.getRouteName());
+        ctx.put("status", trip.getStatus() != null ? trip.getStatus() : "upcoming");
+        ctx.put("totalDays", trip.getDayCount() != null ? trip.getDayCount() : 1);
+
+        int dayNumber = computeCurrentDayNumber(trip);
+        ctx.put("currentDayNumber", Math.min(dayNumber, trip.getDayCount() != null ? trip.getDayCount() : 1));
+
+        // Query today's day plan
+        List<QxUserTripDay> days = tripDayMapper.selectList(
+                new LambdaQueryWrapper<QxUserTripDay>().eq(QxUserTripDay::getTripId, trip.getId())
+                        .eq(QxUserTripDay::getDayNumber, ctx.get("currentDayNumber")).last("LIMIT 1"));
+        if (!days.isEmpty()) {
+            QxUserTripDay d = days.get(0);
+            Map<String, Object> plan = new LinkedHashMap<>();
+            plan.put("dayNumber", d.getDayNumber());
+            plan.put("title", d.getTitle() != null ? d.getTitle() : "第" + d.getDayNumber() + "天");
+            plan.put("description", d.getDescription() != null ? d.getDescription() : "");
+            plan.put("meals", d.getMeals() != null ? d.getMeals() : "");
+            plan.put("accommodation", d.getAccommodation() != null ? d.getAccommodation() : "");
+            ctx.put("todayPlan", plan);
+        } else {
+            ctx.put("todayPlan", Map.of("title", "第" + ctx.get("currentDayNumber") + "天", "description", "暂无详细安排"));
+        }
+
+        return ctx;
+    }
+
+    private int computeCurrentDayNumber(QxUserTrip trip) {
+        if (trip.getStartedAt() != null) {
+            long days = ChronoUnit.DAYS.between(
+                    trip.getStartedAt().toLocalDate(), LocalDate.now());
+            return Math.max(1, (int) days + 1);
+        }
+        if (trip.getTravelStartDate() != null) {
+            long days = ChronoUnit.DAYS.between(
+                    trip.getTravelStartDate(), LocalDate.now());
+            return Math.max(1, (int) days + 1);
+        }
+        return 1;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> buildLocationContext(Map<String, Object> body) {
+        Map<String, Object> ctx = new LinkedHashMap<>();
+        ctx.put("enabled", true);
+
+        if (body == null || body.isEmpty()) {
+            ctx.put("available", false);
+            ctx.put("hasCoordinates", false);
+            ctx.put("privacyNote", "仅用于本次出行建议");
+            return ctx;
+        }
+
+        Object locObj = body.get("locationContext");
+        if (!(locObj instanceof Map)) {
+            ctx.put("available", false);
+            ctx.put("hasCoordinates", false);
+            ctx.put("privacyNote", "仅用于本次出行建议");
+            return ctx;
+        }
+
+        Map<String, Object> loc = (Map<String, Object>) locObj;
+        Boolean enabled = (Boolean) loc.getOrDefault("enabled", false);
+
+        if (!Boolean.TRUE.equals(enabled)) {
+            ctx.put("available", false);
+            ctx.put("hasCoordinates", false);
+            ctx.put("privacyNote", "仅用于本次出行建议");
+            return ctx;
+        }
+
+        Object lat = loc.get("latitude");
+        Object lng = loc.get("longitude");
+        if (lat instanceof Number && lng instanceof Number) {
+            ctx.put("available", true);
+            ctx.put("hasCoordinates", true);
+            ctx.put("privacyNote", "仅用于本次出行建议");
+            // Do NOT log coordinates
+        } else {
+            ctx.put("available", false);
+            ctx.put("hasCoordinates", false);
+            ctx.put("privacyNote", "仅用于本次出行建议");
+        }
+
+        return ctx;
     }
 
     private boolean isGuizhouTravelRelated(String question) {

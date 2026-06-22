@@ -1,4 +1,15 @@
 <view class="ai-page">
+  <!-- 位置授权弹窗 -->
+  <view class="location-modal-mask" wx:if="{{showLocationModal}}" bindtap="onCloseLocationModal"></view>
+  <view class="location-modal" wx:if="{{showLocationModal}}">
+    <view class="location-modal-title">是否使用当前位置</view>
+    <view class="location-modal-body">使用当前位置后，AI助手可以结合附近景区和当天安排给出更合适的建议。本次仅用于生成出行建议。</view>
+    <view class="location-modal-actions">
+      <view class="location-modal-btn location-modal-btn-cancel" bindtap="onCloseLocationModal">暂不使用</view>
+      <view class="location-modal-btn location-modal-btn-ok" bindtap="onAllowLocation">使用当前位置</view>
+    </view>
+  </view>
+
   <view class="ai-header">
     <view class="ai-header-row">
       <view class="ai-header-left">

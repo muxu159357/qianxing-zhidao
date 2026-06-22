@@ -19,6 +19,11 @@
     "navigationBarTextStyle": "white",
     "backgroundColor": "#f4f8f5"
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于结合当前位置提供更合适的出行建议"
+    }
+  },
   "tabBar": {
     "color": "#667085",
     "selectedColor": "#1f8f5f",
