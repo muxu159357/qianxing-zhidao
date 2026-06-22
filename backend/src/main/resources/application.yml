@@ -29,3 +29,10 @@ weather:
   api-base-url: ${WEATHER_API_BASE_URL:}
   api-key: ${WEATHER_API_KEY:}
   update-enabled: ${WEATHER_UPDATE_ENABLED:false}
+
+admin:
+  bootstrap:
+    enabled: ${ADMIN_BOOTSTRAP_ENABLED:false}
+    username: ${ADMIN_BOOTSTRAP_USERNAME:}
+    password: ${ADMIN_BOOTSTRAP_PASSWORD:}
+    display-name: ${ADMIN_BOOTSTRAP_DISPLAY_NAME:管理员}

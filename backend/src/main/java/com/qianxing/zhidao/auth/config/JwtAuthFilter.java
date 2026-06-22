@@ -62,6 +62,13 @@ public class JwtAuthFilter implements Filter {
         String token = authHeader.substring(7);
         try {
             Claims claims = jwtUtil.parseToken(token);
+            // Admin path guard: only tokens with role=admin can access /api/admin/**
+            if (path.startsWith("/api/admin/")) {
+                if (!"admin".equals(claims.get("role", String.class))) {
+                    writeForbidden(httpResp, "无权限访问后台接口");
+                    return;
+                }
+            }
             httpReq.setAttribute("userId", jwtUtil.getUserId(claims));
             httpReq.setAttribute("openid", claims.get("openid", String.class));
             chain.doFilter(request, response);
@@ -83,5 +90,11 @@ public class JwtAuthFilter implements Filter {
         response.setStatus(401);
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(ApiResponse.fail(401, message)));
+    }
+
+    private void writeForbidden(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(403);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(objectMapper.writeValueAsString(ApiResponse.fail(403, message)));
     }
 }
