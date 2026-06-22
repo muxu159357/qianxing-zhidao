@@ -1,261 +1,46 @@
-/* 首页样式 · V20-A 美化 */
-.home-page { background: linear-gradient(180deg, #eef7f1 0%, #f5f7f5 100%); }
+/* index.wxss · UI-1C 景区选择页 */
+.home-page { min-height:100vh; background:linear-gradient(180deg, #f0f7f3 0%, #f5f7f5 50%, #ffffff 100%); padding-bottom:120rpx; }
 
-/* ===== Hero Section ===== */
-.hero-section {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(160deg, #1a7a50 0%, #1f8f5f 40%, #2f6bff 100%);
-  padding: 80rpx 48rpx 0;
-  text-align: center; color: #fff;
-}
-.hero-bg-img {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
-}
-.hero-video-mask {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 1;
-  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.3) 100%);
-}
-/* V20-A: 云雾光斑 */
-.hero-cloud {
-  position: absolute; z-index: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero-cloud-1 {
-  width: 360rpx; height: 180rpx;
-  top: -40rpx; left: -60rpx;
-}
-.hero-cloud-2 {
-  width: 280rpx; height: 140rpx;
-  bottom: 80rpx; right: -80rpx;
-  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-}
+.home-hero { position:relative; display:flex; align-items:center; justify-content:center; padding:80rpx 40rpx 60rpx; overflow:hidden; }
+.home-hero-bg { position:absolute; inset:0; background:linear-gradient(160deg, rgba(31,143,95,0.06) 0%, rgba(47,107,255,0.04) 60%, rgba(255,255,255,0) 100%); }
+.home-hero-content { position:relative; display:flex; flex-direction:column; align-items:center; }
+.home-logo { width:100rpx; height:100rpx; border-radius:24rpx; margin-bottom:24rpx; box-shadow:0 8rpx 32rpx rgba(31,143,95,0.15); }
+.home-brand { font-size:40rpx; font-weight:700; color:#10251d; letter-spacing:4rpx; margin-bottom:12rpx; }
+.home-sub { font-size:26rpx; color:#5d6b7a; text-align:center; margin-bottom:32rpx; line-height:1.5; }
+.home-cta { width:480rpx; height:88rpx; line-height:88rpx; border-radius:44rpx; background:linear-gradient(135deg,#1f8f5f,#2f6bff); color:#fff; font-size:30rpx; font-weight:600; border:none; box-shadow:0 6rpx 24rpx rgba(31,143,95,0.25); }
+.home-cta::after { border:none; }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-  padding-bottom: 40rpx;
-}
-.hero-logo {
-  width: 96rpx; height: 96rpx; border-radius: 32rpx;
-  margin: 0 auto 20rpx;
-}
-.hero-brand { font-size: 52rpx; font-weight: 800; letter-spacing: 0.06em; }
-.hero-subtitle { font-size: 26rpx; opacity: 0.85; margin-top: 10rpx; letter-spacing: 0.04em; }
-.hero-desc { font-size: 26rpx; opacity: 0.72; margin-top: 28rpx; line-height: 1.75; white-space: pre-line; }
-.hero-actions {
-  margin-top: 48rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20rpx;
-  padding: 0;
-}
-.hero-btn {
-  width: 88%;
-  height: 96rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34rpx;
-  font-weight: 700;
-  border-radius: 48rpx;
-  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.2);
-}
-.pulse-glow {
-  animation: softPulse 3s ease-in-out infinite;
-}
-.hero-btn-secondary {
-  width: 88%;
-  height: 88rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30rpx;
-  font-weight: 600;
-  border-radius: 44rpx;
-  border: 2rpx solid rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  transition: background 0.2s ease, transform 0.15s ease;
-}
-.hero-btn-secondary:active {
-  background: rgba(255,255,255,0.2);
-  transform: scale(0.97);
-}
+.home-quick { display:flex; padding:0 24rpx; gap:16rpx; margin-bottom:32rpx; }
+.home-quick-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:24rpx 8rpx; background:rgba(255,255,255,0.8); border-radius:20rpx; box-shadow:0 2rpx 16rpx rgba(0,0,0,0.03); }
+.home-quick-icon { width:48rpx; height:48rpx; margin-bottom:10rpx; }
+.home-quick-title { font-size:26rpx; font-weight:600; color:#10251d; margin-bottom:4rpx; }
+.home-quick-sub { font-size:20rpx; color:#8a9bb5; }
 
-/* V20-A: 底部山形装饰 */
-.hero-mountains {
-  position: relative; z-index: 3;
-  height: 64rpx;
-  margin: 0 -48rpx;
-}
-.mountain {
-  position: absolute; bottom: 0;
-  width: 0; height: 0;
-}
-.mountain-1 {
-  left: 10%;
-  border-left: 180rpx solid transparent;
-  border-right: 140rpx solid transparent;
-  border-bottom: 64rpx solid rgba(255,255,255,0.08);
-}
-.mountain-2 {
-  left: 30%;
-  border-left: 160rpx solid transparent;
-  border-right: 200rpx solid transparent;
-  border-bottom: 48rpx solid rgba(255,255,255,0.05);
-}
-.mountain-3 {
-  left: 55%;
-  border-left: 220rpx solid transparent;
-  border-right: 120rpx solid transparent;
-  border-bottom: 56rpx solid rgba(255,255,255,0.06);
-}
+.home-section { padding:0 24rpx; margin-bottom:32rpx; }
+.home-section-title { font-size:30rpx; font-weight:700; color:#10251d; margin-bottom:18rpx; }
 
-/* ===== Features ===== */
-.features { padding: 48rpx 32rpx 24rpx; }
-.section-title {
-  font-size: 36rpx; font-weight: 700; color: #10251d;
-  margin-bottom: 24rpx;
-  padding-left: 16rpx;
-  border-left: 6rpx solid #1f8f5f;
-}
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20rpx;
-  width: 100%;
-  box-sizing: border-box;
-}
-.feature-card {
-  width: 100%;
-  min-width: 0;
-  min-height: 200rpx;
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 32rpx 24rpx 28rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1rpx solid #e8edea;
-  box-shadow: 0 4rpx 20rpx rgba(16,37,29,0.05);
-  box-sizing: border-box;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.feature-card:active {
-  transform: translateY(-4rpx);
-  box-shadow: 0 8rpx 32rpx rgba(16,37,29,0.1);
-}
-.feature-icon {
-  width: 72rpx; height: 72rpx; border-radius: 20rpx;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24rpx; font-weight: 700; color: #1f8f5f;
-  flex-shrink: 0; overflow: hidden;
-}
-.feature-icon-img {
-  width: 100%; height: 100%;
-}
-.feature-title {
-  font-size: 28rpx; font-weight: 700; color: #10251d;
-  margin-top: 16rpx;
-}
-.feature-desc {
-  font-size: 22rpx; color: #909399;
-  margin-top: 8rpx; line-height: 1.5;
-  text-align: center;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
+.home-cats { white-space:nowrap; margin-bottom:20rpx; }
+.home-cat { display:inline-block; font-size:24rpx; color:#5d6b7a; background:rgba(255,255,255,0.7); padding:12rpx 24rpx; border-radius:28rpx; margin-right:12rpx; border:1rpx solid rgba(0,0,0,0.06); }
+.home-cat-active { color:#fff; background:linear-gradient(135deg,#1f8f5f,#2f6bff); border:none; }
 
-/* ===== Routes Preview ===== */
-.routes-preview { padding: 24rpx 32rpx 48rpx; }
-.route-preview-card {
-  display: flex; align-items: center;
-  background: #ffffff;
-  border-radius: 20rpx;
-  padding: 24rpx;
-  margin-bottom: 16rpx;
-  border: 1rpx solid #e8edea;
-  box-shadow: 0 4rpx 20rpx rgba(16,37,29,0.05);
-  gap: 20rpx;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.route-preview-card:active {
-  transform: translateY(-4rpx);
-  box-shadow: 0 8rpx 32rpx rgba(16,37,29,0.1);
-}
+.home-scenic-grid { display:flex; flex-wrap:wrap; gap:16rpx; }
+.home-scenic-card { width:calc(50% - 8rpx); background:#fff; border-radius:20rpx; overflow:hidden; box-shadow:0 2rpx 16rpx rgba(0,0,0,0.05); }
+.home-scenic-img { width:100%; height:180rpx; overflow:hidden; }
+.home-scenic-thumb { width:100%; height:100%; }
+.home-scenic-info { padding:16rpx; }
+.home-scenic-name { font-size:26rpx; font-weight:600; color:#10251d; margin-bottom:4rpx; }
+.home-scenic-city { font-size:22rpx; color:#8a9bb5; margin-bottom:8rpx; }
+.home-scenic-tags { display:flex; gap:8rpx; }
+.home-scenic-tag { font-size:20rpx; color:#1f8f5f; background:rgba(31,143,95,0.08); padding:4rpx 12rpx; border-radius:16rpx; }
 
-/* V20-I: route theme thumbnail image */
-.rpc-thumb {
-  width: 100rpx; height: 100rpx;
-  border-radius: 16rpx;
-  flex-shrink: 0;
-  overflow: hidden;
-  background: #d4ede0;
-}
-.rpc-thumb-img {
-  width: 100%; height: 100%;
-}
+.home-route-list { display:flex; flex-direction:column; gap:16rpx; }
+.home-route-card { display:flex; gap:16rpx; background:#fff; border-radius:20rpx; padding:20rpx; box-shadow:0 2rpx 16rpx rgba(0,0,0,0.05); }
+.home-route-left { flex-shrink:0; }
+.home-route-thumb { width:140rpx; height:140rpx; border-radius:16rpx; overflow:hidden; }
+.home-route-img { width:100%; height:100%; }
+.home-route-body { flex:1; display:flex; flex-direction:column; justify-content:center; }
+.home-route-name { font-size:28rpx; font-weight:600; color:#10251d; margin-bottom:6rpx; }
+.home-route-meta { font-size:22rpx; color:#1f8f5f; margin-bottom:6rpx; }
+.home-route-desc { font-size:22rpx; color:#5d6b7a; line-height:1.4; }
 
-.rpc-body { flex: 1; min-width: 0; }
-.rpc-name { font-size: 30rpx; font-weight: 700; color: #10251d; }
-.rpc-desc {
-  font-size: 24rpx; color: #909399;
-  margin-top: 6rpx; line-height: 1.45;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.rpc-tags { margin-top: 10rpx; }
-.tag-mini {
-  display: inline-block; font-size: 20rpx;
-  padding: 4rpx 14rpx; border-radius: 10rpx;
-  background: rgba(31,143,95,0.06); color: #1f8f5f;
-  margin-right: 8rpx; font-weight: 500;
-}
-
-/* V20-A: 天数徽章 */
-.rpc-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12rpx;
-  flex-shrink: 0;
-}
-.rpc-days-badge {
-  width: 72rpx; height: 72rpx;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(31,143,95,0.1), rgba(47,107,255,0.08));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 32rpx;
-  font-weight: 800;
-  color: #1f8f5f;
-  line-height: 1;
-}
-.rpc-days-unit {
-  font-size: 18rpx;
-  font-weight: 500;
-  color: #909399;
-}
-.rpc-arrow-icon {
-  width: 0; height: 0;
-  border-top: 10rpx solid transparent;
-  border-bottom: 10rpx solid transparent;
-  border-left: 12rpx solid #d0d5dd;
-}
-
-.view-all-btn {
-  margin-top: 24rpx; width: 100%;
-  height: 80rpx; line-height: 80rpx;
-  font-size: 30rpx;
-}
+.home-bottom { height:40rpx; }

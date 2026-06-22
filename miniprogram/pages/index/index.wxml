@@ -1,67 +1,60 @@
-<!-- 首页 · V20-A 美化 -->
-<view class="page-wrap home-page">
-  <view class="hero-section">
-    <image class="hero-bg-img" src="/assets/images/home-hero.jpg" mode="aspectFill" />
-    <view class="hero-video-mask"></view>
-    <!-- V20-A: 云雾光斑装饰 -->
-    <view class="hero-cloud hero-cloud-1"></view>
-    <view class="hero-cloud hero-cloud-2"></view>
-    <view class="hero-content">
-      <image class="hero-logo anim-fade-scale" src="/assets/images/brand/logo.png" mode="aspectFit" />
-      <view class="hero-brand anim-fade-up" style="animation-delay:0.05s">黔行智导</view>
-      <view class="hero-subtitle anim-fade-up" style="animation-delay:0.12s">贵州山地旅游 AI 个性化导览</view>
-      <text class="hero-desc anim-fade-up" style="animation-delay:0.19s">基于游客兴趣画像与智能推荐算法\n为您定制专属贵州旅游路线</text>
-      <view class="hero-actions anim-fade-up" style="animation-delay:0.26s">
-        <button class="btn-primary hero-btn pulse-glow" bindtap="goPlanner">开始智能规划</button>
-        <button class="btn-outline hero-btn-secondary" bindtap="goKnowledge">浏览景点</button>
-      </view>
-    </view>
-    <!-- V20-A: 底部山形装饰 -->
-    <view class="hero-mountains">
-      <view class="mountain mountain-1"></view>
-      <view class="mountain mountain-2"></view>
-      <view class="mountain mountain-3"></view>
+<view class="home-page">
+  <view class="home-hero">
+    <view class="home-hero-bg"></view>
+    <view class="home-hero-content">
+      <image class="home-logo" src="/assets/images/brand/logo.png" mode="aspectFit" />
+      <view class="home-brand">黔行智导</view>
+      <view class="home-sub">贵州山地旅游 AI 个性化导览平台</view>
+      <button class="home-cta" bindtap="goPlanner">开始智能规划</button>
     </view>
   </view>
 
-  <view class="features">
-    <view class="section-title anim-fade-up">核心能力</view>
-    <view class="feature-grid">
-      <view class="feature-card tap-lift anim-fade-up" wx:for="{{features}}" wx:key="title" wx:for-index="idx"
-        style="animation-delay:{{idx * 0.08}}s"
-        bindtap="onFeatureTap" data-key="{{item.key}}">
-        <view class="feature-icon" style="background:{{item.bg}}">
-          <image wx:if="{{item.icon}}" class="feature-icon-img" src="{{item.icon}}" mode="aspectFit" />
-          <text wx:else>{{item.tag}}</text>
-        </view>
-        <view class="feature-title">{{item.title}}</view>
-        <view class="feature-desc">{{item.desc}}</view>
-      </view>
+  <view class="home-quick">
+    <view class="home-quick-item" wx:for="{{quickEntries}}" wx:key="key" bindtap="onQuickTap" data-key="{{item.key}}">
+      <image class="home-quick-icon" src="{{item.icon}}" mode="aspectFit" />
+      <view class="home-quick-title">{{item.title}}</view>
+      <view class="home-quick-sub">{{item.sub}}</view>
     </view>
   </view>
 
-  <view class="routes-preview">
-    <view class="section-title anim-fade-up">精选路线</view>
-    <view class="route-list">
-      <view class="route-preview-card tap-lift anim-fade-up" wx:for="{{topRoutes}}" wx:key="route.id" wx:for-index="idx"
-        style="animation-delay:{{idx * 0.08}}s"
-        bindtap="goRouteDetail" data-id="{{item.route.id}}">
-        <view class="rpc-thumb">
-          <image class="rpc-thumb-img" src="{{item.coverImage}}" mode="aspectFill" />
+  <view class="home-section">
+    <view class="home-section-title">探索景区</view>
+    <scroll-view class="home-cats" scroll-x>
+      <view class="home-cat {{activeCategory===item.key?'home-cat-active':''}}" wx:for="{{categories}}" wx:key="key" bindtap="onCategoryTap" data-key="{{item.key}}">{{item.label}}</view>
+    </scroll-view>
+    <view class="home-scenic-grid">
+      <view class="home-scenic-card" wx:for="{{filteredSpots}}" wx:key="id" bindtap="goScenicDetail" data-id="{{item.id}}">
+        <view class="home-scenic-img" style="background:linear-gradient(135deg, rgba(31,143,95,0.3), rgba(47,107,255,0.2));">
+          <image class="home-scenic-thumb" src="{{item.coverImage || item.imageUrl || '/assets/images/scenic/scenic-huangguoshu.jpg'}}" mode="aspectFill" />
         </view>
-        <view class="rpc-body">
-          <view class="rpc-name">{{item.route.name}}</view>
-          <view class="rpc-desc">{{item.route.description}}</view>
-          <view class="rpc-tags">
-            <text class="tag-mini" wx:for="{{item.route.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+        <view class="home-scenic-info">
+          <view class="home-scenic-name">{{item.name}}</view>
+          <view class="home-scenic-city">{{item.city}}</view>
+          <view class="home-scenic-tags">
+            <view class="home-scenic-tag" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this" wx:if="{{index < 2}}">{{t}}</view>
           </view>
         </view>
-        <view class="rpc-right">
-          <view class="rpc-days-badge">{{item.route.days}}<text class="rpc-days-unit">天</text></view>
-          <view class="rpc-arrow-icon"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="home-section">
+    <view class="home-section-title">推荐路线</view>
+    <view class="home-route-list">
+      <view class="home-route-card" wx:for="{{topRoutes}}" wx:key="route.id" bindtap="goRouteDetail" data-id="{{item.route.id}}">
+        <view class="home-route-left">
+          <view class="home-route-thumb" style="background:linear-gradient(135deg, rgba(47,107,255,0.3), rgba(31,143,95,0.2));">
+            <image class="home-route-img" src="{{item.coverImage}}" mode="aspectFill" />
+          </view>
+        </view>
+        <view class="home-route-body">
+          <view class="home-route-name">{{item.route.name}}</view>
+          <view class="home-route-meta">{{item.route.dayCount||item.route.days}}天 · {{item.route.energyLevel||item.route.physicalLevel||'适中'}}</view>
+          <view class="home-route-desc">{{item.route.description}}</view>
         </view>
       </view>
     </view>
-    <button class="btn-outline view-all-btn" bindtap="goPlanner">查看更多路线</button>
   </view>
+
+  <view class="home-bottom"></view>
 </view>
