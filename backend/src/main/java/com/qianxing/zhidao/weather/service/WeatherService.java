@@ -48,7 +48,7 @@ public class WeatherService {
         this.apiKey = apiKey != null ? apiKey.trim() : "";
         this.configured = !this.apiKey.isBlank() && !this.apiBaseUrl.isBlank();
     }
-
+    public boolean isConfigured() { return configured; }
     public List<QxScenicWeather> getScenicWeather(Long scenicId) {
         return weatherMapper.selectList(new LambdaQueryWrapper<QxScenicWeather>()
                 .eq(QxScenicWeather::getScenicSpotId, scenicId).orderByDesc(QxScenicWeather::getWeatherDate).last("LIMIT 7"));

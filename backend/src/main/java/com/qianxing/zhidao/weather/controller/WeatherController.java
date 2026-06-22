@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @Tag(name = "weather", description = "天气接口")
 @RestController
@@ -27,8 +27,7 @@ public class WeatherController {
     }
 
     @Operation(summary = "刷新景区天气")
-    @PostMapping("/scenic/{scenicId}/refresh")
-    public ApiResponse<List<QxScenicWeather>> refreshScenicWeather(@PathVariable Long scenicId) {
-        return ApiResponse.ok(weatherService.refreshScenicWeather(scenicId));
-    }
+    @PostMapping("/scenic/{scenicId}/refresh") public ApiResponse<List<QxScenicWeather>> refreshScenicWeather(@PathVariable Long scenicId) { return ApiResponse.ok(weatherService.refreshScenicWeather(scenicId)); }
+
+    @GetMapping("/status") public ApiResponse<Map<String, Object>> status() { Map<String, Object> m = new LinkedHashMap<>(); m.put("provider","amap"); m.put("configured",weatherService.isConfigured()); m.put("locations",weatherService.listLocations().size()); return ApiResponse.ok(m); }
 }
