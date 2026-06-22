@@ -10,6 +10,7 @@
     "pages/knowledge/knowledge",
     "pages/scenic-detail/scenic-detail",
     "pages/my-trips/my-trips",
+    "pages/ai-plan-preview/ai-plan-preview",
     "pages/trip-detail/trip-detail"
   ],
   "window": {

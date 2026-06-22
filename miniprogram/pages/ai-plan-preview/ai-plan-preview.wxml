@@ -1,0 +1,29 @@
+<view class="preview-page">
+  <view class="preview-loading" wx:if="{{loading}}"><view class="preview-loading-text">加载草稿中...</view></view>
+  <block wx:elif="{{errorMsg}}">
+    <view class="preview-error">{{errorMsg}}</view>
+    <view class="preview-actions"><view class="preview-btn preview-btn-outline" bindtap="onBack">返回</view></view>
+  </block>
+  <block wx:elif="{{draft}}">
+    <view class="preview-hero">
+      <view class="preview-title">{{draft.title || '线路草稿'}}</view>
+      <view class="preview-summary">{{draft.summary || ''}}</view>
+      <view class="preview-meta">草稿将在一段时间后失效，请确认后保存</view>
+    </view>
+    <view class="preview-section" wx:if="{{draft.days && draft.days.length}}">
+      <view class="preview-section-title">每日安排</view>
+      <view class="preview-day" wx:for="{{draft.days}}" wx:key="dayIndex">
+        <view class="preview-day-header">第{{item.dayIndex}}天{{item.theme ? ' · '+item.theme : ''}}</view>
+        <view class="preview-day-item" wx:for="{{item.items}}" wx:key="timeRange" wx:for-item="di">
+          <view class="preview-day-time">{{di.timeRange}}</view>
+          <view class="preview-day-body"><view class="preview-day-title">{{di.title}}</view><view class="preview-day-desc" wx:if="{{di.description}}">{{di.description}}</view></view>
+        </view>
+      </view>
+    </view>
+    <view class="preview-actions">
+      <view class="preview-btn preview-btn-primary" bindtap="onConfirmSave">保存到我的行程</view>
+      <view class="preview-btn preview-btn-outline" bindtap="onRegenerate">重新生成</view>
+      <view class="preview-btn preview-btn-ghost" bindtap="onBack">返回AI助手</view>
+    </view>
+  </block>
+</view>
