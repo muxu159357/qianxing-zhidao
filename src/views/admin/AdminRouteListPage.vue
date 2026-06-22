@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { adminGetRoutes, adminCreateRoute, adminUpdateRoute, adminUpdateRouteStatus, adminDeleteRoute, type AdminRoute, type AdminRouteForm } from '@/api/admin-route'
+
+const router = useRouter()
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const routes = ref<AdminRoute[]>([])
@@ -48,7 +51,7 @@ onMounted(() => { loadRoutes() })
         <el-table-column prop="id" label="ID" width="60"/><el-table-column prop="name" label="名称" min-width="160"/><el-table-column prop="dayCount" label="天数" width="60"/><el-table-column prop="theme" label="主题" width="100"/><el-table-column prop="energyLevel" label="强度" width="70"/><el-table-column prop="sortOrder" label="排序" width="70"/>
         <el-table-column label="状态" width="80"><template #default="{ row }"><el-tag :type="sMap[row.status]?.t||'info'" size="small">{{ sMap[row.status]?.tx||'未知' }}</el-tag></template></el-table-column>
         <el-table-column prop="updatedAt" label="更新时间" width="170"/>
-        <el-table-column label="操作" width="220" fixed="right"><template #default="{ row }"><el-button text type="primary" size="small" @click="openEdit(row)">编辑</el-button><el-button text size="small" :type="row.status===1?'warning':'success'" @click="onToggleStatus(row)">{{ row.status===1?'下架':'上架' }}</el-button><el-button text type="danger" size="small" @click="onDelete(row)">禁用</el-button></template></el-table-column>
+        <el-table-column label="操作" width="280" fixed="right"><template #default="{ row }"><el-button text type="primary" size="small" @click="openEdit(row)">编辑</el-button><el-button text size="small" :type="row.status===1?'warning':'success'" @click="onToggleStatus(row)">{{ row.status===1?'下架':'上架' }}</el-button><el-button text type="danger" size="small" @click="onDelete(row)">禁用</el-button><el-button text type="info" size="small" @click="router.push('/admin/routes/'+row.id+'/schedule')">日程</el-button></template></el-table-column>
       </el-table>
       <div v-if="!loading && routes.length===0" class="eh">暂无数据</div>
       <div style="margin-top:16px;text-align:right"><el-pagination v-model:current-page="currentPage" :page-size="pageSize" :total="total" layout="total, prev, pager, next" @current-change="onPageChange"/></div>
