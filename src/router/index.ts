@@ -56,6 +56,7 @@ const router = createRouter({
         { path: 'scenic', name: 'admin-scenic', component: () => import('@/views/admin/AdminScenicListPage.vue') },
         { path: 'routes', name: 'admin-routes', component: () => import('@/views/admin/AdminRouteListPage.vue') },
         { path: 'routes/:id/schedule', name: 'admin-route-schedule', component: () => import('@/views/admin/AdminRouteSchedulePage.vue') },
+        { path: 'knowledge', name: 'admin-knowledge', component: () => import('@/views/admin/AdminKnowledgeListPage.vue') },
       ],
     },
     {

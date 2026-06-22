@@ -11,7 +11,7 @@ const menuItems = [
   { path: '/admin/dashboard', title: '工作台', icon: 'Monitor' },
   { path: '/admin/scenic', title: '景点管理', icon: 'Picture' },
   { path: '/admin/routes', title: '路线管理', icon: 'Promotion' },
-  { path: '/admin/knowledge', title: '知识库管理', icon: 'Reading', disabled: true },
+  { path: '/admin/knowledge', title: '知识库管理', icon: 'Reading' },
   { path: '/admin/media', title: '媒体管理', icon: 'FolderOpened', disabled: true },
   { path: '/admin/weather', title: '天气管理', icon: 'Sunny', disabled: true },
   { path: '/admin/trips', title: '行程管理', icon: 'List', disabled: true },
