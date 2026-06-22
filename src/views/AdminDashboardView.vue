@@ -113,11 +113,14 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck — legacy admin page, replaced by src/views/admin/
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { PictureFilled, MapLocation, Collection, TrendCharts } from '@element-plus/icons-vue'
 import gsap from 'gsap'
 import { useAdminApi, type ScenicItem } from '@/composables/useAdminApi'
+
+type EditableAttraction = ScenicItem & { price?: number; description?: string }
 
 const router = useRouter()
 const headerRef = ref<HTMLElement | null>(null)
@@ -127,7 +130,7 @@ const adminApi = useAdminApi()
 const attractions = ref<ScenicItem[]>([])
 const searchKeyword = ref('')
 const editingRow = ref<EditableAttraction | null>(null)
-const editForm = ref({ name: '', city: '', price: 0, category: '', description: '' })
+const editForm = ref({ name: '', city: '', ticketPrice: 0, category: '', description: '' as string })
 
 const filteredAttractions = computed(() => {
   const q = searchKeyword.value.trim().toLowerCase()
@@ -177,14 +180,14 @@ function viewDetail(id: string) { router.push(`/scenic/${id}`) }
 function toggleEdit(row: EditableAttraction) {
   if (editingRow.value?.id === row.id) { editingRow.value = null; return }
   editingRow.value = row
-  editForm.value = { name: row.name, city: row.city, price: row.price, category: row.category, description: row.description }
+  editForm.value = { name: row.name, city: row.city, ticketPrice: row.ticketPrice || 0, category: row.category, description: row.description || '' }
 }
 
 function saveEdit() {
   if (!editingRow.value) return
   const idx = attractions.value.findIndex((a) => a.id === editingRow.value!.id)
   if (idx >= 0) {
-    attractions.value[idx] = { ...attractions.value[idx], ...editForm.value, price: Number(editForm.value.price) }
+    attractions.value[idx] = { ...attractions.value[idx], ...editForm.value, ticketPrice: Number(editForm.value.ticketPrice) }
   }
   editingRow.value = null
 }
