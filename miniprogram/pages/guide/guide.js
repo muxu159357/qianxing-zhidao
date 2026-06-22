@@ -326,7 +326,8 @@ Page({
 
     var self = this
     api.aiChat(content).then(function (data) {
-      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。', data.actions);
+      var acts = self._normalizeActions(data.actions, data.suggestedActions)
+      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。', acts);
       self.setData({ isTyping: false });
       self.scrollToBottom();
     }).catch(function () {
@@ -348,7 +349,8 @@ Page({
 
     var self = this
     api.aiChat(question).then(function (data) {
-      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。', data.actions);
+      var acts = self._normalizeActions(data.actions, data.suggestedActions)
+      self.addAIMessage(data.answer || '智能助手正在为你分析，请稍后再次提问。', acts);
       self.setData({ isTyping: false });
       self.scrollToBottom();
     }).catch(function () {
@@ -412,30 +414,38 @@ Page({
     this._startTypewriter(msg.id, clean)
   },
 
+  _pageWhitelist: ['scenic-detail/scenic-detail','route-detail/route-detail','trip-detail/trip-detail','my-trips/my-trips','knowledge/knowledge','guide/guide','recommend/recommend','planner/planner','index/index'],
+  _tabPages: ['index/index','guide/guide','my-trips/my-trips'],
+
   onActionTap(e) {
-    var action = e.currentTarget.dataset.action
-    if (!action) return
-    if (action.type === 'navigate' && action.page) {
-      var tabPages = ['pages/index/index', 'pages/guide/guide', 'pages/my-trips/my-trips']
-      var isTab = tabPages.indexOf(action.page.replace(/^\//, '')) !== -1
-      var params = action.params || {}
-      var query = ''
-      Object.keys(params).forEach(function (k) { query += (query ? '&' : '?') + k + '=' + encodeURIComponent(params[k]) })
-      if (isTab) wx.switchTab({ url: '/' + action.page.replace(/^\//, '') })
-      else wx.navigateTo({ url: '/' + action.page.replace(/^\//, '') + query })
-    } else if (action.type === 'create_ai_plan') {
-      var self = this; var p = action.params || {}
-      self.setData({ isTyping: true })
-      api.createAiPlanDraft({ days: p.days || 3, interests: (p.interests || ['自然风光']).join('、'), pace: p.pace || '轻松', budget: p.budget || '中等' }).then(function (draft) {
-        self.setData({ isTyping: false })
-        self.addAIMessage((draft.summary || '已生成路线草稿') + '\n\n可点击下方按钮保存到我的行程。', [{ type: 'confirm_save', label: '保存到我的行程', draftId: draft.draftId }])
-      }).catch(function () { self.setData({ isTyping: false }); self.addAIMessage('路线生成暂不可用，请稍后再试。') })
-    } else if (action.type === 'confirm_save' && action.draftId) {
-      var self2 = this
-      api.confirmAiPlanDraft(action.draftId).then(function (r) {
-        self2.addAIMessage('已保存到我的行程！', [{ type: 'navigate', label: '查看行程详情', page: '/pages/trip-detail/trip-detail', params: { id: r.tripId, source: 'remote' } }])
-      }).catch(function () { self2.addAIMessage('保存失败，请稍后再试。') })
+    var a = e.currentTarget.dataset.action
+    if (!a) return
+    if (a.type === 'navigate' && a.page) {
+      var clean = a.page.replace(/^\//, '').replace(/^pages\//, '')
+      if (this._pageWhitelist.indexOf(clean) === -1) { wx.showToast({title:'暂时无法打开该页面',icon:'none'}); return }
+      var isTab = this._tabPages.indexOf(clean) !== -1
+      var params = a.params || {}; var q = ''
+      Object.keys(params).forEach(function(k){ q += (q?'&':'?') + k + '=' + encodeURIComponent(params[k]) })
+      if (isTab) wx.switchTab({url:'/pages/'+clean}) else wx.navigateTo({url:'/pages/'+clean+q})
+    } else if (a.type === 'ask_followup' && a.question) {
+      this.setData({inputValue:a.question}); this.sendMessage()
+    } else if (a.type === 'create_ai_plan') {
+      var s=this; var p=a.params||{}
+      s.setData({isTyping:true})
+      api.createAiPlanDraft({days:p.days||3,interests:(p.interests||['自然风光']).join('、'),pace:p.pace||'轻松',budget:p.budget||'中等'}).then(function(d){
+        s.setData({isTyping:false})
+        s.addAIMessage((d.summary||'已生成路线草稿')+'\n\n可点击下方按钮保存到我的行程。',[{type:'confirm_save',label:'保存到我的行程',draftId:d.draftId}])
+      }).catch(function(){s.setData({isTyping:false});s.addAIMessage('路线生成暂不可用，请稍后再试。')})
+    } else if (a.type === 'confirm_save' && a.draftId) {
+      var s2=this
+      api.confirmAiPlanDraft(a.draftId).then(function(r){s2.addAIMessage('已保存到我的行程！',[{type:'navigate',label:'查看行程详情',page:'/pages/trip-detail/trip-detail',params:{id:r.tripId,source:'remote'}}])}).catch(function(){s2.addAIMessage('保存失败，请稍后再试。')})
     }
+  },
+
+  _normalizeActions(actions, suggested) {
+    if (actions && actions.length>0) return actions
+    if (suggested && suggested.length>0) return suggested.map(function(s){ return {type:'ask_followup',label:s,question:s} })
+    return []
   },
 
   addUserMessage(content) {
