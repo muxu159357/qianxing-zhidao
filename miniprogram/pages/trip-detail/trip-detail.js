@@ -596,7 +596,7 @@ Page({
 
     var trip = this.data.trip
     try { this.updateCurrentTrip({ review: review }) } catch (e) { return }
-    if (trip.source === 'remote' && trip.remoteId) { api.saveTripReview(trip.remoteId, review).catch(function(){}) }
+    if (trip.source === 'remote' && trip.remoteId) { api.saveTripReview(trip.remoteId, review).catch(function(){ wx.showToast({title:'云端同步失败，已保留在本机',icon:'none',duration:2000}) }) }
     trip.review = review
     var reviewDateText = this.formatReviewDate(review)
     this.setData({

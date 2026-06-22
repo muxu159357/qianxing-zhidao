@@ -6,6 +6,8 @@ import com.qianxing.zhidao.trip.entity.*;
 import com.qianxing.zhidao.trip.mapper.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import java.util.*;
 
 @Service
 public class TripService {
+    private static final Logger log = LoggerFactory.getLogger(TripService.class);
 
     private final QxUserTripMapper tripMapper;
     private final QxUserTripDayMapper tripDayMapper;
@@ -75,7 +78,7 @@ public class TripService {
                     spot.setTripId(trip.getId()); spot.setSpotName(spotNames.get(j)); spot.setSpotOrder(j + 1);
                     tripSpotMapper.insert(spot);
                 }
-            } catch (Exception e) { /* ignore parse failure */ }
+            } catch (Exception e) { log.warn("Failed to parse planSnapshotJson for trip {}: {}", trip.getId(), e.getMessage()); }
         }
 
         // 生成默认安全清单
