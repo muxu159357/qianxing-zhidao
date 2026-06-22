@@ -58,6 +58,7 @@ const router = createRouter({
         { path: 'routes/:id/schedule', name: 'admin-route-schedule', component: () => import('@/views/admin/AdminRouteSchedulePage.vue') },
         { path: 'knowledge', name: 'admin-knowledge', component: () => import('@/views/admin/AdminKnowledgeListPage.vue') },
         { path: 'media', name: 'admin-media', component: () => import('@/views/admin/AdminMediaListPage.vue') },
+        { path: 'weather', name: 'admin-weather', component: () => import('@/views/admin/AdminWeatherPage.vue') },
       ],
     },
     {
