@@ -1,13 +1,9 @@
 # 黔行智导 · 项目阻塞记录
 
-> 长期连续开发模式 | 阻塞记录
-> 遇到阻塞时记录，跳过该项继续其他开发
+## Redis 未真实启用
 
----
-
-## 2026-06-18 — Redis 不可用（已降级解决）
-
-- 模块：AI 线路草稿（P2）
-- 当前：ConcurrentHashMap 内存缓存，TTL=3600s，commit 4febdd1
-- 风险：重启后草稿丢失（开发阶段可接受）
-- 后续：安装 Redis 后替换 AiPlanDraftCache
+- 模块：AI 线路草稿缓存
+- 状态：pom.xml 已有 Redis 依赖，当前 ConcurrentHashMap 内存降级（commit c4ecef9）
+- 风险：重启草稿丢失，多实例不共享
+- 恢复条件：安装 Redis，配置 REDIS_HOST/PORT/PASSWORD/DATABASE
+- 后续验证：Redis key 写入/读取/TTL/confirm 删除
