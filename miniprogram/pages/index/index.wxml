@@ -41,7 +41,7 @@
   <view class="home-section">
     <view class="home-section-title">推荐路线</view>
     <view class="home-route-list">
-      <view class="home-route-card" wx:for="{{topRoutes}}" wx:key="route.id" bindtap="goRouteDetail" data-id="{{item.route.id}}">
+      <view class="home-route-card" wx:for="{{topRoutes}}" wx:key="index" bindtap="goRouteDetail" data-id="{{item.route.id}}">
         <view class="home-route-left">
           <view class="home-route-thumb" style="background:linear-gradient(135deg, rgba(47,107,255,0.3), rgba(31,143,95,0.2));">
             <image class="home-route-img" src="{{item.coverImage}}" mode="aspectFill" />

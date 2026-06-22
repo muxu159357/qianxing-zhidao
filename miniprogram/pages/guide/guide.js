@@ -466,7 +466,11 @@ Page({
       var isTab = this._tabPages.indexOf(clean) !== -1
       var params = a.params || {}; var q = ''
       Object.keys(params).forEach(function(k){ q += (q?'&':'?') + k + '=' + encodeURIComponent(params[k]) })
-      if (isTab) wx.switchTab({url:'/pages/'+clean}) else wx.navigateTo({url:'/pages/'+clean+q})
+      if (isTab) {
+        wx.switchTab({ url: '/pages/' + clean })
+      } else {
+        wx.navigateTo({ url: '/pages/' + clean + q })
+      }
     } else if (a.type === 'ask_followup' && a.question) {
       this.setData({inputValue:a.question}); this.sendMessage()
     } else if (a.type === 'create_ai_plan') {
