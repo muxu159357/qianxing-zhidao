@@ -91,7 +91,7 @@ public class AiService {
         planRequestMapper.insert(request);
         try {
             if (llmClient.isConfigured()) {
-                String llmResponse = llmClient.chat(SYSTEM_PROMPT, buildDatabaseContext() + "\n\n用户需求：" + buildPlanUserInput(request));
+                String llmResponse = llmClient.chat(SYSTEM_PROMPT, buildDatabaseContext() + buildWeatherContext(request.getInputTags()) + "\n\n用户需求：" + buildPlanUserInput(request));
                 QxAiPlanResult result = new QxAiPlanResult();
                 result.setRequestId(request.getId());
                 result.setRouteName("智能规划");

@@ -127,12 +127,25 @@
       </view>
     </view>
 
-    <view class="section" wx:if="{{scenicWeather}}">
-      <view class="section-title">景区天气</view>
+    <view class="section" wx:if="{{routeWeather}}">
+      <view class="section-title">天气参考</view>
       <view class="weather-card">
-        <view class="weather-temp">{{scenicWeather.temperatureLow}}°C ~ {{scenicWeather.temperatureHigh}}°C</view>
-        <view class="weather-desc">{{scenicWeather.weatherDesc}} · {{scenicWeather.windDirection}}{{scenicWeather.windLevel}}级</view>
-        <view class="weather-date">{{scenicWeather.weatherDate}} · 以官方公告为准</view>
+        <view wx:if="{{routeWeather.summary}}" class="weather-summary">{{routeWeather.summary}}</view>
+        <view wx:if="{{routeWeather.available}}" class="weather-items">
+          <view class="weather-item" wx:for="{{routeWeather.items}}" wx:key="scenicId">
+            <view class="weather-item-name">{{item.scenicName}}</view>
+            <view class="weather-item-desc">{{item.weatherText}} · {{item.temperature}}</view>
+            <view wx:if="{{item.tips && item.tips.length > 0}}" class="weather-item-tips">
+              <text wx:for="{{item.tips}}" wx:key="*this" wx:for-item="tip">{{tip}}</text>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{routeWeather.tips && routeWeather.tips.length > 0}}" class="weather-notice">
+          <text wx:for="{{routeWeather.tips}}" wx:key="*this" wx:for-item="tip">{{tip}}</text>
+        </view>
+        <view wx:if="{{!routeWeather.available}}" class="weather-unavailable">
+          <text>以上为参考数据，以官方平台公告为准</text>
+        </view>
       </view>
     </view>
 

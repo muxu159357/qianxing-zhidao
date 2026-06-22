@@ -113,8 +113,12 @@ function getScenicWeather(scenicId) {
   return request('/api/app/weather/scenic/' + scenicId)
 }
 
-function refreshWeather() {
-  return request('/api/app/weather/refresh', { method: 'POST' })
+function getRouteWeather(routeId) {
+  return request('/api/app/weather/route/' + routeId)
+}
+
+function getWeatherStatus() {
+  return request('/api/app/weather/status')
 }
 
 // ============ 登录接口 ============
@@ -205,7 +209,8 @@ module.exports = {
   searchKnowledge: searchKnowledge,
   getKnowledgeRelations: getKnowledgeRelations,
   getScenicWeather: getScenicWeather,
-  refreshWeather: refreshWeather,
+  getRouteWeather: getRouteWeather,
+  getWeatherStatus: getWeatherStatus,
   wechatLogin: wechatLogin,
   getUserMe: getUserMe,
   getTrips: getTrips,

@@ -34,7 +34,7 @@ Page({
         var coverImage = assetResolver.resolveAttractionCover(attraction);
         self.setData({ attraction: attraction, scenicCoverImage: coverImage });
         self._loadRelatedRoutes(attraction);
-        if (spot._dbId || spot.id) { api.getKnowledgeRelations({ relType: 'scenic_spot', relId: spot._dbId || spot.id }).then(function(rels){ if(rels&&rels.length>0) self.setData({knowledgeRelations:rels}) }).catch(function(){}) }
+        if (spot._dbId || spot.id) { var scenicDbId = spot._dbId || spot.id; api.getKnowledgeRelations({ relType: 'scenic_spot', relId: scenicDbId }).then(function(rels){ if(rels&&rels.length>0) self.setData({knowledgeRelations:rels}) }).catch(function(){}); api.getScenicWeather(scenicDbId).then(function(w){ if (w && w.length > 0) self.setData({ scenicWeather: w[0] }) }).catch(function(){}) }
       } else {
         self._loadFromMock(id);
       }

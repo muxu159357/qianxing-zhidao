@@ -68,7 +68,7 @@ Page({
 
     var coverImage = assetResolver.resolveRouteCover(route)
     this.setData({ route: route, score: score || 0, attractions: attractions, safety: safety, emptyState: false, routeCoverImage: coverImage })
-    if (attractions.length > 0 && route._dbId) { var self = this; api.getScenicWeather(route._dbId).then(function (d) { if (d && d.length > 0) self.setData({ scenicWeather: d[0] }) }).catch(function () {}) }
+    if (route._dbId) { var self = this; api.getRouteWeather(route._dbId).then(function (d) { self.setData({ routeWeather: d }) }).catch(function () {}) }
 
     // V11: Generate recommendation explanation
     var profile = null

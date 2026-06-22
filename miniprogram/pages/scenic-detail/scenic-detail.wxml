@@ -113,6 +113,26 @@
       <text class="rr-empty-text">暂无包含该景点的推荐路线，你可以返回知识库继续查看其他景点。</text>
     </view>
 
+    <!-- 天气参考 -->
+    <view wx:if="{{scenicWeather}}" class="section-card" style="animation: fadeInUp 0.4s 0.28s both;">
+      <view class="section-header">
+        <view class="section-dot blue-dot"></view>
+        <text class="section-title">天气参考</text>
+      </view>
+      <view class="weather-ref-card">
+        <view class="weather-ref-row">
+          <text class="weather-ref-temp">{{scenicWeather.temperatureLow}}°C ~ {{scenicWeather.temperatureHigh}}°C</text>
+          <text class="weather-ref-desc">{{scenicWeather.weatherDesc}}</text>
+        </view>
+        <view wx:if="{{scenicWeather.windDirection}}" class="weather-ref-wind">
+          <text>{{scenicWeather.windDirection}} {{scenicWeather.windLevel}}级</text>
+        </view>
+        <view class="weather-ref-notice">
+          <text>以上为参考数据，以官方平台公告为准</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 旅行贴士 -->
     <view wx:if="{{attraction.tips && attraction.tips.length}}" class="section-card" style="animation: fadeInUp 0.4s 0.3s both;">
       <view class="section-header">

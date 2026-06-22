@@ -16,7 +16,7 @@ jwt:
   expiration-ms: 86400000
 
 wx:
-  appid: ${WX_APPID:wxaba2cf77773a606f}
+  appid: ${WX_APPID:}
   secret: ${WX_SECRET:}
 
 llm:

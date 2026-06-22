@@ -1,6 +1,7 @@
 package com.qianxing.zhidao.weather.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class QxScenicWeather {
     private Integer visibility;
     private Integer uvIndex;
     private String tips;
+    @JsonIgnore
     private String rawJson;
     private String provider;
     private LocalDateTime fetchedAt;

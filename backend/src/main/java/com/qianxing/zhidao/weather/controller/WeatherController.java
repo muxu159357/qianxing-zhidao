@@ -30,4 +30,10 @@ public class WeatherController {
     @PostMapping("/scenic/{scenicId}/refresh") public ApiResponse<List<QxScenicWeather>> refreshScenicWeather(@PathVariable Long scenicId) { return ApiResponse.ok(weatherService.refreshScenicWeather(scenicId)); }
 
     @GetMapping("/status") public ApiResponse<Map<String, Object>> status() { Map<String, Object> m = new LinkedHashMap<>(); m.put("provider","amap"); m.put("configured",weatherService.isConfigured()); m.put("locations",weatherService.listLocations().size()); return ApiResponse.ok(m); }
+
+    @Operation(summary = "路线天气摘要")
+    @GetMapping("/route/{routeId}")
+    public ApiResponse<Map<String, Object>> getRouteWeather(@PathVariable Long routeId) {
+        return ApiResponse.ok(weatherService.getRouteWeather(routeId));
+    }
 }

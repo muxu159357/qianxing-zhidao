@@ -487,6 +487,38 @@
   line-height: 1.6;
 }
 
+/* ===== Weather reference ===== */
+.weather-ref-card {
+  background: rgba(47,107,255,0.04);
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  border: 1rpx solid rgba(47,107,255,0.1);
+}
+.weather-ref-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+  margin-bottom: 10rpx;
+}
+.weather-ref-temp {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #2f6bff;
+}
+.weather-ref-desc {
+  font-size: 24rpx;
+  color: #4d5f6f;
+}
+.weather-ref-wind {
+  font-size: 22rpx;
+  color: #8a9bb5;
+  margin-bottom: 10rpx;
+}
+.weather-ref-notice {
+  font-size: 20rpx;
+  color: #b0b9c6;
+}
+
 /* ===== Bottom spacer ===== */
 .list-bottom-spacer {
   height: 60rpx;
