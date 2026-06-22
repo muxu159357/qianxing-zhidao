@@ -12,7 +12,7 @@ const menuItems = [
   { path: '/admin/scenic', title: '景点管理', icon: 'Picture' },
   { path: '/admin/routes', title: '路线管理', icon: 'Promotion' },
   { path: '/admin/knowledge', title: '知识库管理', icon: 'Reading' },
-  { path: '/admin/media', title: '媒体管理', icon: 'FolderOpened', disabled: true },
+  { path: '/admin/media', title: '媒体管理', icon: 'FolderOpened' },
   { path: '/admin/weather', title: '天气管理', icon: 'Sunny', disabled: true },
   { path: '/admin/trips', title: '行程管理', icon: 'List', disabled: true },
   { path: '/admin/ai-records', title: 'AI记录', icon: 'ChatDotRound', disabled: true },
