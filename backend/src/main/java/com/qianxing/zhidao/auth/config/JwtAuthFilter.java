@@ -31,6 +31,7 @@ public class JwtAuthFilter implements Filter {
             "/api/app/media/",
             "/api/app/knowledge/",
             "/api/app/weather/",
+            "/api/admin/auth/",
             "/swagger-ui",
             "/v3/api-docs"
     };

@@ -55,6 +55,19 @@ public class JwtUtil {
         return Long.valueOf(claims.getSubject());
     }
 
+    public String generateAdminToken(Long adminId, String username) {
+        if (!configured) throw new IllegalStateException("JWT not configured");
+        Date now = new Date();
+        return Jwts.builder()
+                .subject(String.valueOf(adminId))
+                .claim("username", username)
+                .claim("role", "admin")
+                .issuedAt(now)
+                .expiration(new Date(now.getTime() + expirationMs))
+                .signWith(key)
+                .compact();
+    }
+
     public boolean isConfigured() {
         return configured;
     }

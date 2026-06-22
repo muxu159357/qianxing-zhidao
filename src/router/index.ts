@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { adminAuthState } from '@/stores/admin-auth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -40,9 +41,20 @@ const router = createRouter({
       component: () => import('@/views/ScenicKnowledgeView.vue'),
     },
     {
+      path: '/admin/login',
+      name: 'admin-login',
+      component: () => import('@/views/admin/AdminLoginPage.vue'),
+      meta: { noAuth: true },
+    },
+    {
       path: '/admin',
-      name: 'admin',
-      component: () => import('@/views/AdminDashboardView.vue'),
+      component: () => import('@/views/admin/AdminLayout.vue'),
+      meta: { requiresAdmin: true },
+      children: [
+        { path: '', redirect: '/admin/dashboard' },
+        { path: 'dashboard', name: 'admin-dashboard', component: () => import('@/views/admin/AdminDashboardPage.vue') },
+        { path: 'scenic', name: 'admin-scenic', component: () => import('@/views/admin/AdminScenicListPage.vue') },
+      ],
     },
     {
       path: '/quick-tour',
@@ -50,6 +62,16 @@ const router = createRouter({
       component: () => import('@/views/DemoFlowView.vue'),
     },
   ],
+})
+
+router.beforeEach((to, _from, next) => {
+  if (to.meta.requiresAdmin) {
+    if (!adminAuthState.token) { next('/admin/login'); return }
+  }
+  if (to.path === '/admin/login' && adminAuthState.token) {
+    next('/admin/dashboard'); return
+  }
+  next()
 })
 
 export default router
