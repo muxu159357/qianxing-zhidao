@@ -54,6 +54,7 @@ const router = createRouter({
         { path: '', redirect: '/admin/dashboard' },
         { path: 'dashboard', name: 'admin-dashboard', component: () => import('@/views/admin/AdminDashboardPage.vue') },
         { path: 'scenic', name: 'admin-scenic', component: () => import('@/views/admin/AdminScenicListPage.vue') },
+        { path: 'routes', name: 'admin-routes', component: () => import('@/views/admin/AdminRouteListPage.vue') },
       ],
     },
     {
