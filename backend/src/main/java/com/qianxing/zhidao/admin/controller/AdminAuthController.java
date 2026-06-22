@@ -8,6 +8,8 @@ import com.qianxing.zhidao.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/admin/auth")
 public class AdminAuthController {
+    private static final Logger log = LoggerFactory.getLogger(AdminAuthController.class);
 
     private final QxAdminUserMapper adminUserMapper;
     private final JwtUtil jwtUtil;
@@ -40,10 +43,12 @@ public class AdminAuthController {
         QxAdminUser user = adminUserMapper.selectOne(
                 new LambdaQueryWrapper<QxAdminUser>().eq(QxAdminUser::getUsername, username));
         if (user == null || user.getStatus() == null || user.getStatus() != 1) {
+            log.warn("Admin login failed: unknown or disabled user '{}'", username);
             return ApiResponse.fail(401, "用户名或密码错误");
         }
 
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
+            log.warn("Admin login failed: wrong password for '{}'", username);
             return ApiResponse.fail(401, "用户名或密码错误");
         }
 

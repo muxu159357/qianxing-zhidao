@@ -27,7 +27,7 @@ public class JwtAuthFilter implements Filter {
             "/api/health",
             "/api/app/auth/",
             "/api/app/scenic/",
-            "/api/app/routes",
+            "/api/app/route",
             "/api/app/media/",
             "/api/app/knowledge/",
             "/api/app/weather/",
@@ -68,6 +68,11 @@ public class JwtAuthFilter implements Filter {
                     writeForbidden(httpResp, "无权限访问后台接口");
                     return;
                 }
+            }
+            // App path guard: admin tokens cannot access /api/app/**
+            if (path.startsWith("/api/app/") && "admin".equals(claims.get("role", String.class))) {
+                writeForbidden(httpResp, "管理员账号不能访问用户接口");
+                return;
             }
             httpReq.setAttribute("userId", jwtUtil.getUserId(claims));
             httpReq.setAttribute("openid", claims.get("openid", String.class));
