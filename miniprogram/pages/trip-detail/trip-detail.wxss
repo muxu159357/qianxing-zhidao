@@ -11,14 +11,14 @@
 /* ===== Page container ===== */
 .page-container {
   min-height: 100vh;
-  background: #f5f6f8;
+  background: #f8f9fa;
 }
 
 /* ===== 1. Hero section ===== */
 .hero-section {
   position: relative;
   padding: 60rpx 32rpx 44rpx;
-  background: linear-gradient(160deg, #1f8f5f 0%, #198056 50%, #14633f 100%);
+  background: linear-gradient(160deg, #012d1d 0%, #012d1d 50%, #012d1d 100%);
   overflow: hidden;
 }
 
@@ -212,13 +212,13 @@
   border-radius: 10rpx;
   font-size: 24rpx;
   font-weight: 500;
-  color: #5d6b7a;
-  background: #f0f2f5;
+  color: #414844;
+  background: #e1e3e4;
 }
 
 .info-tag-easy {
-  color: #1f8f5f;
-  background: rgba(31,143,95,0.08);
+  color: #012d1d;
+  background: rgba(1,45,29,0.08);
 }
 
 .info-tag-medium {
@@ -253,12 +253,12 @@
 
 .date-bar-label {
   font-size: 24rpx;
-  color: #5d6b7a;
+  color: #414844;
 }
 
 .date-bar-action {
   font-size: 24rpx;
-  color: #1f8f5f;
+  color: #012d1d;
   padding: 6rpx 12rpx;
 }
 
@@ -285,19 +285,19 @@
 }
 
 .action-btn-outline {
-  border: 2rpx solid rgba(31,143,95,0.25);
-  color: #1f8f5f;
+  border: 2rpx solid rgba(1,45,29,0.25);
+  color: #012d1d;
   background: #ffffff;
 }
 
 .action-btn-outline:active {
-  background: rgba(31,143,95,0.04);
+  background: rgba(1,45,29,0.04);
 }
 
 .action-btn-primary {
-  background: linear-gradient(135deg, #1f8f5f, #2f6bff);
+  background: linear-gradient(135deg, #012d1d, #116c4a);
   color: #ffffff;
-  box-shadow: 0 6rpx 20rpx rgba(31,143,95,0.25);
+  box-shadow: 0 6rpx 20rpx rgba(1,45,29,0.25);
 }
 
 .action-btn-primary:active {
@@ -316,13 +316,13 @@
   padding: 12rpx 22rpx;
   border-radius: 20rpx;
   font-size: 26rpx;
-  color: #1f8f5f;
-  background: rgba(31,143,95,0.06);
-  border: 1rpx solid rgba(31,143,95,0.12);
+  color: #012d1d;
+  background: rgba(1,45,29,0.06);
+  border: 1rpx solid rgba(1,45,29,0.12);
 }
 
 .spot-chip:active {
-  background: rgba(31,143,95,0.12);
+  background: rgba(1,45,29,0.12);
   transform: scale(0.96);
 }
 
@@ -335,7 +335,7 @@
 
 .status-hint-text {
   font-size: 26rpx;
-  color: #909399;
+  color: #8a9ba6;
   text-align: center;
   line-height: 1.5;
 }
@@ -370,7 +370,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #f5f6f8;
+  background: #f8f9fa;
 }
 
 .empty-card {
@@ -384,8 +384,8 @@
   width: 120rpx;
   height: 120rpx;
   border-radius: 50%;
-  background: rgba(31,143,95,0.06);
-  border: 3rpx dashed rgba(31,143,95,0.18);
+  background: rgba(1,45,29,0.06);
+  border: 3rpx dashed rgba(1,45,29,0.18);
   margin-bottom: 28rpx;
 }
 
@@ -407,7 +407,7 @@
 .empty-back-btn {
   padding: 22rpx 56rpx;
   border-radius: 40rpx;
-  background: linear-gradient(135deg, #1f8f5f 0%, #2f6bff 100%);
+  background: linear-gradient(135deg, #012d1d 0%, #116c4a 100%);
   color: #ffffff;
   font-size: 30rpx;
   font-weight: 600;
