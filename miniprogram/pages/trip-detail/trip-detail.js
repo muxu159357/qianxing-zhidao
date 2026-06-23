@@ -464,7 +464,7 @@ Page({
     if (!found) return
     try { this.updateCurrentTrip({ safetyChecklist: checklist }) } catch (e) { return }
     var trip = this.data.trip
-    if (trip.source === 'remote' && trip.remoteId) { api.updateTripSafetyItem(trip.remoteId, id, { isChecked: checklist.find(function(c){return c.id===id}).checked ? 1 : 0 }).catch(function(){}) }
+    if ((trip.source === 'remote' || (trip.id + '').indexOf('remote_') === 0) && (trip.remoteId || parseInt((trip.id + '').replace('remote_', ''), 10))) { api.updateTripSafetyItem(trip.remoteId, id, { isChecked: checklist.find(function(c){return c.id===id}).checked ? 1 : 0 }).catch(function(){}) }
     trip.safetyChecklist = checklist
     var progress = this.getChecklistProgress(checklist)
     this.setData({ trip: trip, safetyChecklist: checklist, checklistProgress: progress })
@@ -619,7 +619,7 @@ Page({
 
     var trip = this.data.trip
     try { this.updateCurrentTrip({ review: review }) } catch (e) { return }
-    if (trip.source === 'remote' && trip.remoteId) { api.saveTripReview(trip.remoteId, review).catch(function(){ wx.showToast({title:'云端同步失败，已保留在本机',icon:'none',duration:2000}) }) }
+    if ((trip.source === 'remote' || (trip.id + '').indexOf('remote_') === 0) && (trip.remoteId || parseInt((trip.id + '').replace('remote_', ''), 10))) { api.saveTripReview(trip.remoteId, review).catch(function(){ wx.showToast({title:'云端同步失败，已保留在本机',icon:'none',duration:2000}) }) }
     trip.review = review
     var reviewDateText = this.formatReviewDate(review)
     this.setData({
@@ -685,7 +685,7 @@ Page({
     trip.status = newStatus
     trip[timeField] = new Date().toISOString()
     try { this.updateCurrentTrip({ status: trip.status, startedAt: trip.startedAt, completedAt: trip.completedAt }) } catch (e) { return }
-    if (trip.source === 'remote' && trip.remoteId) { api.updateTrip(trip.remoteId, { status: newStatus }).catch(function(){}) }
+    if ((trip.source === 'remote' || (trip.id + '').indexOf('remote_') === 0) && (trip.remoteId || parseInt((trip.id + '').replace('remote_', ''), 10))) { api.updateTrip(trip.remoteId, { status: newStatus }).catch(function(){}) }
     var statusInfo = this.getStatusInfo(trip.status)
     this.setData({
       trip: trip,
@@ -740,8 +740,8 @@ Page({
           wx.showToast({ title: '已删除', icon: 'success', duration: 1200 })
           setTimeout(function () { wx.switchTab({ url: '/pages/my-trips/my-trips' }) }, 1200)
         }
-        if (trip.source === 'remote' && trip.remoteId) {
-          api.deleteTrip(trip.remoteId).then(done).catch(function () { self._localDelete(trip, done) })
+        if ((trip.source === 'remote' || (trip.id + '').indexOf('remote_') === 0) && (trip.remoteId || parseInt((trip.id + '').replace('remote_', ''), 10))) {
+          var rid = trip.remoteId || parseInt((trip.id + "").replace("remote_", ""), 10); api.deleteTrip(rid).then(done).catch(function () { self._localDelete(trip, done) })
         } else {
           self._localDelete(trip, done)
         }
