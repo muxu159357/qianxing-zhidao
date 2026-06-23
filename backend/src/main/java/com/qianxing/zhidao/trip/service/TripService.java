@@ -61,7 +61,7 @@ public class TripService {
         if (planJson != null && !planJson.isBlank()) {
             try {
                 Map<String, Object> plan = objectMapper.readValue(planJson, new TypeReference<>() {});
-                List<Map<String, Object>> dayPlans = (List<Map<String, Object>>) plan.getOrDefault("dayPlans", List.of());
+                List<Map<String, Object>> dayPlans = (List<Map<String, Object>>) plan.getOrDefault("dayPlans", plan.getOrDefault("days", List.of()));
                 List<String> spotNames = (List<String>) plan.getOrDefault("spotNames", List.of());
                 for (int i = 0; i < dayPlans.size(); i++) {
                     Map<String, Object> dp = dayPlans.get(i);

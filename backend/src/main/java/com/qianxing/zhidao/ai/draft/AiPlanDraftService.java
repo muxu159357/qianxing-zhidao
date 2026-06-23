@@ -50,7 +50,8 @@ public class AiPlanDraftService {
         QxUserTrip t = new QxUserTrip(); t.setUserId(userId);
         t.setRouteName((String) draft.getOrDefault("title", "AI规划行程"));
         t.setDayCount(((List<?>) draft.getOrDefault("days", List.of())).size());
-        t.setStatus("upcoming"); t.setPlanSnapshotJson(draft.toString());
+        t.setStatus("upcoming");
+        try { t.setPlanSnapshotJson(om.writeValueAsString(draft)); } catch (Exception e) { throw new BusinessException(500, "草稿保存失败"); }
         QxUserTrip saved = tripService.createTrip(t);
         cache.remove(String.valueOf(userId), did);
         return Map.of("tripId", saved.getId(), "title", t.getRouteName());
