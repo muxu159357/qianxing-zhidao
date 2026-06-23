@@ -737,11 +737,13 @@ Page({
       success: function (res) {
         if (!res.confirm) return
         var done = function () {
-          wx.showToast({ title: '已删除', icon: 'success', duration: 1200 })
-          setTimeout(function () { wx.switchTab({ url: '/pages/my-trips/my-trips' }) }, 1200)
+          wx.showToast({ title: "已删除", icon: "success", duration: 1200 })
+          setTimeout(function () { wx.switchTab({ url: "/pages/my-trips/my-trips" }) }, 1200)
         }
-        if ((trip.source === 'remote' || (trip.id + '').indexOf('remote_') === 0) && (trip.remoteId || parseInt((trip.id + '').replace('remote_', ''), 10))) {
-          var rid = trip.remoteId || parseInt((trip.id + "").replace("remote_", ""), 10); api.deleteTrip(rid).then(done).catch(function () { self._localDelete(trip, done) })
+        var rid = trip.remoteId || trip._dbId
+        if (!rid && trip.id) { rid = parseInt((trip.id + "").replace("remote_", ""), 10) }
+        if (rid && !isNaN(rid)) {
+          api.deleteTrip(rid).then(done).catch(function () { done() })
         } else {
           self._localDelete(trip, done)
         }
