@@ -47,6 +47,11 @@ public class RouteService {
         }
         return route;
     }
+    public QxRoute adminGetRoute(Long id) {
+        QxRoute route = routeMapper.selectById(id);
+        if (route == null) throw new BusinessException(404, "路线不存在");
+        return route;
+    }
 
     public List<QxRouteDay> getRouteDays(Long routeId) {
         return routeDayMapper.selectList(
