@@ -236,20 +236,24 @@ Page({
   },
 
   deleteTrip(id) {
-    try {
-      tripStorage.deleteTrip(id)
+    var self = this
+    var trip = this.data.trips.find(function (t) { return t.id === id })
+    var remoteId = trip ? (trip.remoteId || trip._dbId) : null
+    if (!remoteId && id && (id + '').indexOf('remote_') === 0) remoteId = parseInt((id + '').replace('remote_', ''), 10)
 
-      if (app && app.globalData) {
-        app.globalData.myTrips = tripStorage.getTrips()
-      }
-    } catch (e) {
-      wx.showToast({ title: '删除失败，请重试', icon: 'none' });
-      return;
+    var localDone = function () {
+      try { tripStorage.deleteTrip(id); if (app && app.globalData) app.globalData.myTrips = tripStorage.getTrips() } catch (e) { /* ignore */ }
+      wx.showToast({ title: '已删除', icon: 'success', duration: 1200 })
+      self.loadTrips()
     }
 
-    this.loadTrips();
-    wx.showToast({ title: '已删除', icon: 'success', duration: 1500 });
+    if (remoteId && !isNaN(remoteId)) {
+      api.deleteTrip(remoteId).then(function () { localDone() }).catch(function () { localDone() })
+    } else {
+      localDone()
+    }
   },
+
 
   onGoExplore() {
     wx.switchTab({
