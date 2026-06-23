@@ -1,46 +1,66 @@
-/* index.wxss · UI-1C 景区选择页 */
-.home-page { min-height:100vh; background:linear-gradient(180deg, #f0f7f3 0%, #f5f7f5 50%, #ffffff 100%); padding-bottom:120rpx; }
+/* index.wxss · Stitch 自然科技风 */
 
-.home-hero { position:relative; display:flex; align-items:center; justify-content:center; padding:80rpx 40rpx 60rpx; overflow:hidden; }
-.home-hero-bg { position:absolute; inset:0; background:linear-gradient(160deg, rgba(31,143,95,0.06) 0%, rgba(47,107,255,0.04) 60%, rgba(255,255,255,0) 100%); }
-.home-hero-content { position:relative; display:flex; flex-direction:column; align-items:center; }
-.home-logo { width:100rpx; height:100rpx; border-radius:24rpx; margin-bottom:24rpx; box-shadow:0 8rpx 32rpx rgba(31,143,95,0.15); }
-.home-brand { font-size:40rpx; font-weight:700; color:#10251d; letter-spacing:4rpx; margin-bottom:12rpx; }
-.home-sub { font-size:26rpx; color:#5d6b7a; text-align:center; margin-bottom:32rpx; line-height:1.5; }
-.home-cta { width:480rpx; height:88rpx; line-height:88rpx; border-radius:44rpx; background:linear-gradient(135deg,#1f8f5f,#2f6bff); color:#fff; font-size:30rpx; font-weight:600; border:none; box-shadow:0 6rpx 24rpx rgba(31,143,95,0.25); }
-.home-cta::after { border:none; }
+.home-page { min-height:100vh; background:#f8f9fa; padding-bottom:120rpx; }
 
-.home-quick { display:flex; padding:0 24rpx; gap:16rpx; margin-bottom:32rpx; }
-.home-quick-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:24rpx 8rpx; background:rgba(255,255,255,0.8); border-radius:20rpx; box-shadow:0 2rpx 16rpx rgba(0,0,0,0.03); }
+/* Header */
+.app-header { padding:40rpx 32rpx 12rpx; display:flex; align-items:center; justify-content:space-between; }
+.app-header-left { display:flex; flex-direction:column; }
+.app-header-title { font-size:44rpx; font-weight:800; color:#012d1d; letter-spacing:2rpx; }
+.app-header-sub { font-size:24rpx; color:#414844; margin-top:4rpx; }
+
+/* Hero */
+.hero-card { position:relative; border-radius:32rpx; overflow:hidden; margin:12rpx 24rpx 24rpx; height:400rpx; }
+.hero-card-bg { position:absolute; top:0; left:0; right:0; bottom:0; }
+.hero-card-pattern { position:absolute; top:-60rpx; right:-40rpx; width:220rpx; height:220rpx; border-radius:50%; background:rgba(255,255,255,0.03); }
+.hero-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:linear-gradient(180deg, rgba(1,45,29,0.1) 0%, rgba(1,45,29,0.55) 100%); display:flex; flex-direction:column; justify-content:flex-end; padding:40rpx 36rpx; }
+.hero-title { font-size:44rpx; font-weight:800; color:#ffffff; line-height:1.2; margin-bottom:8rpx; }
+.hero-subtitle { font-size:26rpx; color:rgba(255,255,255,0.85); line-height:1.5; margin-bottom:24rpx; }
+.primary-button { display:flex; align-items:center; justify-content:center; height:88rpx; line-height:88rpx; border-radius:999rpx; font-size:30rpx; font-weight:700; background:#012d1d; color:#ffffff; border:none; box-shadow:0 8rpx 28rpx rgba(1,45,29,0.2); }
+.primary-button:active { transform:scale(0.97); opacity:0.9; }
+.primary-button::after { border:none; }
+
+/* Quick entries */
+.home-quick { display:flex; padding:0 24rpx; gap:16rpx; margin-bottom:28rpx; }
+.home-quick-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:24rpx 8rpx; background:#ffffff; border-radius:24rpx; box-shadow:0 8rpx 40rpx rgba(1,45,29,0.05); }
 .home-quick-icon { width:48rpx; height:48rpx; margin-bottom:10rpx; }
-.home-quick-title { font-size:26rpx; font-weight:600; color:#10251d; margin-bottom:4rpx; }
-.home-quick-sub { font-size:20rpx; color:#8a9bb5; }
+.home-quick-title { font-size:24rpx; font-weight:600; color:#012d1d; margin-bottom:4rpx; }
+.home-quick-sub { font-size:20rpx; color:#8a9ba6; text-align:center; }
 
-.home-section { padding:0 24rpx; margin-bottom:32rpx; }
-.home-section-title { font-size:30rpx; font-weight:700; color:#10251d; margin-bottom:18rpx; }
+/* Section */
+.home-section { padding:0 24rpx; margin-bottom:28rpx; }
+.section-title { font-size:32rpx; font-weight:700; color:#012d1d; margin-bottom:18rpx; padding-left:16rpx; border-left:6rpx solid #116c4a; line-height:1.3; }
 
-.home-cats { white-space:nowrap; margin-bottom:20rpx; }
-.home-cat { display:inline-block; font-size:24rpx; color:#5d6b7a; background:rgba(255,255,255,0.7); padding:12rpx 24rpx; border-radius:28rpx; margin-right:12rpx; border:1rpx solid rgba(0,0,0,0.06); }
-.home-cat-active { color:#fff; background:linear-gradient(135deg,#1f8f5f,#2f6bff); border:none; }
+/* Bento */
+.home-bento { display:flex; gap:16rpx; }
+.home-bento-card { flex:1; padding:24rpx; border-radius:24rpx; min-height:140rpx; }
+.home-bento-weather { background:rgba(161,244,200,0.25); border:1rpx solid rgba(161,244,200,0.5); }
+.home-bento-mountain { background:#f3f4f5; border:1rpx solid #edeeef; }
+.home-bento-label { font-size:24rpx; font-weight:700; color:#012d1d; margin-bottom:10rpx; }
+.home-bento-text { font-size:22rpx; color:#414844; line-height:1.6; }
 
-.home-scenic-grid { display:flex; flex-wrap:wrap; gap:16rpx; }
-.home-scenic-card { width:calc(50% - 8rpx); background:#fff; border-radius:20rpx; overflow:hidden; box-shadow:0 2rpx 16rpx rgba(0,0,0,0.05); }
-.home-scenic-img { width:100%; height:180rpx; overflow:hidden; }
+/* Categories */
+.home-cats { white-space:nowrap; margin-bottom:18rpx; }
+.home-cat { display:inline-block; font-size:24rpx; color:#414844; background:#f3f4f5; padding:10rpx 24rpx; border-radius:999rpx; margin-right:12rpx; font-weight:500; }
+.home-cat-active { color:#012d1d; background:#c1ecd4; font-weight:600; }
+
+/* Scenic horizontal scroll */
+.home-scenic-scroll { white-space:nowrap; padding-bottom:8rpx; }
+.home-scenic-card { display:inline-block; width:280rpx; margin-right:16rpx; background:#ffffff; border-radius:24rpx; overflow:hidden; box-shadow:0 8rpx 40rpx rgba(1,45,29,0.05); vertical-align:top; }
+.home-scenic-img { width:100%; height:200rpx; overflow:hidden; }
 .home-scenic-thumb { width:100%; height:100%; }
-.home-scenic-info { padding:16rpx; }
-.home-scenic-name { font-size:26rpx; font-weight:600; color:#10251d; margin-bottom:4rpx; }
-.home-scenic-city { font-size:22rpx; color:#8a9bb5; margin-bottom:8rpx; }
-.home-scenic-tags { display:flex; gap:8rpx; }
-.home-scenic-tag { font-size:20rpx; color:#1f8f5f; background:rgba(31,143,95,0.08); padding:4rpx 12rpx; border-radius:16rpx; }
+.home-scenic-body { padding:14rpx 18rpx 18rpx; }
+.tag-chip { display:inline-block; font-size:20rpx; color:#116c4a; background:#c1ecd4; padding:4rpx 14rpx; border-radius:999rpx; font-weight:500; margin-bottom:8rpx; }
+.home-scenic-name { font-size:26rpx; font-weight:700; color:#012d1d; margin-bottom:4rpx; white-space:normal; overflow:hidden; text-overflow:ellipsis; }
+.home-scenic-duration { font-size:22rpx; color:#8a9ba6; }
 
+/* Route list */
 .home-route-list { display:flex; flex-direction:column; gap:16rpx; }
-.home-route-card { display:flex; gap:16rpx; background:#fff; border-radius:20rpx; padding:20rpx; box-shadow:0 2rpx 16rpx rgba(0,0,0,0.05); }
-.home-route-left { flex-shrink:0; }
-.home-route-thumb { width:140rpx; height:140rpx; border-radius:16rpx; overflow:hidden; }
-.home-route-img { width:100%; height:100%; }
-.home-route-body { flex:1; display:flex; flex-direction:column; justify-content:center; }
-.home-route-name { font-size:28rpx; font-weight:600; color:#10251d; margin-bottom:6rpx; }
-.home-route-meta { font-size:22rpx; color:#1f8f5f; margin-bottom:6rpx; }
-.home-route-desc { font-size:22rpx; color:#5d6b7a; line-height:1.4; }
+.route-card { display:flex; gap:16rpx; background:#ffffff; border-radius:24rpx; padding:20rpx; box-shadow:0 8rpx 40rpx rgba(1,45,29,0.05); }
+.route-card-thumb { width:140rpx; height:140rpx; border-radius:20rpx; overflow:hidden; flex-shrink:0; }
+.route-card-thumb image { width:100%; height:100%; }
+.route-card-body { flex:1; display:flex; flex-direction:column; justify-content:center; }
+.route-card-name { font-size:28rpx; font-weight:700; color:#012d1d; margin-bottom:6rpx; }
+.route-card-meta { font-size:22rpx; color:#116c4a; margin-bottom:6rpx; }
+.route-card-desc { font-size:22rpx; color:#414844; line-height:1.4; }
 
 .home-bottom { height:40rpx; }

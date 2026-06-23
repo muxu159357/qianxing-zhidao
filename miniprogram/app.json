@@ -15,9 +15,9 @@
   ],
   "window": {
     "navigationBarTitleText": "黔行智导",
-    "navigationBarBackgroundColor": "#1f8f5f",
+    "navigationBarBackgroundColor": "#012d1d",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#f4f8f5"
+    "backgroundColor": "#f8f9fa"
   },
   "permission": {
     "scope.userLocation": {
@@ -25,8 +25,8 @@
     }
   },
   "tabBar": {
-    "color": "#667085",
-    "selectedColor": "#1f8f5f",
+    "color": "#414844",
+    "selectedColor": "#116c4a",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [

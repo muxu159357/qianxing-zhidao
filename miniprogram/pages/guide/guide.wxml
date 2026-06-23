@@ -1,5 +1,4 @@
 <view class="ai-page">
-  <!-- 位置授权弹窗 -->
   <view class="location-modal-mask" wx:if="{{showLocationModal}}" bindtap="onCloseLocationModal"></view>
   <view class="location-modal" wx:if="{{showLocationModal}}">
     <view class="location-modal-title">是否使用当前位置</view>
@@ -10,83 +9,43 @@
     </view>
   </view>
 
-  <view class="ai-header">
-    <view class="ai-header-row">
-      <view class="ai-header-left">
-        <image class="ai-header-avatar" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
-        <view class="ai-header-text">
-          <view class="ai-header-title">黔行智导</view>
-          <view class="ai-header-sub">贵州山地旅游 AI助手</view>
-        </view>
-      </view>
-      <view class="ai-header-tag">{{scenicName}}</view>
+  <view class="app-header">
+    <view class="app-header-left">
+      <view class="app-header-title">AI 助手</view>
+      <view class="app-header-sub">你的贵州山地旅行 AI 伴游</view>
     </view>
-  </view>
-
-  <view class="ai-hero-card">
-    <view class="ai-hero-gradient"></view>
-    <view class="ai-hero-content">
-      <view class="ai-hero-name">{{scenicName}}</view>
-      <view class="ai-hero-intro">{{scenicIntro}}</view>
-      <view class="ai-hero-tags">
-        <view class="ai-hero-tag">轻松游</view>
-        <view class="ai-hero-tag">山水游</view>
-        <view class="ai-hero-tag">民族文化</view>
-      </view>
-      <view class="ai-hero-actions">
-        <view class="ai-hero-btn ai-hero-btn-primary" bindtap="onQuickTap" data-question="帮我安排三日轻松游">行程攻略</view>
-        <view class="ai-hero-btn" bindtap="onQuickTap" data-question="贵州必去景点有哪些？">查看路线</view>
-      </view>
-    </view>
-  </view>
-
-  <view class="ai-info-cards">
-    <view class="ai-info-card" wx:for="{{infoCards}}" wx:key="title">
-      <view class="ai-info-card-title">{{item.title}}</view>
-      <view class="ai-info-card-desc">{{item.desc}}</view>
-    </view>
+    <view class="app-header-tag">{{scenicName}}</view>
   </view>
 
   <view class="ai-quick-section">
-    <view class="ai-quick-title">快速提问</view>
-    <view class="ai-quick-grid">
+    <scroll-view class="ai-quick-scroll" scroll-x>
       <view class="ai-quick-item" wx:for="{{quickQuestions}}" wx:key="*this" bindtap="onQuickTap" data-question="{{item}}">{{item}}</view>
-    </view>
-  </view>
-
-  <view class="ai-chat-section">
-    <view class="ai-chat-title">AI 助手对话</view>
-    <scroll-view class="ai-chat-area" scroll-y scroll-top="{{scrollTop}}" scroll-with-animation>
-      <view class="msg-list">
-        <block wx:for="{{messages}}" wx:key="id">
-          <view class="msg-row msg-ai" wx:if="{{item.type === 'ai'}}">
-            <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
-            <view class="bubble-wrap">
-              <view class="bubble bubble-ai">{{item.content}}</view>
-              <view class="ai-actions" wx:if="{{item.actions && item.actions.length > 0}}">
-                <view class="ai-action-btn" wx:for="{{item.actions}}" wx:key="label" wx:for-item="action" bindtap="onActionTap" data-action="{{action}}">{{action.label}}</view>
-              </view>
-            </view>
-          </view>
-          <view class="msg-row msg-user" wx:else>
-            <view class="bubble bubble-user">{{item.content}}</view>
-            <view class="avatar avatar-user">我</view>
-          </view>
-        </block>
-        <view class="msg-row msg-ai" wx:if="{{isTyping}}">
-          <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
-          <view class="bubble bubble-typing"><view class="dots"><view class="dot" style="animation-delay:0s;"></view><view class="dot" style="animation-delay:0.15s;"></view><view class="dot" style="animation-delay:0.3s;"></view></view></view>
-        </view>
-      </view>
     </scroll-view>
   </view>
 
-  <view class="ai-bottom-nav">
-    <view class="ai-nav-item" bindtap="onBottomNav" data-key="service"><view class="ai-nav-icon ai-nav-icon-service"></view><view class="ai-nav-label">服务</view></view>
-    <view class="ai-nav-item" bindtap="onBottomNav" data-key="guide"><view class="ai-nav-icon ai-nav-icon-guide"></view><view class="ai-nav-label">导览</view></view>
-    <view class="ai-nav-item" bindtap="onBottomNav" data-key="route"><view class="ai-nav-icon ai-nav-icon-route"></view><view class="ai-nav-label">路线</view></view>
-    <view class="ai-nav-item" bindtap="onBottomNav" data-key="trip"><view class="ai-nav-icon ai-nav-icon-trip"></view><view class="ai-nav-label">行程</view></view>
-  </view>
+  <scroll-view class="ai-chat-area" scroll-y scroll-top="{{scrollTop}}" scroll-with-animation>
+    <view class="msg-list">
+      <block wx:for="{{messages}}" wx:key="id">
+        <view class="msg-row msg-ai" wx:if="{{item.type === 'ai'}}">
+          <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
+          <view class="bubble-wrap">
+            <view class="bubble bubble-ai">{{item.content}}</view>
+            <view class="ai-actions" wx:if="{{item.actions && item.actions.length > 0}}">
+              <view class="ai-action-btn" wx:for="{{item.actions}}" wx:key="label" wx:for-item="action" bindtap="onActionTap" data-action="{{action}}">{{action.label}}</view>
+            </view>
+          </view>
+        </view>
+        <view class="msg-row msg-user" wx:else>
+          <view class="bubble bubble-user">{{item.content}}</view>
+          <view class="avatar avatar-user">我</view>
+        </view>
+      </block>
+      <view class="msg-row msg-ai" wx:if="{{isTyping}}">
+        <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
+        <view class="bubble bubble-typing"><view class="dots"><view class="dot" style="animation-delay:0s;"></view><view class="dot" style="animation-delay:0.15s;"></view><view class="dot" style="animation-delay:0.3s;"></view></view></view>
+      </view>
+    </view>
+  </scroll-view>
 
   <view class="ai-input-bar">
     <input class="ai-input-field" placeholder="输入你想问的..." value="{{inputValue}}" bindinput="onInput" bindconfirm="sendMessage" confirm-type="send" adjust-position="{{false}}" maxlength="300" />

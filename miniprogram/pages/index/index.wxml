@@ -1,14 +1,24 @@
 <view class="home-page">
-  <view class="home-hero">
-    <view class="home-hero-bg"></view>
-    <view class="home-hero-content">
-      <image class="home-logo" src="/assets/images/brand/logo.png" mode="aspectFit" />
-      <view class="home-brand">黔行智导</view>
-      <view class="home-sub">贵州山地旅游 AI 个性化导览平台</view>
-      <button class="home-cta" bindtap="goPlanner">开始智能规划</button>
+  <!-- Header -->
+  <view class="app-header">
+    <view class="app-header-left">
+      <view class="app-header-title">黔行智导</view>
+      <view class="app-header-sub">贵州山地旅行</view>
     </view>
   </view>
 
+  <!-- Hero Card -->
+  <view class="hero-card" style="animation: fadeInUp 0.5s both;">
+    <view class="hero-card-bg" style="background:linear-gradient(160deg, #012d1d 0%, #116c4a 40%, #0a4d30 100%);"></view>
+    <view class="hero-card-pattern"></view>
+    <view class="hero-overlay">
+      <view class="hero-title">探索贵州山水</view>
+      <view class="hero-subtitle">用 AI 助手规划适合你的山地行程</view>
+      <button class="primary-button" bindtap="goPlanner">开始智能规划</button>
+    </view>
+  </view>
+
+  <!-- Quick entries -->
   <view class="home-quick">
     <view class="home-quick-item" wx:for="{{quickEntries}}" wx:key="key" bindtap="onQuickTap" data-key="{{item.key}}">
       <image class="home-quick-icon" src="{{item.icon}}" mode="aspectFit" />
@@ -17,40 +27,53 @@
     </view>
   </view>
 
+  <!-- Today suggestions Bento -->
   <view class="home-section">
-    <view class="home-section-title">探索景区</view>
-    <scroll-view class="home-cats" scroll-x>
-      <view class="home-cat {{activeCategory===item.key?'home-cat-active':''}}" wx:for="{{categories}}" wx:key="key" bindtap="onCategoryTap" data-key="{{item.key}}">{{item.label}}</view>
-    </scroll-view>
-    <view class="home-scenic-grid">
-      <view class="home-scenic-card" wx:for="{{filteredSpots}}" wx:key="id" bindtap="goScenicDetail" data-id="{{item.id}}">
-        <view class="home-scenic-img" style="background:linear-gradient(135deg, rgba(31,143,95,0.3), rgba(47,107,255,0.2));">
-          <image class="home-scenic-thumb" src="{{item.coverImage || item.imageUrl || '/assets/images/scenic/scenic-huangguoshu.jpg'}}" mode="aspectFill" />
-        </view>
-        <view class="home-scenic-info">
-          <view class="home-scenic-name">{{item.name}}</view>
-          <view class="home-scenic-city">{{item.city}}</view>
-          <view class="home-scenic-tags">
-            <view class="home-scenic-tag" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this" wx:if="{{index < 2}}">{{t}}</view>
-          </view>
-        </view>
+    <view class="section-title">今日建议</view>
+    <view class="home-bento">
+      <view class="home-bento-card home-bento-weather">
+        <view class="home-bento-label">天气参考</view>
+        <view class="home-bento-text">贵州山地天气多变，早晚温差大，建议随身携带雨具和薄外套</view>
+      </view>
+      <view class="home-bento-card home-bento-mountain">
+        <view class="home-bento-label">山地提醒</view>
+        <view class="home-bento-text">部分景区需步行较多，建议穿舒适防滑鞋，合理安排每日体力</view>
       </view>
     </view>
   </view>
 
+  <!-- Scenic spots horizontal scroll -->
   <view class="home-section">
-    <view class="home-section-title">推荐路线</view>
-    <view class="home-route-list">
-      <view class="home-route-card" wx:for="{{topRoutes}}" wx:key="index" bindtap="goRouteDetail" data-id="{{item.route.id}}">
-        <view class="home-route-left">
-          <view class="home-route-thumb" style="background:linear-gradient(135deg, rgba(47,107,255,0.3), rgba(31,143,95,0.2));">
-            <image class="home-route-img" src="{{item.coverImage}}" mode="aspectFill" />
-          </view>
+    <view class="section-title">景区推荐</view>
+    <view class="home-cats">
+      <view class="home-cat {{activeCategory===item.key?'home-cat-active':''}}" wx:for="{{categories}}" wx:key="key" bindtap="onCategoryTap" data-key="{{item.key}}">{{item.label}}</view>
+    </view>
+    <scroll-view class="home-scenic-scroll" scroll-x>
+      <view class="home-scenic-card" wx:for="{{filteredSpots}}" wx:key="id" bindtap="goScenicDetail" data-id="{{item.id}}">
+        <view class="home-scenic-img">
+          <image class="home-scenic-thumb" src="{{item.coverImage || item.imageUrl || '/assets/images/scenic/scenic-huangguoshu.jpg'}}" mode="aspectFill" />
         </view>
-        <view class="home-route-body">
-          <view class="home-route-name">{{item.route.name}}</view>
-          <view class="home-route-meta">{{item.route.dayCount||item.route.days}}天 · {{item.route.energyLevel||item.route.physicalLevel||'适中'}}</view>
-          <view class="home-route-desc">{{item.route.description}}</view>
+        <view class="home-scenic-body">
+          <view class="tag-chip" wx:if="{{item.category}}">{{item.category}}</view>
+          <view class="home-scenic-name">{{item.name}}</view>
+          <view class="home-scenic-duration">{{item.duration || '半天'}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- Route list -->
+  <view class="home-section">
+    <view class="section-title">推荐路线</view>
+    <view class="home-route-list">
+      <view class="route-card" wx:for="{{topRoutes}}" wx:key="index" bindtap="goRouteDetail" data-id="{{item.route.id}}" style="animation: fadeInUp 0.45s {{index * 0.08}}s both;">
+        <view class="route-card-thumb">
+          <image src="{{item.coverImage}}" mode="aspectFill" />
+        </view>
+        <view class="route-card-body">
+          <view class="route-card-name">{{item.route.name}}</view>
+          <view class="route-card-meta">{{item.route.dayCount||item.route.days}}天 · {{item.route.energyLevel||item.route.physicalLevel||'适中'}}</view>
+          <view class="route-card-desc">{{item.route.description}}</view>
         </view>
       </view>
     </view>

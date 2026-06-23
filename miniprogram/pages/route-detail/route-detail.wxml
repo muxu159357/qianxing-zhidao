@@ -1,238 +1,123 @@
-<!-- 路线详情页 -->
-<view class="page-wrap">
-
-  <!-- 空态 -->
+<view class="page-shell">
   <view wx:if="{{emptyState}}" class="empty-container">
-    <view class="empty-card">
-      <view class="empty-icon"></view>
+    <view class="surface-card" style="text-align:center;padding:64rpx 48rpx;">
+      <view class="empty-icon-dec"></view>
       <view class="empty-title">暂未找到该路线</view>
       <view class="empty-desc">你可以返回路线推荐页，重新选择适合自己的贵州山地旅行路线。</view>
-      <button class="btn-primary" bindtap="onGoRecommend">返回路线推荐</button>
+      <button class="primary-button" bindtap="onGoRecommend">返回路线推荐</button>
     </view>
   </view>
 
-  <!-- 正常态 -->
   <block wx:else>
-    <!-- 路线头部 -->
-    <view class="route-hero">
-      <image class="route-hero-cover" src="{{routeCoverImage}}" mode="aspectFill" binderror="onCoverError" />
-      <view class="route-hero-mask"></view>
-      <view class="route-hero-row">
-        <view class="route-hero-main">
-          <view class="route-name">{{route.name}}</view>
-          <view class="route-desc">{{route.description}}</view>
+    <view class="rd-hero">
+      <image class="rd-hero-img" src="{{routeCoverImage}}" mode="aspectFill" binderror="onCoverError" />
+      <view class="rd-hero-mask"></view>
+      <view class="rd-hero-content">
+        <view class="rd-hero-tags">
+          <view class="tag-chip" wx:for="{{route.tags}}" wx:key="*this" wx:if="{{index < 3}}">{{item}}</view>
         </view>
-        <text class="home-link home-link--light" bindtap="goHome">首页</text>
-      </view>
-      <view wx:if="{{score > 0}}" class="route-score">
-        <view class="score-circle">
-          <text class="score-num">{{score}}</text>
-          <text class="score-unit">分</text>
-        </view>
-        <text class="score-label">匹配度评分</text>
+        <view class="rd-hero-name">{{route.name}}</view>
+        <view class="rd-hero-desc">{{route.description}}</view>
       </view>
     </view>
 
-    <!-- 基本信息卡片 -->
-    <view class="info-grid">
-      <view class="info-item">
-        <view class="info-label">出行天数</view>
-        <view class="info-value">{{route.days}} 天</view>
+    <view class="rd-stats">
+      <view class="rd-stat">
+        <view class="rd-stat-num">{{route.days}}</view>
+        <view class="rd-stat-label">天数</view>
       </view>
-      <view class="info-item">
-        <view class="info-label">体力等级</view>
-        <view class="info-value">{{route.physicalLevel}}</view>
+      <view class="rd-stat">
+        <view class="rd-stat-num">{{route.physicalLevel}}</view>
+        <view class="rd-stat-label">强度</view>
       </view>
-      <view class="info-item">
-        <view class="info-label">预算范围</view>
-        <view class="info-value">{{route.budgetRange}}</view>
-      </view>
-      <view class="info-item">
-        <view class="info-label">适合人群</view>
-        <view class="info-value info-value-sm">{{route.suitableFor.join('、')}}</view>
+      <view class="rd-stat">
+        <view class="rd-stat-num">{{attractions.length}}</view>
+        <view class="rd-stat-label">景点</view>
       </view>
     </view>
 
-    <!-- 标签 -->
-    <view class="tag-row">
-      <text class="tag-item" wx:for="{{route.tags}}" wx:key="*this">{{item}}</text>
-    </view>
-
-    <!-- V11: 推荐解释模块 -->
     <view wx:if="{{recommendExplanation}}" class="section">
       <view class="section-title">为什么推荐这条路线</view>
-      <view class="explain-card">
-        <text class="explain-summary">{{recommendExplanation.summary}}</text>
-
-        <view wx:if="{{recommendExplanation.matchItems && recommendExplanation.matchItems.length > 0}}" class="explain-match-section">
-          <text class="explain-subtitle">匹配你的偏好</text>
-          <view class="explain-list">
-            <view class="explain-item" wx:for="{{recommendExplanation.matchItems}}" wx:key="label">
-              <text class="explain-label">{{item.label}}</text>
-              <text class="explain-detail">{{item.detail}}</text>
+      <view class="surface-card">
+        <view class="rd-explain-summary">{{recommendExplanation.summary}}</view>
+        <view wx:if="{{recommendExplanation.matchItems && recommendExplanation.matchItems.length > 0}}" class="rd-explain-section">
+          <view class="rd-explain-subtitle">匹配你的偏好</view>
+          <view class="rd-explain-list">
+            <view class="rd-explain-item" wx:for="{{recommendExplanation.matchItems}}" wx:key="label">
+              <view class="rd-explain-label">{{item.label}}</view>
+              <view class="rd-explain-detail">{{item.detail}}</view>
             </view>
           </view>
         </view>
-
-        <view wx:if="{{recommendExplanation.notices && recommendExplanation.notices.length > 0}}" class="explain-notice-section">
-          <text class="explain-subtitle">出行提醒</text>
-          <view class="notice-list">
-            <view class="notice-item" wx:for="{{recommendExplanation.notices}}" wx:key="*this">
-              <text class="notice-text">{{item}}</text>
-            </view>
+        <view wx:if="{{recommendExplanation.notices && recommendExplanation.notices.length > 0}}" class="rd-explain-section">
+          <view class="rd-explain-subtitle">出行提醒</view>
+          <view class="rd-notice-list">
+            <view class="rd-notice-item" wx:for="{{recommendExplanation.notices}}" wx:key="*this">{{item}}</view>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 每日行程 -->
     <view class="section">
       <view class="section-title">每日行程</view>
       <view class="timeline">
-        <view class="tl-day" wx:for="{{route.dailyPlan}}" wx:key="day">
-          <view class="tl-marker">
-            <view class="tl-dot"></view>
-            <view wx:if="{{item.day < route.dailyPlan.length}}" class="tl-line"></view>
+        <view class="timeline-node" wx:for="{{route.dailyPlan}}" wx:key="day">
+          <view class="timeline-marker">
+            <view class="timeline-dot"></view>
+            <view wx:if="{{item.day < route.dailyPlan.length}}" class="timeline-line"></view>
           </view>
-          <view class="tl-content">
-            <view class="tl-head">第{{item.day}}天 · {{item.title}}</view>
-            <view class="tl-desc">{{item.description}}</view>
-            <view class="tl-meta">{{item.meals}} · {{item.accommodation}}</view>
+          <view class="timeline-card">
+            <view class="timeline-head">D{{item.day}} · {{item.title}}</view>
+            <view class="timeline-desc">{{item.description}}</view>
+            <view class="timeline-meta">{{item.meals}} · {{item.accommodation}}</view>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 涉及景点 -->
     <view wx:if="{{attractions.length > 0}}" class="section">
       <view class="section-title">涉及景点</view>
-      <view class="scenic-grid">
-        <view class="scenic-card" wx:for="{{attractions}}" wx:key="id" bindtap="onViewScenic" data-id="{{item.id}}">
-          <view class="scenic-gradient" style="background: {{item.imageUrl ? 'url(' + item.imageUrl + ') center/cover no-repeat' : item.imageGradient}}"></view>
-          <view class="scenic-info">
-            <view class="scenic-name">{{item.name}}</view>
-            <view class="scenic-city">{{item.city}}</view>
-            <view class="scenic-rating">评分 {{item.rating}}</view>
+      <view class="rd-scenic-list">
+        <view class="rd-scenic-card" wx:for="{{attractions}}" wx:key="id" bindtap="onViewScenic" data-id="{{item.id}}">
+          <view class="rd-scenic-img" style="background:{{item.imageUrl ? 'url(' + item.imageUrl + ') center/cover no-repeat' : item.imageGradient}}"></view>
+          <view class="rd-scenic-info">
+            <view class="rd-scenic-name">{{item.name}}</view>
+            <view class="rd-scenic-city">{{item.city}}</view>
           </view>
-          <view class="scenic-arrow">→</view>
+          <view class="rd-scenic-arrow"></view>
         </view>
       </view>
     </view>
 
-    <!-- 交通建议 -->
-    <view class="section">
-      <view class="section-title">交通建议</view>
-      <view class="tip-card">
-        <view class="tip-text">贵州已实现"县县通高速"，景区间可通过高铁+旅游专线大巴衔接。贵阳为全省交通枢纽，建议以贵阳为起点规划行程。部分山区景点建议预留充足车程时间。</view>
-      </view>
-    </view>
-
-    <view class="section" wx:if="{{routeWeather}}">
-      <view class="section-title">天气参考</view>
-      <view class="weather-card">
-        <view wx:if="{{routeWeather.summary}}" class="weather-summary">{{routeWeather.summary}}</view>
-        <view wx:if="{{routeWeather.available}}" class="weather-items">
-          <view class="weather-item" wx:for="{{routeWeather.items}}" wx:key="scenicId">
-            <view class="weather-item-name">{{item.scenicName}}</view>
-            <view class="weather-item-desc">{{item.weatherText}} · {{item.temperature}}</view>
-            <view wx:if="{{item.tips && item.tips.length > 0}}" class="weather-item-tips">
-              <text wx:for="{{item.tips}}" wx:key="*this" wx:for-item="tip">{{tip}}</text>
-            </view>
-          </view>
-        </view>
-        <view wx:if="{{routeWeather.tips && routeWeather.tips.length > 0}}" class="weather-notice">
-          <text wx:for="{{routeWeather.tips}}" wx:key="*this" wx:for-item="tip">{{tip}}</text>
-        </view>
-        <view wx:if="{{!routeWeather.available}}" class="weather-unavailable">
-          <text>以上为参考数据，以官方平台公告为准</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 注意事项 -->
-    <view class="section">
-      <view class="section-title">注意事项</view>
-      <view class="tip-card">
-        <view class="tip-text" wx:for="{{attractions}}" wx:key="id">
-          <text class="tip-label">{{item.name}}：</text>{{item.tips}}
-        </view>
-      </view>
-    </view>
-
-    <!-- 安全守护 -->
     <view wx:if="{{safety}}" class="section">
-      <view class="section-title safety-title">安全守护</view>
-
-      <view class="safety-card">
-        <!-- 风险等级 -->
-        <view class="safety-row">
-          <view class="safety-label">路线风险等级</view>
-          <view class="risk-badge risk-{{safety.riskLevel}}">{{safety.riskLabel}}</view>
+      <view class="section-title" style="border-left-color:#e67e22;">安全守护</view>
+      <view class="surface-card" style="border:1rpx solid rgba(230,126,34,0.1);">
+        <view class="rd-safety-row">
+          <view class="rd-safety-label">路线风险等级</view>
+          <view class="rd-risk-badge rd-risk-{{safety.riskLevel}}">{{safety.riskLabel}}</view>
         </view>
-
-        <!-- 体力提醒 -->
-        <view class="safety-row">
-          <view class="safety-icon safety-icon-risk"></view>
-          <view class="safety-text">{{safety.physicalReminder}}</view>
+        <view class="rd-safety-text" wx:if="{{safety.physicalReminder}}">{{safety.physicalReminder}}</view>
+        <view class="rd-safety-text" wx:if="{{safety.weatherReminder}}">{{safety.weatherReminder}}</view>
+        <view class="rd-safety-text" wx:if="{{safety.mountainReminder}}">{{safety.mountainReminder}}</view>
+        <view class="rd-safety-divider"></view>
+        <view class="rd-safety-subtitle">附近服务点</view>
+        <view class="rd-service-grid">
+          <view class="tag-chip" wx:for="{{safety.servicePoints}}" wx:key="*this" style="background:rgba(47,107,255,0.06);color:#2f6bff;">{{item}}</view>
         </view>
-
-        <!-- 天气提醒 -->
-        <view class="safety-row">
-          <view class="safety-icon safety-icon-weather"></view>
-          <view class="safety-text">{{safety.weatherReminder}}</view>
-        </view>
-
-        <!-- 山地提醒 -->
-        <view wx:if="{{safety.mountainReminder}}" class="safety-row">
-          <view class="safety-icon safety-icon-mountain"></view>
-          <view class="safety-text">{{safety.mountainReminder}}</view>
-        </view>
-
-        <!-- 错峰提醒 -->
-        <view wx:if="{{safety.peakReminder}}" class="safety-row">
-          <view class="safety-icon safety-icon-crowd"></view>
-          <view class="safety-text">{{safety.peakReminder}}</view>
-        </view>
-
-        <!-- 体力分配提醒 -->
-        <view wx:if="{{safety.staminaReminder}}" class="safety-row">
-          <view class="safety-icon safety-icon-time"></view>
-          <view class="safety-text">{{safety.staminaReminder}}</view>
-        </view>
-
-        <!-- 分隔 -->
-        <view class="safety-divider"></view>
-
-        <!-- 服务点 -->
-        <view class="safety-subtitle">附近服务点</view>
-        <view class="service-grid">
-          <view class="service-item" wx:for="{{safety.servicePoints}}" wx:key="*this">{{item}}</view>
-        </view>
-
-        <!-- 紧急求助 -->
-        <view class="safety-subtitle">紧急求助</view>
-        <view class="emergency-grid">
-          <view class="emergency-item" wx:for="{{safety.emergencyContacts}}" wx:key="label">
-            <view class="emergency-label">{{item.label}}</view>
-            <view wx:if="{{item.number}}" class="emergency-number">{{item.number}}</view>
-            <view wx:else class="emergency-note">{{item.note}}</view>
+        <view class="rd-safety-subtitle">紧急求助</view>
+        <view class="rd-emergency-grid">
+          <view class="rd-emergency-item" wx:for="{{safety.emergencyContacts}}" wx:key="label">
+            <view class="rd-emergency-label">{{item.label}}</view>
+            <view wx:if="{{item.number}}" class="rd-emergency-num">{{item.number}}</view>
+            <view wx:else class="rd-emergency-note">{{item.note}}</view>
           </view>
-        </view>
-
-        <!-- 替代路线 -->
-        <view wx:if="{{safety.alternativeRoute}}" class="alt-route-box">
-          <view class="alt-route-label">为你推荐更轻松的替代路线</view>
-          <view class="alt-route-name">{{safety.alternativeRoute.name}}</view>
-          <view class="alt-route-level">体力等级：{{safety.alternativeRoute.physicalLevel}}</view>
-          <button class="btn-outline-sm" bindtap="onViewAlternative">查看更轻松路线</button>
         </view>
       </view>
     </view>
 
-    <!-- 底部操作栏 -->
     <view class="bottom-bar">
-      <button class="btn-save" bindtap="onSaveOrViewTrip">{{hasSavedTrip ? '查看我的行程' : '保存到我的行程'}}</button>
-      <button class="btn-guide" bindtap="onOpenAiGuide">开启 AI 山地伴游</button>
+      <button class="bottom-btn-save" bindtap="onSaveOrViewTrip">{{hasSavedTrip ? '查看我的行程' : '保存到我的行程'}}</button>
+      <button class="bottom-btn-guide" bindtap="onOpenAiGuide">开启 AI 山地伴游</button>
     </view>
   </block>
 </view>
