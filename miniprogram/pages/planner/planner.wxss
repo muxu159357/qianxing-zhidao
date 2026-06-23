@@ -1,7 +1,5 @@
 /* 兴趣选择页样式 · V20-A 美化 */
-.planner-page {
-  background: linear-gradient(180deg, #f0f5f2 0%, #f5f7f5 100%);
-}
+.planner-page { background:#f8f9fa; }
 
 /* ===== Plan card with left accent ===== */
 .plan-card {

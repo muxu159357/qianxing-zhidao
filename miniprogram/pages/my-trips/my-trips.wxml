@@ -43,7 +43,7 @@
 
   <!-- Empty State -->
   <view wx:else class="trips-empty">
-    <view class="trips-empty-icon"></view>
+    <image class="trips-empty-icon" src="/assets/images/empty/empty-trips.png" mode="aspectFit" />
     <view class="trips-empty-title">{{emptyTitle}}</view>
     <view class="trips-empty-desc">{{emptyDesc}}</view>
     <view class="trips-empty-btn" bindtap="onGoExplore">去首页看看推荐路线</view>

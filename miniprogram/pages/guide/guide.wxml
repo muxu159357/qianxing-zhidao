@@ -28,7 +28,7 @@
       <block wx:for="{{messages}}" wx:key="id">
         <!-- AI Message -->
         <view class="msg-row msg-row-ai" wx:if="{{item.type === 'ai'}}">
-          <view class="msg-avatar msg-avatar-ai"></view>
+          <image class="msg-avatar msg-avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFill" />
           <view class="msg-wrap">
             <view class="msg-bubble msg-bubble-ai">{{item.content}}</view>
             <view class="msg-actions" wx:if="{{item.actions && item.actions.length > 0}}">
@@ -45,7 +45,7 @@
 
       <!-- Typing indicator -->
       <view class="msg-row msg-row-ai" wx:if="{{isTyping}}">
-        <view class="msg-avatar msg-avatar-ai"></view>
+        <image class="msg-avatar msg-avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFill" />
         <view class="msg-bubble msg-bubble-typing">
           <view class="dots"><view class="dot" style="animation-delay:0s;"></view><view class="dot" style="animation-delay:0.15s;"></view><view class="dot" style="animation-delay:0.3s;"></view></view>
         </view>
