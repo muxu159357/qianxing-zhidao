@@ -209,8 +209,9 @@ Page({
 
     if (!trip) return;
 
+    var src = trip.source || (trip.id && trip.id.indexOf('remote_') === 0 ? 'remote' : 'local')
     wx.navigateTo({
-      url: '/pages/trip-detail/trip-detail?id=' + trip.id,
+      url: '/pages/trip-detail/trip-detail?id=' + trip.id + '&source=' + src,
       fail: function () {
         wx.showToast({ title: '更多行程服务即将开放', icon: 'none' });
       }

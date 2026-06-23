@@ -42,12 +42,31 @@ Page({
 
   onLoad(options) {
     var id = options.id
+    var source = options.source
     if (!id) {
       this.setData({ trip: null })
       return
     }
 
     var trip = null
+
+    // Remote trip from backend API
+    if (source === 'remote' || id.indexOf('remote_') === 0) {
+      var numericId = parseInt(id.replace('remote_', ''), 10)
+      if (numericId) {
+        var self = this
+        api.getTrip(numericId).then(function (remoteTrip) {
+          var unified = adapters.backendTripToUnified(remoteTrip)
+          if (unified) self._initTripData(unified)
+          else self.setData({ trip: null })
+        }).catch(function () {
+          self.setData({ trip: null })
+        })
+        return
+      }
+    }
+
+    // Local trip from storage
     try {
       var trips = wx.getStorageSync('qianxing_trips') || []
       trip = trips.find(function (t) { return t.id === id })
@@ -59,6 +78,10 @@ Page({
       this.setData({ trip: null })
       return
     }
+    this._initTripData(trip)
+  },
+
+  _initTripData: function (trip) {
 
     // Compatibility
     trip.status = trip.status || 'upcoming'
