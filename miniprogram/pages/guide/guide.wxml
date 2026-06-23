@@ -1,54 +1,71 @@
 <view class="ai-page">
-  <view class="location-modal-mask" wx:if="{{showLocationModal}}" bindtap="onCloseLocationModal"></view>
-  <view class="location-modal" wx:if="{{showLocationModal}}">
-    <view class="location-modal-title">是否使用当前位置</view>
-    <view class="location-modal-body">使用当前位置后，AI助手可以结合附近景区和当天安排给出更合适的建议。本次仅用于生成出行建议。</view>
-    <view class="location-modal-actions">
-      <view class="location-modal-btn location-modal-btn-cancel" bindtap="onCloseLocationModal">暂不使用</view>
-      <view class="location-modal-btn location-modal-btn-ok" bindtap="onAllowLocation">使用当前位置</view>
+  <!-- Location Modal -->
+  <view class="loc-modal-mask" wx:if="{{showLocationModal}}" bindtap="onCloseLocationModal"></view>
+  <view class="loc-modal" wx:if="{{showLocationModal}}">
+    <view class="loc-modal-title">是否使用当前位置</view>
+    <view class="loc-modal-body">使用当前位置后，AI助手可以结合附近景区和当天安排给出更合适的建议。</view>
+    <view class="loc-modal-actions">
+      <view class="loc-modal-btn loc-btn-cancel" bindtap="onCloseLocationModal">暂不使用</view>
+      <view class="loc-modal-btn loc-btn-ok" bindtap="onAllowLocation">使用当前位置</view>
     </view>
   </view>
 
-  <view class="app-header">
-    <view class="app-header-left">
-      <view class="app-header-title">AI 助手</view>
-      <view class="app-header-sub">你的贵州山地旅行 AI 伴游</view>
+  <!-- TopAppBar -->
+  <view class="top-bar">
+    <view class="top-bar-back" bindtap="goBack"></view>
+    <view class="top-bar-title">黔行智导</view>
+    <view class="top-bar-spacer"></view>
+  </view>
+
+  <!-- Chat Area -->
+  <scroll-view class="chat-scroll" scroll-y scroll-top="{{scrollTop}}" scroll-with-animation>
+    <!-- Timestamp -->
+    <view class="chat-time">
+      <view class="chat-time-chip">今天 09:41</view>
     </view>
-    <view class="app-header-tag">{{scenicName}}</view>
-  </view>
 
-  <view class="ai-quick-section">
-    <scroll-view class="ai-quick-scroll" scroll-x>
-      <view class="ai-quick-item" wx:for="{{quickQuestions}}" wx:key="*this" bindtap="onQuickTap" data-question="{{item}}">{{item}}</view>
-    </scroll-view>
-  </view>
-
-  <scroll-view class="ai-chat-area" scroll-y scroll-top="{{scrollTop}}" scroll-with-animation>
     <view class="msg-list">
       <block wx:for="{{messages}}" wx:key="id">
-        <view class="msg-row msg-ai" wx:if="{{item.type === 'ai'}}">
-          <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
-          <view class="bubble-wrap">
-            <view class="bubble bubble-ai">{{item.content}}</view>
-            <view class="ai-actions" wx:if="{{item.actions && item.actions.length > 0}}">
-              <view class="ai-action-btn" wx:for="{{item.actions}}" wx:key="label" wx:for-item="action" bindtap="onActionTap" data-action="{{action}}">{{action.label}}</view>
+        <!-- AI Message -->
+        <view class="msg-row msg-row-ai" wx:if="{{item.type === 'ai'}}">
+          <view class="msg-avatar msg-avatar-ai"></view>
+          <view class="msg-wrap">
+            <view class="msg-bubble msg-bubble-ai">{{item.content}}</view>
+            <view class="msg-actions" wx:if="{{item.actions && item.actions.length > 0}}">
+              <view class="msg-action-btn" wx:for="{{item.actions}}" wx:key="label" wx:for-item="action" bindtap="onActionTap" data-action="{{action}}">{{action.label}}</view>
             </view>
           </view>
         </view>
-        <view class="msg-row msg-user" wx:else>
-          <view class="bubble bubble-user">{{item.content}}</view>
-          <view class="avatar avatar-user">我</view>
+        <!-- User Message -->
+        <view class="msg-row msg-row-user" wx:else>
+          <view class="msg-bubble msg-bubble-user">{{item.content}}</view>
+          <view class="msg-avatar msg-avatar-user">我</view>
         </view>
       </block>
-      <view class="msg-row msg-ai" wx:if="{{isTyping}}">
-        <image class="avatar avatar-ai" src="/assets/images/ai/aibanyou.png" mode="aspectFit" />
-        <view class="bubble bubble-typing"><view class="dots"><view class="dot" style="animation-delay:0s;"></view><view class="dot" style="animation-delay:0.15s;"></view><view class="dot" style="animation-delay:0.3s;"></view></view></view>
+
+      <!-- Typing indicator -->
+      <view class="msg-row msg-row-ai" wx:if="{{isTyping}}">
+        <view class="msg-avatar msg-avatar-ai"></view>
+        <view class="msg-bubble msg-bubble-typing">
+          <view class="dots"><view class="dot" style="animation-delay:0s;"></view><view class="dot" style="animation-delay:0.15s;"></view><view class="dot" style="animation-delay:0.3s;"></view></view>
+        </view>
       </view>
     </view>
   </scroll-view>
 
-  <view class="ai-input-bar">
-    <input class="ai-input-field" placeholder="输入你想问的..." value="{{inputValue}}" bindinput="onInput" bindconfirm="sendMessage" confirm-type="send" adjust-position="{{false}}" maxlength="300" />
-    <view class="ai-send-btn {{inputValue ? 'ai-send-active' : ''}}" bindtap="sendMessage">发送</view>
+  <!-- Quick Questions -->
+  <view class="quick-section" wx:if="{{messages.length === 0}}">
+    <scroll-view class="quick-scroll" scroll-x>
+      <view class="quick-chip" wx:for="{{quickQuestions}}" wx:key="*this" bindtap="onQuickTap" data-question="{{item}}">{{item}}</view>
+    </scroll-view>
+  </view>
+
+  <!-- Input Bar -->
+  <view class="input-bar">
+    <view class="input-wrap">
+      <view class="input-add"></view>
+      <input class="input-field" placeholder="继续提问..." value="{{inputValue}}" bindinput="onInput" bindconfirm="sendMessage" confirm-type="send" adjust-position="{{false}}" maxlength="300" />
+      <view class="input-send {{inputValue ? 'input-send-active' : ''}}" bindtap="sendMessage"></view>
+    </view>
   </view>
 </view>

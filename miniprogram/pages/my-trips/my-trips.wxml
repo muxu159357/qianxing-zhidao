@@ -1,61 +1,51 @@
 <view class="trips-page">
-  <view class="app-header">
-    <view class="app-header-left">
-      <view class="app-header-title">我的行程</view>
-      <view class="app-header-sub">管理你的贵州山地行程</view>
-    </view>
+  <!-- TopAppBar -->
+  <view class="top-bar">
+    <view class="top-bar-back"></view>
+    <view class="top-bar-title">黔行智导</view>
+    <view class="top-bar-spacer"></view>
   </view>
 
-  <view wx:if="{{tripStats.total > 0}}" class="trips-stats">
-    <view class="trips-stats-row">
-      <view class="trips-stat">
-        <view class="trips-stat-num">{{tripStats.total}}</view>
-        <view class="trips-stat-label">全部</view>
-      </view>
-      <view class="trips-stat">
-        <view class="trips-stat-num">{{tripStats.upcoming}}</view>
-        <view class="trips-stat-label">未开始</view>
-      </view>
-      <view class="trips-stat">
-        <view class="trips-stat-num">{{tripStats.active}}</view>
-        <view class="trips-stat-label">进行中</view>
-      </view>
-      <view class="trips-stat">
-        <view class="trips-stat-num">{{tripStats.completed}}</view>
-        <view class="trips-stat-label">已完成</view>
-      </view>
-    </view>
+  <!-- Header -->
+  <view class="trips-header">
+    <view class="trips-header-title">我的行程</view>
+    <view class="trips-header-sub">管理您在贵州的自然探索之旅</view>
   </view>
 
-  <view class="trips-filter">
-    <view class="trips-filter-item {{activeFilter === item.key ? 'trips-filter-active' : ''}}" wx:for="{{filters}}" wx:key="key" data-key="{{item.key}}" bindtap="onFilterTap">{{item.label}}</view>
-  </view>
-
+  <!-- Trip List -->
   <scroll-view wx:if="{{trips.length > 0}}" class="trips-list" scroll-y enhanced show-scrollbar="{{false}}">
-    <view class="trip-card" wx:for="{{filteredTrips}}" wx:key="id" wx:for-index="idx" style="animation: fadeInUp 0.45s {{idx * 0.07}}s both;">
+    <view class="trip-card {{item.status === 'completed' ? 'trip-card-done' : ''}}" wx:for="{{filteredTrips}}" wx:key="id">
       <view class="trip-card-img">
-        <view class="trip-card-img-placeholder" style="background:linear-gradient(160deg, #012d1d 0%, #116c4a 50%, #0a4d30 100%);"></view>
-        <view class="trip-card-status {{item.status === 'active' ? 'trip-status-active' : item.status === 'completed' ? 'trip-status-done' : 'trip-status-soon'}}">{{item.status === 'active' ? '进行中' : item.status === 'completed' ? '已完成' : '即将开始'}}</view>
-      </view>
-      <view class="trip-card-body" data-id="{{item.id}}" bindtap="onTapTrip">
-        <view class="trip-card-name">{{item.displayName}}</view>
-        <view class="trip-card-meta">{{item.travelDateText || item.savedAt}} · {{item.dayCount}}天{{item.spotCount}}景</view>
-        <view class="trip-card-tags">
-          <view class="trip-card-tag">{{item.energyLevel === '挑战' ? '徒步' : item.energyLevel === '轻松' ? '休闲' : '适中'}}</view>
-          <view class="trip-card-tag" wx:if="{{item.spotNames && item.spotNames.length > 0}}">{{item.spotNames[0]}}</view>
+        <image wx:if="{{item.spotNames && item.spotNames.length > 0 && item.spotNames[0].indexOf('荔波') !== -1}}" src="/assets/stitch/trip-libo.jpg" mode="aspectFill" />
+        <image wx:elif="{{item.spotNames && item.spotNames.length > 0 && item.spotNames[0].indexOf('梵净') !== -1}}" src="/assets/stitch/trip-fanjingshan.jpg" mode="aspectFill" />
+        <image wx:else src="/assets/stitch/trip-libo.jpg" mode="aspectFill" />
+        <view class="trip-status {{item.status === 'active' ? 'trip-status-active' : item.status === 'completed' ? 'trip-status-done' : 'trip-status-upcoming'}}">
+          {{item.status === 'active' ? '进行中' : item.status === 'completed' ? '已完成' : '即将开始'}}
         </view>
       </view>
-      <view class="trip-card-delete" data-id="{{item.id}}" bindtap="onDeleteTrip">
-        <view class="trip-delete-icon"></view>
+      <view class="trip-card-inner">
+        <view class="trip-card-content" data-id="{{item.id}}" bindtap="onTapTrip">
+          <view class="trip-name">{{item.displayName}}</view>
+          <view class="trip-date">{{item.travelDateText || item.savedAt}}</view>
+          <view class="trip-tags">
+            <view class="trip-tag">{{item.energyLevel === '挑战' ? '徒步' : item.energyLevel === '轻松' ? '休闲' : '适中'}}</view>
+            <view class="trip-tag" wx:if="{{item.spotNames && item.spotNames.length > 0}}">{{item.spotNames[0]}}</view>
+          </view>
+        </view>
+        <view class="trip-card-btn" data-id="{{item.id}}" bindtap="onTapTrip">
+          {{item.status === 'completed' ? '回顾行程' : '查看详情'}}
+        </view>
+        <view class="trip-card-delete" data-id="{{item.id}}" bindtap="onDeleteTrip"></view>
       </view>
     </view>
     <view class="list-bottom-spacer"></view>
   </scroll-view>
 
+  <!-- Empty State -->
   <view wx:else class="trips-empty">
     <view class="trips-empty-icon"></view>
     <view class="trips-empty-title">{{emptyTitle}}</view>
     <view class="trips-empty-desc">{{emptyDesc}}</view>
-    <button class="primary-button" bindtap="onGoExplore" style="width:360rpx;">去首页看看推荐路线</button>
+    <view class="trips-empty-btn" bindtap="onGoExplore">去首页看看推荐路线</view>
   </view>
 </view>

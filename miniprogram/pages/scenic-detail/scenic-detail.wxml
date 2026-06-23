@@ -1,110 +1,115 @@
 <view wx:if="{{attraction}}" class="sd-page">
-  <view class="sd-hero" style="background:{{attraction.imageGradient || 'linear-gradient(160deg, #012d1d 0%, #116c4a 40%, #0a4d30 100%)'}};">
-    <image class="sd-hero-img" src="{{scenicCoverImage}}" mode="aspectFill" />
+  <!-- Hero -->
+  <view class="sd-hero">
+    <image class="sd-hero-img" src="{{scenicCoverImage || '/assets/stitch/scenic-hero.jpg'}}" mode="aspectFill" />
     <view class="sd-hero-mask"></view>
-    <view class="sd-hero-back" bindtap="onGoBack">
-      <view class="sd-back-icon"></view>
+    <!-- TopAppBar overlay -->
+    <view class="sd-top">
+      <view class="sd-top-back" bindtap="onGoBack"></view>
+      <view class="sd-top-title">黔行智导</view>
+      <view class="sd-top-share"></view>
     </view>
     <view class="sd-hero-content">
       <view class="sd-hero-tags">
-        <view class="sd-hero-tag" wx:for="{{attraction.tags}}" wx:key="*this" wx:if="{{index < 3}}">{{item}}</view>
+        <view class="sd-hero-tag" wx:for="{{attraction.tags}}" wx:key="*this" wx:if="{{index < 2}}">{{item}}</view>
       </view>
       <view class="sd-hero-name">{{attraction.name}}</view>
-      <view class="sd-hero-city">{{attraction.city}}</view>
-    </view>
-  </view>
-
-  <view class="sd-info-bar">
-    <view class="sd-info-item">
-      <view class="sd-info-value">{{attraction.rating}}</view>
-      <view class="sd-info-label">评分</view>
-    </view>
-    <view class="sd-info-divider"></view>
-    <view class="sd-info-item">
-      <view class="sd-info-value">{{attraction.price || '免费'}}</view>
-      <view class="sd-info-label">门票</view>
-    </view>
-    <view class="sd-info-divider"></view>
-    <view class="sd-info-item">
-      <view class="sd-info-value">{{attraction.duration || '半天'}}</view>
-      <view class="sd-info-label">建议时长</view>
+      <view class="sd-hero-addr">{{attraction.city}}</view>
     </view>
   </view>
 
   <scroll-view class="sd-scroll" scroll-y enhanced show-scrollbar="{{false}}">
-    <view class="section">
-      <view class="section-title">景点简介</view>
-      <view class="surface-card">
-        <view class="sd-desc">{{attraction.description}}</view>
-      </view>
-    </view>
-
-    <view wx:if="{{attraction.highlights && attraction.highlights.length}}" class="section">
-      <view class="section-title">精彩亮点</view>
-      <view class="surface-card">
-        <view class="sd-highlight-item" wx:for="{{attraction.highlights}}" wx:key="*this">
-          <view class="sd-highlight-dot"></view>
-          <view class="sd-highlight-text">{{item}}</view>
+    <!-- Description -->
+    <view class="sd-section">
+      <view class="sd-desc">{{attraction.description}}</view>
+      <!-- Best for tags -->
+      <view wx:if="{{attraction.tags && attraction.tags.length > 0}}" class="sd-for">
+        <view class="sd-for-title">适合人群</view>
+        <view class="sd-for-tags">
+          <view class="sd-for-tag" wx:for="{{attraction.tags}}" wx:key="*this" wx:if="{{index < 3}}">
+            <view class="sd-for-tag-dot"></view>{{item}}</view>
         </view>
       </view>
     </view>
 
-    <view class="section">
-      <view class="surface-card" style="background:rgba(161,244,200,0.15);border:1rpx solid rgba(161,244,200,0.3);">
-        <view class="sd-ai-label">AI 伴游建议</view>
-        <view class="sd-ai-text">想了解「{{attraction.name}}」的游览攻略、最佳路线和注意事项？让 AI 伴游为你提供个性化建议。</view>
-        <button class="primary-button" bindtap="onAskAI" style="margin-top:16rpx;">询问 AI 伴游</button>
-      </view>
-    </view>
-
-    <view wx:if="{{relatedRoutes.length > 0}}" class="section">
-      <view class="section-title">包含该景点的路线</view>
-      <view class="sd-routes-list">
-        <view class="sd-route-card" wx:for="{{relatedRoutes}}" wx:key="id" data-route-id="{{item.id}}" bindtap="onTapRelatedRoute">
-          <view class="sd-route-header">
-            <view class="sd-route-name">{{item.name}}</view>
-            <view class="sd-route-meta">{{item.days}}天 · {{item.physicalLevel}}</view>
+    <!-- Highlights Bento -->
+    <view wx:if="{{attraction.highlights && attraction.highlights.length > 0}}" class="sd-section">
+      <view class="sd-section-title">核心亮点</view>
+      <view class="sd-bento">
+        <view class="sd-bento-large">
+          <image class="sd-bento-img" src="/assets/stitch/scenic-highlight-waterfall.jpg" mode="aspectFill"/>
+          <view class="sd-bento-mask"></view>
+          <view class="sd-bento-label">{{attraction.highlights[0]}}</view>
+        </view>
+        <view class="sd-bento-small">
+          <image class="sd-bento-img" src="/assets/stitch/scenic-highlight-cave.jpg" mode="aspectFill"/>
+          <view class="sd-bento-mask"></view>
+          <view class="sd-bento-label">{{attraction.highlights.length > 1 ? attraction.highlights[1] : '峡谷精华'}}</view>
+        </view>
+        <view class="sd-bento-icon">
+          <view class="sd-bento-icon-circle">&#x26F5;</view>
+          <view class="sd-bento-icon-title">峡谷探索</view>
+          <view class="sd-bento-icon-desc">全长约数公里，深度体验自然奇观</view>
+        </view>
+        <view class="sd-bento-ai">
+          <image class="sd-bento-ai-avatar" src="/assets/stitch/scenic-ai-avatar.jpg" mode="aspectFill"/>
+          <view class="sd-bento-ai-content">
+            <view class="sd-bento-ai-label">AI伴游建议</view>
+            <view class="sd-bento-ai-text">建议上午光线最好时游览主要景点，下午安排轻度活动，需准备替换衣物。</view>
           </view>
-          <view class="sd-route-summary">{{item.summary}}</view>
-          <view class="sd-route-action">
-            <view class="sd-route-action-text">查看路线</view>
-            <view class="sd-route-arrow"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- AI Companion -->
+    <view wx:if="{{!attraction.highlights || attraction.highlights.length === 0}}" class="sd-section">
+      <view class="sd-ai-card" bindtap="onAskAI">
+        <image class="sd-ai-card-avatar" src="/assets/stitch/scenic-ai-avatar.jpg" mode="aspectFill"/>
+        <view class="sd-ai-card-content">
+          <view class="sd-ai-card-label">AI伴游建议</view>
+          <view class="sd-ai-card-text">想了解「{{attraction.name}}」的游览攻略？让 AI 伴游为你提供个性化建议。</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Travel Alerts -->
+    <view class="sd-section">
+      <view class="sd-section-title">出行提醒</view>
+      <view class="sd-alerts">
+        <view class="sd-alert">
+          <view class="sd-alert-icon sd-alert-weather"></view>
+          <view class="sd-alert-body">
+            <view class="sd-alert-title">天气参考</view>
+            <view class="sd-alert-text">多云转晴，22&#xB0;C - 28&#xB0;C。山区温差较大，建议携带薄外套。</view>
+            <view class="sd-alert-chip sd-alert-chip-ok">适宜出行</view>
           </view>
         </view>
-      </view>
-    </view>
-
-    <view wx:if="{{scenicWeather}}" class="section">
-      <view class="section-title">天气参考</view>
-      <view class="surface-card" style="background:rgba(17,108,74,0.03);border:1rpx solid rgba(17,108,74,0.08);">
-        <view class="sd-weather-row">
-          <view class="sd-weather-temp">{{scenicWeather.temperatureLow}}°C ~ {{scenicWeather.temperatureHigh}}°C</view>
-          <view class="sd-weather-desc">{{scenicWeather.weatherDesc}}</view>
-        </view>
-        <view wx:if="{{scenicWeather.windDirection}}" class="sd-weather-wind">{{scenicWeather.windDirection}} {{scenicWeather.windLevel}}级</view>
-        <view class="sd-weather-notice">以上为参考数据，以官方平台公告为准</view>
-      </view>
-    </view>
-
-    <view wx:if="{{attraction.tips && attraction.tips.length}}" class="section">
-      <view class="section-title">出行提醒</view>
-      <view class="surface-card">
-        <view class="sd-tip-item" wx:for="{{attraction.tips}}" wx:key="*this">
-          <view class="sd-tip-num">{{index + 1}}</view>
-          <view class="sd-tip-text">{{item}}</view>
+        <view class="sd-alert">
+          <view class="sd-alert-icon sd-alert-gear"></view>
+          <view class="sd-alert-body">
+            <view class="sd-alert-title">装备建议</view>
+            <view class="sd-alert-text">建议穿着舒适的防滑徒步鞋，携带雨具和水壶。</view>
+            <view class="sd-alert-chip sd-alert-chip-warn">注意防滑</view>
+          </view>
         </view>
       </view>
     </view>
 
     <view class="list-bottom-spacer"></view>
   </scroll-view>
+
+  <!-- Floating Action Button -->
+  <view class="sd-fab" bindtap="onAskAI">
+    <view class="sd-fab-icon"></view>
+    <view class="sd-fab-text">询问 AI 伴游</view>
+  </view>
 </view>
 
 <view wx:else class="sd-page sd-centered">
-  <view class="sd-not-found">
+  <view class="sd-nf">
     <view class="sd-nf-icon"></view>
     <view class="sd-nf-title">景点未找到</view>
     <view class="sd-nf-desc">请检查链接是否正确</view>
-    <button class="primary-button" bindtap="onGoBack">返回</button>
+    <view class="sd-nf-btn" bindtap="onGoBack">返回</view>
   </view>
 </view>
