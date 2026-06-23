@@ -70,4 +70,4 @@ onMounted(() => { loadRoutes() })
   </div>
 </template>
 
-<style scoped>.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}.pt{font-size:22px;font-weight:700;color:#303133}.ha{display:flex;gap:10px;align-items:center}.eh{text-align:center;color:#909399;padding:40px 0}</style>
+<style scoped></style>

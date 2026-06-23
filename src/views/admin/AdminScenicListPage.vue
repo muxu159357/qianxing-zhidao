@@ -103,46 +103,17 @@ onMounted(() => { loadSpots() })
 
 <template>
   <div class="admin-scenic-list">
-    <div class="page-header">
-      <h2 class="page-title">景点管理</h2>
-      <div class="header-actions">
-        <el-input v-model="keyword" placeholder="搜索景点名称" clearable style="width:240px" @keyup.enter="onSearch" />
-        <el-button type="primary" @click="onSearch">搜索</el-button>
-        <el-button @click="loadSpots">刷新</el-button>
-        <el-button type="success" @click="openCreate">新增景点</el-button>
-      </div>
-    </div>
-
-    <el-card shadow="never">
-      <el-table :data="spots" v-loading="loading" stripe style="width:100%">
-        <el-table-column prop="id" label="ID" width="60" />
-        <el-table-column prop="name" label="名称" min-width="150" />
-        <el-table-column prop="city" label="城市" width="90" />
-        <el-table-column prop="category" label="类型" width="100" />
-        <el-table-column prop="sortOrder" label="排序" width="70" />
-        <el-table-column label="状态" width="80">
-          <template #default="{ row }">
-            <el-tag :type="statusMap[row.status]?.type || 'info'" size="small">{{ statusMap[row.status]?.text || '未知' }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="updatedAt" label="更新时间" width="170" />
-        <el-table-column label="操作" width="220" fixed="right">
-          <template #default="{ row }">
-            <el-button text type="primary" size="small" @click="openEdit(row)">编辑</el-button>
-            <el-button text size="small" :type="row.status===1?'warning':'success'" @click="onToggleStatus(row)">{{ row.status===1?'下架':'上架' }}</el-button>
-            <el-button text type="danger" size="small" @click="onDelete(row)">禁用</el-button>
-          </template>
-        </el-table-column>
+    <div class="aph"><div class="aph-l"><h2 class="aph-t">景点管理</h2><p class="aph-d">维护贵州核心景区信息与展示状态</p></div><div class="aph-r"><el-input v-model="keyword" placeholder="搜索景点名称" clearable style="width:220px" @keyup.enter="onSearch"/><el-button type="primary" @click="onSearch">搜索</el-button><el-button @click="loadSpots">刷新</el-button><el-button type="success" @click="openCreate">新增景点</el-button></div></div>
+    <div class="atc">
+      <el-table :data="spots" v-loading="loading" style="width:100%">
+        <el-table-column prop="id" label="ID" width="60"/><el-table-column prop="name" label="名称" min-width="150"/><el-table-column prop="city" label="城市" width="90"/><el-table-column prop="category" label="类型" width="100"/><el-table-column prop="sortOrder" label="排序" width="70"/>
+        <el-table-column label="状态" width="80"><template #default="{row}"><el-tag :class="row.status===1?'ast-1':'ast-0'" size="small" disable-transitions>{{row.status===1?'上架':'下架'}}</el-tag></template></el-table-column>
+        <el-table-column prop="updatedAt" label="更新时间" width="170"/>
+        <el-table-column label="操作" width="220" fixed="right"><template #default="{row}"><el-button text type="primary" size="small" @click="openEdit(row)">编辑</el-button><el-button text :type="row.status===1?'warning':'success'" size="small" @click="onToggleStatus(row)">{{row.status===1?'下架':'上架'}}</el-button><el-button text type="danger" size="small" @click="onDelete(row)">禁用</el-button></template></el-table-column>
       </el-table>
-
-      <div v-if="!loading && spots.length===0" class="empty-hint">暂无数据</div>
-
-      <div style="margin-top:16px;text-align:right">
-        <el-pagination v-model:current-page="currentPage" :page-size="pageSize" :total="total" layout="total, prev, pager, next" @current-change="onPageChange" />
-      </div>
-    </el-card>
-
-    <!-- 新增/编辑弹窗 -->
+      <div v-if="!loading&&spots.length===0" class="aeh">暂无数据</div>
+      <div class="atc-pager"><el-pagination v-model:current-page="currentPage" :page-size="pageSize" :total="total" layout="total,prev,pager,next" @current-change="onPageChange"/></div>
+    </div>
     <el-dialog v-model="dlgVisible" :title="dlgTitle" width="640px" :close-on-click-modal="false" destroy-on-close>
       <el-form :model="form" label-width="90px" @submit.prevent="onSave">
         <el-row :gutter="16">
@@ -183,9 +154,4 @@ onMounted(() => { loadSpots() })
   </div>
 </template>
 
-<style scoped>
-.page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
-.page-title { font-size:22px; font-weight:700; color:#303133; }
-.header-actions { display:flex; gap:10px; align-items:center; }
-.empty-hint { text-align:center; color:#909399; padding:40px 0; }
-</style>
+<style scoped></style>

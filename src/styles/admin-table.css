@@ -1,0 +1,30 @@
+/* Admin Table Pages · Figma Visual System */
+.aph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.aph-l{flex:1}
+.aph-t{font-size:18px;font-weight:700;color:#0f172a}
+.aph-d{font-size:13px;color:#64748b;margin-top:4px}
+.aph-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.afc{background:#fff;border-radius:12px;padding:16px 20px;border:1px solid #f1f5f9;box-shadow:0 1px 2px rgba(0,0,0,0.04);margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.afc .el-input__wrapper{box-shadow:0 0 0 1px #e2e8f0 inset !important;border-radius:8px}
+.afc .el-select .el-input__wrapper{box-shadow:0 0 0 1px #e2e8f0 inset !important}
+.atc{background:#fff;border-radius:12px;border:1px solid #f1f5f9;box-shadow:0 1px 2px rgba(0,0,0,0.04);overflow:hidden}
+.atc .el-table{--el-table-border-color:#f1f5f9}
+.atc .el-table th{background:#f8fafc;color:#64748b;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;border-bottom:1px solid #f1f5f9}
+.atc .el-table td{font-size:13px;color:#0f172a}
+.atc .el-table tr:hover td{background:#f8fafc}
+.atc-pager{padding:12px 20px;border-top:1px solid #f1f5f9;display:flex;justify-content:flex-end}
+.aeh{text-align:center;color:#94a3b8;padding:48px 0;font-size:14px}
+.ast-1{background:#ecfdf5 !important;color:#059669 !important;border:1px solid #a7f3d0 !important}
+.ast-0{background:#f1f5f9 !important;color:#64748b !important;border:1px solid #e2e8f0 !important}
+.ast-pub{background:#f0fdf9 !important;color:#0d9488 !important;border:1px solid #99f6e4 !important}
+.ast-draft{background:#fffbeb !important;color:#d97706 !important;border:1px solid #fde68a !important}
+.aph-r .el-button--primary{background:#0d9488;border-color:#0d9488}
+.aph-r .el-button--primary:hover{background:#0f766e;border-color:#0f766e}
+.aph-r .el-button--success{background:#0d9488;border-color:#0d9488}
+.el-dialog{border-radius:12px !important}
+.el-dialog__header{border-bottom:1px solid #f1f5f9;padding:16px 24px}
+.el-dialog__title{font-size:16px;font-weight:600;color:#0f172a}
+.el-dialog__body{padding:24px}
+.el-dialog__footer{border-top:1px solid #f1f5f9;padding:16px 24px;display:flex;justify-content:flex-end;gap:12px}
+.atc .el-button--primary.is-text{color:#0d9488}
+.atc .el-button--danger.is-text{color:#e11d48}

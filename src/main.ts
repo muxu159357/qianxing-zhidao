@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './router'
 import './styles/variables.css'
 import './styles/global.css'
+import './styles/admin-table.css'
 
 const app = createApp(App)
 
