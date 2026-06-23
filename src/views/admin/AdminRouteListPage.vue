@@ -45,17 +45,17 @@ onMounted(() => { loadRoutes() })
 
 <template>
   <div class="ar-page">
-    <div class="ph"><h2 class="pt">路线管理</h2><div class="ha"><el-input v-model="keyword" placeholder="搜索路线名称" clearable style="width:240px" @keyup.enter="onSearch"/><el-button type="primary" @click="onSearch">搜索</el-button><el-button @click="loadRoutes">刷新</el-button><el-button type="success" @click="openCreate">新增路线</el-button></div></div>
-    <el-card shadow="never">
+    <div class="aph"><div class="aph-l"><h2 class="aph-t">路线管理</h2><p class="aph-d">管理旅游路线与上下架状态</p></div><div class="aph-r"><el-input v-model="keyword" placeholder="搜索路线名称" clearable style="width:240px" @keyup.enter="onSearch"/><el-button type="primary" @click="onSearch">搜索</el-button><el-button @click="loadRoutes">刷新</el-button><el-button type="success" @click="openCreate">新增路线</el-button></div></div>
+    <div class="atc">
       <el-table :data="routes" v-loading="loading" stripe>
         <el-table-column prop="id" label="ID" width="60"/><el-table-column prop="name" label="名称" min-width="160"/><el-table-column prop="dayCount" label="天数" width="60"/><el-table-column prop="theme" label="主题" width="100"/><el-table-column prop="energyLevel" label="强度" width="70"/><el-table-column prop="sortOrder" label="排序" width="70"/>
         <el-table-column label="状态" width="80"><template #default="{ row }"><el-tag :type="sMap[row.status]?.t||'info'" size="small">{{ sMap[row.status]?.tx||'未知' }}</el-tag></template></el-table-column>
         <el-table-column prop="updatedAt" label="更新时间" width="170"/>
         <el-table-column label="操作" width="280" fixed="right"><template #default="{ row }"><el-button text type="primary" size="small" @click="openEdit(row)">编辑</el-button><el-button text size="small" :type="row.status===1?'warning':'success'" @click="onToggleStatus(row)">{{ row.status===1?'下架':'上架' }}</el-button><el-button text type="danger" size="small" @click="onDelete(row)">禁用</el-button><el-button text type="info" size="small" @click="router.push('/admin/routes/'+row.id+'/schedule')">日程</el-button></template></el-table-column>
       </el-table>
-      <div v-if="!loading && routes.length===0" class="eh">暂无数据</div>
-      <div style="margin-top:16px;text-align:right"><el-pagination v-model:current-page="currentPage" :page-size="pageSize" :total="total" layout="total, prev, pager, next" @current-change="onPageChange"/></div>
-    </el-card>
+      <div v-if="!loading && routes.length===0" class="aeh">暂无数据</div>
+      <div class="atc-pager"><el-pagination v-model:current-page="currentPage" :page-size="pageSize" :total="total" layout="total, prev, pager, next" @current-change="onPageChange"/></div>
+    </div>
     <el-dialog v-model="dlgVisible" :title="dlgTitle" width="600px" :close-on-click-modal="false" destroy-on-close>
       <el-form :model="form" label-width="90px">
         <el-row :gutter="16"><el-col :span="16"><el-form-item label="路线名称" required><el-input v-model="form.name" placeholder="如：黔中精华三日游"/></el-form-item></el-col><el-col :span="8"><el-form-item label="天数" required><el-input-number v-model="form.dayCount" :min="1" :max="15"/></el-form-item></el-col></el-row>

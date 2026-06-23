@@ -36,8 +36,8 @@ onMounted(async () => { await loadScenic(); loadAll() })
 
 <template>
   <div v-loading="loading" class="asp">
-    <div class="ph"><h2 class="pt">{{ routeName || '路线日程' }} — 日程与景点</h2><div class="ha"><el-button @click="router.push('/admin/routes')">返回</el-button><el-button type="primary" @click="openDayNew">新增日程</el-button><el-button @click="loadAll">刷新</el-button></div></div>
-    <div v-if="days.length===0" class="eh">每日安排将在这里维护</div>
+    <div class="ph"><h2 class="pt">{{ routeName || '路线日程' }} — 日程与景点</h2><div class="aph-r"><el-button @click="router.push('/admin/routes')">返回</el-button><el-button type="primary" @click="openDayNew">新增日程</el-button><el-button @click="loadAll">刷新</el-button></div></div>
+    <div v-if="days.length===0" class="aeh">每日安排将在这里维护</div>
 
     <div v-for="d in days" :key="d.id" class="dc">
       <div class="dh"><span class="dn">第{{ d.dayNumber }}天</span><span class="dt">{{ d.title }}</span><span v-if="d.description" class="dd">{{ d.description }}</span><div style="flex:1"/><el-button text size="small" @click="openSpotAdd(d.dayNumber)">+ 景点</el-button><el-button text type="primary" size="small" @click="openDayEdit(d)">编辑</el-button><el-button text type="danger" size="small" @click="onDayDel(d)">删除</el-button></div>
