@@ -6,13 +6,20 @@
 
 **黔行智导：贵州山地旅游 AI 个性化导览平台**
 
-组成: Spring Boot 3.4 后端 + Vue 3/Vite 后台 Web + 微信小程序 + AI助手/路线草稿 + 天气 + Redis准备
+组成: Spring Boot + MyBatis-Plus 后端 + Vue 3/Vite 后台 Web + 微信小程序 + AI助手/路线草稿 + 天气
+
+## 新电脑接手入口
+```powershell
+git clone https://github.com/muxu159357/qianxing-zhidao.git
+cd qianxing-zhidao
+```
+Claude 第一条指令: 先读取 `CLAUDE_PROJECT_HANDOFF.md`、`docs/NEW_COMPUTER_SETUP.md`、`PROJECT_PROGRESS.md`。不要复制旧电脑登录状态。API Key/密码/JWT 需新电脑重新配置。
 
 ## 2. 目录结构
 
 | 目录 | 用途 |
 |------|------|
-| `backend/` | Spring Boot 后端 (Java21, Maven, MySQL, Flyway) |
+| `backend/` | Spring Boot 后端 (Java21, Maven, MySQL, MyBatis-Plus, Flyway) |
 | `src/` | Vue 3 前端 (后台管理页面) |
 | `miniprogram/` | 微信原生小程序 |
 | `scripts/` | PowerShell 检查脚本 |

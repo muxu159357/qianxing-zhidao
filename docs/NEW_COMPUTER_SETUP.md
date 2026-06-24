@@ -36,7 +36,7 @@ $env:WEATHER_API_KEY="<your-weather-key>"
 ```sql
 CREATE DATABASE qianxing_zhidao CHARACTER SET utf8mb4;
 ```
-后端启动自动建表 (JPA ddl-auto)。
+后端启动自动建表 (MyBatis-Plus + DDL自动同步)。
 
 ## 6. Redis (可选)
 用于缓存，无 Redis 时降级运行。
