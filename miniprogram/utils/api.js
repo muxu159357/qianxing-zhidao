@@ -1,14 +1,10 @@
 // 黔行智导 · 后端 API 请求封装
 // 统一处理 wx.request、JWT token、错误码
 //
-// 本地联调（模拟器）：BASE_URL = 'http://localhost:8080'
-//   需勾选 详情→本地设置→不校验合法域名、web-view、TLS 版本以及 HTTPS 证书
-//
-// 真机预览调试：不能使用 localhost，改为电脑局域网 IP
-//   如 BASE_URL = 'http://192.168.1.100:8080'，手机电脑同 WiFi，防火墙放行 8080
-//
-// 正式上线：必须 HTTPS 域名，微信公众平台→开发管理→开发设置→服务器域名
-var BASE_URL = 'http://localhost:8080'
+// 环境配置见 config/env.js
+// 开发者工具: USE_LAN=false  手机预览: USE_LAN=true  正式上线: HTTPS域名
+var env = require('../config/env')
+var BASE_URL = env.BASE_URL
 
 function request(path, options) {
   options = options || {}
