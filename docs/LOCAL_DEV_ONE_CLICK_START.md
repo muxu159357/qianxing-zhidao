@@ -46,10 +46,15 @@ cd backend && mvn clean compile && mvn test
 | WXSS编译错误 | 无`*`/`var()`/`:root` |
 
 ## 手机真机预览
-1. 手机和电脑必须在同一个 WiFi
-2. 修改 `miniprogram/config/env.js`: `USE_LAN = true`
-3. IP 地址查看: `ipconfig` → 无线局域网适配器 IPv4
-4. PC 防火墙放行 8080 端口（Java/TCP）
-5. 微信开发者工具: 勾选「不校验合法域名」
-6. 验证: 手机浏览器打开 `http://电脑IP:8080/health`
-7. 正式发布必须用 HTTPS 域名
+### 方案 A: 同 WiFi (电脑连 WiFi)
+1. 手机电脑同 WiFi, `ipconfig` 查 IPv4
+2. 修改 `config/env.js` 的地址为 `http://IP:8080`
+3. 防火墙放行 8080
+
+### 方案 B: 专线网络 (内网穿透, 推荐)
+1. 启动后端 `localhost:8080`
+2. 穿透: `cpolar http 8080` → 获得 `https://xxx.cpolar.cn`
+3. 修改 `config/env.js`: `ACTIVE='devTunnel'`, 填入穿透地址
+4. 微信勾选「不校验合法域名」→ 编译 → 手机扫码
+
+注意: 穿透地址不提交 Git。正式上线用固定 HTTPS 域名。

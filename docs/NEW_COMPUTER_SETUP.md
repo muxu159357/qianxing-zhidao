@@ -67,3 +67,4 @@ npm run dev
 | MySQL连接失败 | 检查local-env.ps1密码 |
 | 端口冲突 | 后端8080/前端5173 |
 | WXSS编译错误 | 检查无`*`/`var()`/`:root` |
+| 手机预览连不上后端 | 同WiFi改IP或cpolar穿透(见LOCAL_DEV_ONE_CLICK_START) |

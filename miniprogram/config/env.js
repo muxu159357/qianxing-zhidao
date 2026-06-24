@@ -1,9 +1,12 @@
 // 小程序环境配置
-// USE_LAN=false → 开发者工具( localhost )
-// USE_LAN=true  → 手机预览( 192.168.197.1 )
-var USE_LAN = false
+// devLocal:   开发者工具模拟器 (localhost)
+// devTunnel: 手机真机预览 (cpolar/ngrok/natapp 穿透)
+// prod:      正式上线 (HTTPS域名+微信合法域名)
+var ACTIVE = 'devLocal'
 module.exports = {
-  localhost: 'http://localhost:8080',
-  lan: 'http://192.168.197.1:8080',
-  get BASE_URL() { return USE_LAN ? this.lan : this.localhost }
+  devLocal:  'http://localhost:8080',
+  devTunnel: 'https://<your-tunnel>.example.com',
+  prod:      'https://<your-api-domain>.com',
+  get BASE_URL() { return this[ACTIVE] }
 }
+
