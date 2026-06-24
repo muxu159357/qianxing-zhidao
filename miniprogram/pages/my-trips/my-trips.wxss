@@ -1,5 +1,5 @@
 .trips-page{min-height:100vh;background:#F7F8F5;padding-bottom:140rpx;overflow-x:hidden;box-sizing:border-box;}
-.trips-page *{box-sizing:border-box;}
+.trips-header,.trips-list,.trip-card,.trip-card-img,.trip-card-inner,.trip-card-content{box-sizing:border-box;}
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:0 40rpx;height:100rpx;background:#F7F8F5;position:sticky;top:0;z-index:50;}
 .top-bar-back{width:64rpx;height:64rpx;border-radius:50%;position:relative;}
 .top-bar-back::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);width:16rpx;height:16rpx;border-left:2rpx solid #012D1D;border-bottom:2rpx solid #012D1D;}
