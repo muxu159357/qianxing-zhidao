@@ -10,7 +10,7 @@
 .msg-list{display:flex;flex-direction:column;gap:24rpx;}
 .msg-row{display:flex;align-items:flex-start;gap:16rpx;}
 .msg-row-ai{flex-direction:row;}
-.msg-row-user{flex-direction:row-reverse;}
+.msg-row-user{flex-direction:row;justify-content:flex-end;}
 .msg-avatar{width:80rpx;height:80rpx;border-radius:50%;flex-shrink:0;}
 .msg-avatar-ai{overflow:hidden;border:2rpx solid rgba(161,244,200,0.5);}
 .msg-avatar-user{background:#116c4a;color:#fff;font-size:22rpx;display:flex;align-items:center;justify-content:center;}
