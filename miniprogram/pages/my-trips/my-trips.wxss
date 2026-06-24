@@ -1,4 +1,5 @@
-.trips-page{min-height:100vh;background:#F7F8F5;padding-bottom:140rpx;}
+.trips-page{min-height:100vh;background:#F7F8F5;padding-bottom:140rpx;overflow-x:hidden;box-sizing:border-box;}
+.trips-page *{box-sizing:border-box;}
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:0 40rpx;height:100rpx;background:#F7F8F5;position:sticky;top:0;z-index:50;}
 .top-bar-back{width:64rpx;height:64rpx;border-radius:50%;position:relative;}
 .top-bar-back::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);width:16rpx;height:16rpx;border-left:2rpx solid #012D1D;border-bottom:2rpx solid #012D1D;}
@@ -8,7 +9,7 @@
 .trips-header-title{font-size:40rpx;font-weight:700;color:#1F2A24;margin-bottom:8rpx;}
 .trips-header-sub{font-size:26rpx;color:#66716B;}
 .trips-list{padding:0 40rpx;}
-.trip-card{margin-bottom:28rpx;background:#ffffff;border-radius:24rpx;overflow:hidden;box-shadow:0 4rpx 20rpx rgba(1,45,29,0.04);}
+.trip-card{margin-bottom:28rpx;background:#ffffff;border-radius:24rpx;overflow:hidden;box-shadow:0 4rpx 20rpx rgba(1,45,29,0.04);position:relative;}
 .trip-card-done{opacity:0.8;}
 .trip-card-img{height:300rpx;position:relative;overflow:hidden;}
 .trip-card-img image{width:100%;height:100%;}

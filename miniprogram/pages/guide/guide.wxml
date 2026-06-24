@@ -44,32 +44,18 @@
         </view>
       </view>
     </view>
+    <!-- Guide Cards & Quick Questions (always inside scroll-view) -->
+    <view class="ai-guide-cards">
+      <view class="ai-guide-card" bindtap="onQuickTap" data-question="帮我安排三日轻松游"><view class="ai-guide-card-icon">&#x1F5FA;</view><view class="ai-guide-card-label">智能规划</view><view class="ai-guide-card-desc">AI定制专属路线</view></view>
+      <view class="ai-guide-card" bindtap="onQuickTap" data-question="推荐自然风光景点"><view class="ai-guide-card-icon">&#x26F0;</view><view class="ai-guide-card-label">景点建议</view><view class="ai-guide-card-desc">发现贵州精华</view></view>
+      <view class="ai-guide-card" bindtap="onQuickTap" data-question="贵州有什么特色美食？"><view class="ai-guide-card-icon">&#x1F372;</view><view class="ai-guide-card-label">行程攻略</view><view class="ai-guide-card-desc">全面出行指南</view></view>
+    </view>
+    <view class="quick-section">
+      <scroll-view class="quick-scroll" scroll-x>
+        <view class="quick-chip" wx:for="{{quickQuestions}}" wx:key="*this" bindtap="onQuickTap" data-question="{{item}}">{{item}}</view>
+      </scroll-view>
+    </view>
   </scroll-view>
-
-  <!-- Guide Cards (shown when empty) -->
-  <view class="ai-guide-cards" wx:if="{{messages.length === 0}}">
-    <view class="ai-guide-card" bindtap="onQuickTap" data-question="帮我安排三日轻松游">
-      <view class="ai-guide-card-icon">&#x1F5FA;</view>
-      <view class="ai-guide-card-label">智能规划</view>
-      <view class="ai-guide-card-desc">AI定制专属路线</view>
-    </view>
-    <view class="ai-guide-card" bindtap="onQuickTap" data-question="推荐自然风光景点">
-      <view class="ai-guide-card-icon">&#x26F0;</view>
-      <view class="ai-guide-card-label">景点建议</view>
-      <view class="ai-guide-card-desc">发现贵州精华</view>
-    </view>
-    <view class="ai-guide-card" bindtap="onQuickTap" data-question="贵州有什么特色美食？">
-      <view class="ai-guide-card-icon">&#x1F372;</view>
-      <view class="ai-guide-card-label">行程攻略</view>
-      <view class="ai-guide-card-desc">全面出行指南</view>
-    </view>
-  </view>
-  <!-- Quick Questions -->
-  <view class="quick-section" wx:if="{{messages.length === 0}}">
-    <scroll-view class="quick-scroll" scroll-x>
-      <view class="quick-chip" wx:for="{{quickQuestions}}" wx:key="*this" bindtap="onQuickTap" data-question="{{item}}">{{item}}</view>
-    </scroll-view>
-  </view>
 
   <!-- Input Bar -->
   <view class="input-bar">
