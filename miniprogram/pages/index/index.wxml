@@ -1,11 +1,4 @@
 <view class="home-page">
-  <!-- TopAppBar -->
-  <view class="top-bar">
-    <view class="top-bar-back" bindtap="goBack"></view>
-    <view class="top-bar-title">黔行智导</view>
-    <view class="top-bar-spacer"></view>
-  </view>
-
   <!-- Location -->
   <view class="location-row">
     <view class="location-dot"></view>
@@ -33,7 +26,7 @@
         <view class="bento-icon-cloud"></view>
         <view class="bento-chip bento-chip-blue">适宜</view>
       </view>
-      <view class="bento-value">24&#xB0;C</view>
+      <view class="bento-value">24°C</view>
       <view class="bento-label">多云舒适</view>
     </view>
     <view class="bento-card">

@@ -34,7 +34,9 @@ Page({
   },
 
   onShow() {
-    if (!auth.requireLoginRedirect()) return
+    if (!auth.requireLoginRedirect()) return;
+    var tb = this.getTabBar && this.getTabBar();
+    if (tb) tb.setData({ selected: 2 });
     this.loadTrips();
   },
 

@@ -1,11 +1,4 @@
 <view class="trips-page">
-  <!-- TopAppBar -->
-  <view class="top-bar">
-    <view class="top-bar-back"></view>
-    <view class="top-bar-title">黔行智导</view>
-    <view class="top-bar-spacer"></view>
-  </view>
-
   <!-- Header -->
   <view class="trips-header">
     <view class="trips-header-title">我的行程</view>

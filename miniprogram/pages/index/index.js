@@ -20,7 +20,11 @@ Page({
     activeCategory:'all', scenicSpots:[], filteredSpots:[], topRoutes:[]
   },
 
-  onShow(){ auth.requireLoginRedirect() },
+  onShow(){
+    auth.requireLoginRedirect();
+    var tb = this.getTabBar && this.getTabBar();
+    if (tb) tb.setData({ selected: 0 });
+  },
 
   onLoad(){
     var that=this

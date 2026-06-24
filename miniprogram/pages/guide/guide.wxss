@@ -41,3 +41,8 @@
 .loc-modal-btn{flex:1;height:88rpx;line-height:88rpx;text-align:center;border-radius:999rpx;font-size:28rpx;font-weight:600;}
 .loc-btn-cancel{background:#f3f4f5;color:#414844;}
 .loc-btn-ok{background:#012d1d;color:#fff;}
+.ai-guide-cards{display:flex;gap:16rpx;padding:0 40rpx 24rpx;}
+.ai-guide-card{flex:1;background:#fff;border-radius:24rpx;padding:28rpx 20rpx;text-align:center;box-shadow:0 4rpx 20rpx rgba(1,45,29,0.04);}
+.ai-guide-card-icon{font-size:44rpx;margin-bottom:12rpx;}
+.ai-guide-card-label{font-size:26rpx;font-weight:600;color:#012D1D;margin-bottom:4rpx;}
+.ai-guide-card-desc{font-size:22rpx;color:#66716B;}
