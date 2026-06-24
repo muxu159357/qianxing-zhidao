@@ -13,7 +13,7 @@
 }
 .plan-card-accent {
   width: 6rpx;
-  background: linear-gradient(180deg, #1f8f5f, #2f6bff);
+  background: linear-gradient(180deg, #012d1d, #116c4a);
   flex-shrink: 0;
   border-radius: 3rpx 0 0 3rpx;
 }
@@ -52,9 +52,9 @@
   background: #e0ebe4;
 }
 .planner-tag--active {
-  background: rgba(31,143,95,0.08);
-  color: #1f8f5f;
-  border: 2rpx solid #1f8f5f;
+  background: rgba(1,45,29,0.08);
+  color: #012d1d;
+  border: 2rpx solid #012d1d;
   font-weight: 600;
 }
 
@@ -74,9 +74,9 @@
   background: #e0ebe4;
 }
 .radio-active {
-  border-color: #1f8f5f;
-  background: rgba(31,143,95,0.08);
-  color: #1f8f5f;
+  border-color: #012d1d;
+  background: rgba(1,45,29,0.08);
+  color: #012d1d;
   font-weight: 600;
 }
 

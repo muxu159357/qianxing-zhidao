@@ -648,7 +648,7 @@ Page({
     wx.showModal({
       title: '开始行程',
       content: '确定要开始「' + (trip.customName || trip.routeName || '该行程') + '」吗？',
-      confirmText: '开始', confirmColor: '#1f8f5f',
+      confirmText: '开始', confirmColor: '#012d1d',
       success: function (res) {
         if (!res.confirm) return
         self.updateTripStatus('active', 'startedAt')
@@ -671,7 +671,7 @@ Page({
     wx.showModal({
       title: '完成行程',
       content: '确定要将「' + (trip.customName || trip.routeName || '该行程') + '」标记为已完成吗？',
-      confirmText: '完成', confirmColor: '#1f8f5f',
+      confirmText: '完成', confirmColor: '#012d1d',
       success: function (res) {
         if (!res.confirm) return
         self.updateTripStatus('completed', 'completedAt')
